@@ -9,9 +9,9 @@ Objectif : une appli vide mais installable, connectée et déployée.
 | ID | User story | Critères d'acceptation | Statut |
 | --- | --- | --- | --- |
 | US-01 | En tant que développeur, je veux un projet Next.js en PWA déployé sur Vercel, afin de tester chaque évolution sur mon téléphone. | Appli installable sur l'écran d'accueil ; déploiement automatique à chaque envoi de code ; mise en page mobile first. | Terminée |
-| US-02 | En tant que développeur, je veux la base Supabase créée selon le modèle de données, afin de stocker cahiers, recettes et membres. | Toutes les tables de la V1 créées ; règles d'accès : un membre ne lit que ses propres listes ; schéma versionné. | En cours |
-| US-03 | En tant qu'utilisateur, je veux me connecter avec mon seul e-mail, afin d'accéder à l'appli sans mot de passe. | Un seul e-mail via Brevo avec lien magique et code à 6 chiffres ; valable 15 min, usage unique ; lien Renvoyer l'e-mail ; session de 30 jours par appareil. | À faire |
-| US-04 | En tant qu'administrateur, je veux un compte avec le rôle admin, afin d'accéder à toutes les fonctions. | Compte créé dans Supabase avec le rôle admin ; aucune inscription publique : l'accueil mène uniquement à la connexion. | À faire |
+| US-02 | En tant que développeur, je veux la base Supabase créée selon le modèle de données, afin de stocker cahiers, recettes et membres. | Toutes les tables de la V1 créées ; règles d'accès : un membre ne lit que ses propres listes ; schéma versionné. | Terminée |
+| US-03 | En tant qu'utilisateur, je veux me connecter avec mon seul e-mail, afin d'accéder à l'appli sans mot de passe. | Un seul e-mail via Brevo avec lien magique et code à 6 chiffres ; valable 15 min, usage unique ; lien Renvoyer l'e-mail ; session de 30 jours par appareil. | Terminée |
+| US-04 | En tant qu'administrateur, je veux un compte avec le rôle admin, afin d'accéder à toutes les fonctions. | Compte créé dans Supabase avec le rôle admin ; aucune inscription publique : l'accueil mène uniquement à la connexion. | En cours |
 | US-05 | En tant qu'administrateur, je veux que la base ne se mette jamais en pause, afin que l'appli reste disponible. | Requête quotidienne planifiée ; un échec de la tâche m'est signalé par e-mail. | À faire |
 
 ## Sprint 1 · Capture et lecture IA

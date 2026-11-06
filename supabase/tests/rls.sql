@@ -52,7 +52,11 @@ do $$ begin
   end;
 end $$;
 insert into public.liste_perso (membre_id, recette_id, type) values ('00000000-0000-0000-0000-00000000000b', 2, 'favori');
+update public.membre set role = 'admin' where id = '00000000-0000-0000-0000-00000000000b';
 reset role;
+do $$ begin
+  assert (select role from public.membre where email = 'lecteur@ex.fr') = 'lecteur', 'un lecteur ne doit pas se donner le rôle admin';
+end $$;
 
 -- Admin : gère les listes fermées, ne voit pas les listes des autres
 set role authenticated;

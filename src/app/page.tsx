@@ -1,4 +1,13 @@
+import { Suspense } from "react";
+import { creerClientServeur } from "@/lib/supabase/serveur";
 import { AideInstallation } from "./aide-installation";
+import { BoutonDeconnexion } from "./deconnexion";
+
+const LIBELLES_ROLE: Record<string, string> = {
+  admin: "Administrateur",
+  contributeur: "Contributeur",
+  lecteur: "Lecteur",
+};
 
 export default function Accueil() {
   return (
@@ -10,11 +19,32 @@ export default function Accueil() {
         </p>
       </header>
 
-      <section className="rounded-2xl bg-jaune/40 p-5 leading-relaxed">
-        <p>L’appli est en construction. La connexion arrive bientôt.</p>
+      <section className="flex flex-col gap-3 rounded-2xl bg-jaune/40 p-5 leading-relaxed">
+        <p>L’appli est en construction.</p>
+        <Suspense>
+          <MembreConnecte />
+        </Suspense>
       </section>
 
       <AideInstallation />
     </main>
+  );
+}
+
+async function MembreConnecte() {
+  const supabase = await creerClientServeur();
+  const { data } = await supabase.auth.getClaims();
+  const claims = data?.claims;
+  if (!claims?.email) return null;
+  const { data: membre } = await supabase.from("membre").select("role").eq("id", claims.sub).maybeSingle();
+  const role = membre ? LIBELLES_ROLE[membre.role] : null;
+  return (
+    <>
+      <p className="text-sm text-taupe">
+        Connecté avec {claims.email}
+        {role ? ` · ${role}` : ""}
+      </p>
+      <BoutonDeconnexion />
+    </>
   );
 }

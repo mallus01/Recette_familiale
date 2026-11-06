@@ -8,6 +8,8 @@ Le cadrage est dans `docs/` (le cahier des charges fait foi) et les consignes po
 
 Prérequis : Node.js 20.9 ou plus récent.
 
+Copier `.env.example` en `.env.local` et y mettre l'URL et la clé publishable du projet Supabase.
+
 ```bash
 npm install
 npm run dev      # http://localhost:3000
@@ -20,7 +22,8 @@ npm run build && npm start   # version de production, avec le service worker
 - Next.js 16 (App Router) + Tailwind CSS 4
 - PWA sans librairie : manifeste `src/app/manifest.ts`, service worker `public/sw.js` (page hors connexion), icônes dans `public/icons/` et `src/app/` (générées par `scripts/generer-icones.py`)
 - Supabase : schéma et règles d'accès dans `supabase/`
-- À venir : connexion Supabase Auth, Brevo (e-mails), modèle d'IA de vision
+- Connexion : Supabase Auth (lien magique et code dans un seul e-mail, via Brevo) ; réglages dans `docs/guide-connexion.md`
+- À venir : modèle d'IA de vision
 
 ## Base Supabase
 

@@ -332,6 +332,11 @@ Propositions faites lors de l'écriture du schéma (US-02), appliquées dans la 
 - La table des photos proposées n'est créée qu'avec la V2, quand la fonction arrive.
 - L'admin ne voit pas les listes Favoris et À cuisiner des autres membres.
 
+Proposition faite lors de la connexion (US-03) :
+
+- Une adresse sans compte voit le même écran « e-mail envoyé » qu'une adresse connue, mais ne reçoit rien, pour ne pas révéler qui a un compte.
+- La session de 30 jours repart à chaque utilisation de l'appli (on n'est déconnecté qu'après 30 jours sans l'ouvrir).
+
 ## Journal des décisions
 
 | Date | Sujet | Décision |
