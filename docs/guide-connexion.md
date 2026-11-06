@@ -37,7 +37,11 @@ Project Settings → API Keys : copier l'URL du projet et la clé **publishable*
 
 ## 5. Créer votre compte
 
-En V1, le compte est créé à la main (US-04) : Authentication → Users → Add user → Create new user, avec votre e-mail et sans mot de passe (cocher Auto Confirm User). Le trigger de la base crée la fiche membre.
+En V1, le compte est créé à la main (US-04) :
+
+1. Authentication → Users → Add user → Create new user, avec votre e-mail et sans mot de passe (cocher Auto Confirm User). La base crée la fiche membre avec le rôle lecteur.
+2. SQL Editor : coller le contenu de `supabase/scripts/definir-admin.sql`, remplacer `votre.adresse@exemple.fr` par votre adresse, puis Run. Le résultat doit afficher votre adresse avec le rôle `admin`.
+3. Se connecter à l'appli : l'accueil affiche « Connecté avec … · Administrateur ».
 
 ## Comportement attendu
 

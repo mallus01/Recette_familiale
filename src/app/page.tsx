@@ -3,6 +3,12 @@ import { creerClientServeur } from "@/lib/supabase/serveur";
 import { AideInstallation } from "./aide-installation";
 import { BoutonDeconnexion } from "./deconnexion";
 
+const LIBELLES_ROLE: Record<string, string> = {
+  admin: "Administrateur",
+  contributeur: "Contributeur",
+  lecteur: "Lecteur",
+};
+
 export default function Accueil() {
   return (
     <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-6 pt-[max(3rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))]">
@@ -28,11 +34,16 @@ export default function Accueil() {
 async function MembreConnecte() {
   const supabase = await creerClientServeur();
   const { data } = await supabase.auth.getClaims();
-  const email = data?.claims?.email;
-  if (!email) return null;
+  const claims = data?.claims;
+  if (!claims?.email) return null;
+  const { data: membre } = await supabase.from("membre").select("role").eq("id", claims.sub).maybeSingle();
+  const role = membre ? LIBELLES_ROLE[membre.role] : null;
   return (
     <>
-      <p className="text-sm text-taupe">Connecté avec {email}</p>
+      <p className="text-sm text-taupe">
+        Connecté avec {claims.email}
+        {role ? ` · ${role}` : ""}
+      </p>
       <BoutonDeconnexion />
     </>
   );
