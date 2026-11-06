@@ -325,7 +325,12 @@ Le détail des user stories et leur suivi : `docs/backlog-v1.md`.
 
 ## Points ouverts à valider
 
-Aucun point ouvert à ce jour. Les prochaines propositions non validées seront listées ici.
+Propositions faites lors de l'écriture du schéma (US-02), appliquées dans la migration en attendant validation :
+
+- Un lecteur ne voit que les recettes publiées ; les brouillons et les pages scannées sont réservés aux contributeurs et à l'admin.
+- Une page scannée a un quatrième statut, « en échec », pour pouvoir relancer sa lecture (US-09).
+- La table des photos proposées n'est créée qu'avec la V2, quand la fonction arrive.
+- L'admin ne voit pas les listes Favoris et À cuisiner des autres membres.
 
 ## Journal des décisions
 
