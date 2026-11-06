@@ -1,0 +1,32 @@
+# US-05 · Empêche le projet Supabase gratuit de se mettre en pause (7 jours d'inactivité).
+# Une requête par jour sur la base. En cas d'échec, GitHub envoie un e-mail
+# (réglage : GitHub → Settings → Notifications → Actions).
+name: Anti-pause Supabase
+
+on:
+  schedule:
+    - cron: "17 6 * * *" # chaque jour vers 6 h 17 UTC
+  workflow_dispatch: # bouton « Run workflow » pour tester à la main
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Interroger la base
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_PUBLISHABLE_KEY" ]; then
+            echo "::error::Secrets SUPABASE_URL et SUPABASE_PUBLISHABLE_KEY manquants (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+          reponse=$(curl --silent --show-error --fail-with-body --retry 3 --retry-delay 30 --max-time 60 \
+            -X POST "$SUPABASE_URL/rest/v1/rpc/ping" \
+            -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{}') || { echo "::error::La base n'a pas répondu : $reponse"; exit 1; }
+          echo "La base a répondu : $reponse"

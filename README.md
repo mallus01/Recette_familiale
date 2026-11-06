@@ -23,6 +23,7 @@ npm run build && npm start   # version de production, avec le service worker
 - PWA sans librairie : manifeste `src/app/manifest.ts`, service worker `public/sw.js` (page hors connexion), icônes dans `public/icons/` et `src/app/` (générées par `scripts/generer-icones.py`)
 - Supabase : schéma et règles d'accès dans `supabase/`
 - Connexion : Supabase Auth (lien magique et code dans un seul e-mail, via Brevo) ; réglages dans `docs/guide-connexion.md`
+- Anti-pause : tâche GitHub Actions quotidienne (`.github/workflows/anti-pause.yml`) ; réglages dans `docs/guide-anti-pause.md`
 - À venir : modèle d'IA de vision
 
 ## Base Supabase
@@ -30,7 +31,7 @@ npm run build && npm start   # version de production, avec le service worker
 Le schéma est versionné dans `supabase/migrations/` (une migration par évolution, jamais modifiée après application).
 
 1. Créer un projet sur supabase.com (offre gratuite).
-2. Dans SQL Editor, coller et exécuter le contenu de `supabase/migrations/20261106230000_schema_v1.sql`, puis `supabase/seed.sql` pour les valeurs d'exemple des listes fermées.
+2. Dans SQL Editor, coller et exécuter chaque fichier de `supabase/migrations/` dans l'ordre de leur nom, puis `supabase/seed.sql` pour les valeurs d'exemple des listes fermées.
 3. Vérifier dans Table Editor que les 14 tables sont là, avec RLS activé (cadenas).
 
 Tester les règles d'accès sur un Postgres local (sans Supabase) :
@@ -39,6 +40,7 @@ Tester les règles d'accès sur un Postgres local (sans Supabase) :
 createdb essai
 psql -d essai -f supabase/tests/stub-supabase.sql
 psql -d essai -f supabase/migrations/20261106230000_schema_v1.sql
+psql -d essai -f supabase/migrations/20261106240000_anti_pause.sql
 psql -d essai -f supabase/seed.sql
 psql -d essai -f supabase/tests/rls.sql   # affiche « Tous les tests RLS passent »
 ```
