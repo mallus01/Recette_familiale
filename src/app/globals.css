@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* Palette validée (voir docs/cahier-des-charges.md, section Palette de couleurs).
+   Les trois couleurs claires ne servent jamais de couleur de texte sur fond blanc. */
+@theme {
+  --color-ardoise: #5c707d; /* texte principal, bouton principal */
+  --color-taupe: #7d735c; /* texte secondaire, notes */
+  --color-peche: #fca86e; /* surlignage, progression */
+  --color-jaune: #fcdc8d; /* fond du scan, tags d'occasion */
+  --color-ciel: #8dd2fc; /* tags de type de repas, informations */
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: #ffffff;
+  color: var(--color-ardoise);
+}
