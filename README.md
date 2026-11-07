@@ -43,10 +43,13 @@ psql -d essai -f supabase/migrations/20261106230000_schema_v1.sql
 psql -d essai -f supabase/migrations/20261106240000_anti_pause.sql
 psql -d essai -f supabase/migrations/20261107120000_stockage_images.sql
 psql -d essai -f supabase/migrations/20261107160000_lecture_ia.sql
+psql -d essai -f supabase/migrations/20261107170000_comparaison_ia.sql
+psql -d essai -f supabase/migrations/20261108090000_relecture.sql
 psql -d essai -f supabase/seed.sql
 psql -d essai -f supabase/tests/rls.sql        # « Tous les tests RLS passent »
 psql -d essai -f supabase/tests/stockage.sql   # « Tous les tests de stockage passent »
 psql -d essai -f supabase/tests/lecture.sql    # « Tous les tests de lecture passent »
+psql -d essai -f supabase/tests/relecture.sql  # « Tous les tests de relecture passent »
 ```
 
 ## Déploiement sur Vercel

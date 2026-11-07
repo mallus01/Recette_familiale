@@ -269,7 +269,7 @@ La webapp repose sur Next.js en PWA, Supabase, un modèle d'IA de vision, Brevo 
 | --- | --- | --- |
 | Interface | Next.js + Tailwind, en PWA (installable) | Interface et logique serveur, mobile first |
 | Connexion, base, images | Supabase, offre gratuite uniquement | Lien magique et code, base Postgres, stockage des scans et photos |
-| Lecture des cahiers | Modèle d'IA multimodal, choisi après un test comparatif entre Claude (Anthropic) et Gemini (Google) sur de vraies pages | Extraction de la recette structurée et des mots douteux |
+| Lecture des cahiers | Claude (Anthropic), modèle d'IA multimodal retenu après un test comparatif avec Gemini (Google) sur de vraies pages | Extraction de la recette structurée et des mots douteux |
 | E-mails | Brevo | Envoi des e-mails de connexion et d'invitation |
 | Hébergement | Vercel | Déploiement de la webapp |
 
@@ -361,8 +361,17 @@ Propositions faites lors de la comparaison des modèles (US-11) :
 
 - La comparaison se fait dans l'appli, sur un écran réservé à l'administrateur : les deux modèles lisent la même page, sans créer de recette, et l'administrateur saisit le nombre d'erreurs de chacun.
 - Une erreur compte un mot mal lu, une quantité fausse, ou un ingrédient ou une étape manquant ou inventé.
+- Une lecture est interrompue au bout de 4 minutes et notée en échec ; une lecture restée bloquée peut être relancée.
 
-## Journal des décisions
+Propositions faites lors de la relecture (US-12) :
+
+- La relecture s'ouvre depuis la file à relire, en touchant le titre d'une recette ; une recette sur plusieurs pages permet de passer d'un scan à l'autre.
+- Le scan reste visible en haut pendant la saisie ; il se zoome au pincement, au double toucher ou avec les boutons + et −.
+- L'IA situe chaque mot douteux sur la photo, pour l'encadrer sur le scan ; les pages lues avant cette version n'ont que le surlignage dans les champs, sauf à relancer leur lecture.
+- Un encadré récapitule les mots douteux encore présents ; un mot corrigé n'est plus surligné.
+- Chaque ingrédient se corrige tel qu'écrit, puis en quantité, unité et nom ; on peut ajouter ou retirer ingrédients, groupes, étapes et notes.
+- Un bouton Enregistrer les corrections garde les changements ; les boutons Plus tard et Valider arrivent avec US-17.
+
 
 | Date | Sujet | Décision |
 | --- | --- | --- |
@@ -407,3 +416,4 @@ Propositions faites lors de la comparaison des modèles (US-11) :
 | 06/11/2026 | Organisation | Scrum adapté en solo, sprints de 2 semaines, V1 en cinq sprints (0 à 4) |
 | 06/11/2026 | Numérisation | Première photo d'un cahier = sa couverture, utilisée comme image de couverture dans les menus |
 | 07/11/2026 | Technique | Lecture des cahiers : comparaison entre Claude et Gemini (US-11), modèle interchangeable par variable d'environnement |
+| 07/11/2026 | Technique | Modèle de lecture retenu : Claude (les lectures Gemini n'aboutissaient pas lors du test) ; LECTURE_IA=claude |

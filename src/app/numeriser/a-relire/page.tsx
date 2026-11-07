@@ -64,7 +64,9 @@ async function Contenu() {
       url: urls.get(p.image_chemin),
       statut: p.statut,
       nb_mots_douteux: p.nb_mots_douteux,
-      titres: p.recette_page.flatMap((rp) => (rp.recette?.statut === "brouillon" ? [rp.recette.titre] : [])),
+      recettes: p.recette_page.flatMap((rp) =>
+        rp.recette?.statut === "brouillon" ? [{ id: rp.recette.id, titre: rp.recette.titre }] : [],
+      ),
     });
     parCahier.set(p.cahier.id, cahier);
   }
