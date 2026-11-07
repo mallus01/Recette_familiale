@@ -357,6 +357,11 @@ Propositions faites lors de la file à relire (US-10) :
 - Les cahiers sont classés par ordre alphabétique ; chaque page affiche les titres des recettes lues.
 - La file est accessible depuis l'écran Numériser.
 
+Propositions faites lors de la comparaison des modèles (US-11) :
+
+- La comparaison se fait dans l'appli, sur un écran réservé à l'administrateur : les deux modèles lisent la même page, sans créer de recette, et l'administrateur saisit le nombre d'erreurs de chacun.
+- Une erreur compte un mot mal lu, une quantité fausse, ou un ingrédient ou une étape manquant ou inventé.
+
 ## Journal des décisions
 
 | Date | Sujet | Décision |

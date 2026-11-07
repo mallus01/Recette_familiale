@@ -40,3 +40,12 @@ Redéployer ensuite (Deployments → … → Redeploy).
 - Dès qu'une page est envoyée, elle passe « Lecture en cours », puis « Prête » avec son nombre de mots douteux, en général en moins d'une minute.
 - Chaque recette lue devient une recette brouillon, à relire au sprint 2.
 - Une page « En échec » (ou restée en lecture plus de 10 minutes) se relance depuis la fiche du cahier. En cas d'échec, le détail est dans Vercel → Logs.
+
+## Comparer Claude et Gemini (US-11)
+
+1. Supabase → SQL Editor : coller le contenu de `supabase/migrations/20261107170000_comparaison_ia.sql`, puis Run.
+2. Vérifier que `ANTHROPIC_API_KEY` et `GEMINI_API_KEY` sont toutes les deux dans Vercel. Facultatif : `LECTURE_PRIX_GEMINI` = prix en dollars par million de jetons, entrée puis sortie (par exemple `0.3,2.5`), d'après la grille de Google, pour afficher le coût de Gemini.
+3. Photographier 10 pages variées : écritures différentes, page abîmée, plusieurs recettes sur une page, mesures anciennes.
+4. Numériser → Comparer les modèles d'IA : appuyer sur Comparer pour chaque page. Les deux modèles lisent la page en même temps ; la comparaison n'écrit aucune recette.
+5. Ouvrir chaque résultat, le comparer au scan (toucher la vignette pour l'agrandir) et saisir le nombre d'erreurs : mot mal lu, quantité fausse, ingrédient ou étape manquant ou inventé.
+6. Le bilan en haut donne, par modèle, les erreurs par page, le coût par page et la durée. Choisir le modèle, puis régler `LECTURE_IA` dans Vercel en conséquence.

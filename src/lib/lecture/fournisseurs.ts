@@ -8,12 +8,17 @@ import { CONSIGNE, ResultatLecture } from "./resultat";
 // pouvoir les comparer sur de vraies pages (US-11) : variable LECTURE_IA = claude, gemini
 // (ou simulee pour les tests). Les clés restent dans les variables d'environnement.
 
-export type Lecture = { resultat: ResultatLecture; modele: string };
+export type Fournisseur = "claude" | "gemini" | "simulee";
+export type Lecture = {
+  resultat: ResultatLecture;
+  modele: string;
+  jetons: { entree: number; sortie: number };
+};
 
 const MODELE_CLAUDE = process.env.LECTURE_MODELE_CLAUDE || "claude-opus-5-5";
 const MODELE_GEMINI = process.env.LECTURE_MODELE_GEMINI || "gemini-3.8-flash";
 
-export function fournisseurChoisi(): "claude" | "gemini" | "simulee" | null {
+export function fournisseurChoisi(): Fournisseur | null {
   const choix = process.env.LECTURE_IA;
   if (choix === "claude" || choix === "gemini" || choix === "simulee") return choix;
   if (process.env.ANTHROPIC_API_KEY) return "claude";
@@ -21,8 +26,11 @@ export function fournisseurChoisi(): "claude" | "gemini" | "simulee" | null {
   return null;
 }
 
-export async function lirePage(image: Uint8Array, typeMime: string): Promise<Lecture> {
-  const fournisseur = fournisseurChoisi();
+export async function lirePage(
+  image: Uint8Array,
+  typeMime: string,
+  fournisseur: Fournisseur | null = fournisseurChoisi(),
+): Promise<Lecture> {
   if (fournisseur === "claude") return lireAvecClaude(image, typeMime);
   if (fournisseur === "gemini") return lireAvecGemini(image, typeMime);
   if (fournisseur === "simulee") return lectureSimulee();
@@ -64,7 +72,11 @@ async function lireAvecClaude(image: Uint8Array, typeMime: string): Promise<Lect
   if (reponse.stop_reason === "max_tokens") throw new Error("Lecture tronquée");
   const texte = reponse.content.find((b) => b.type === "text");
   if (!texte || texte.type !== "text") throw new Error("Réponse vide");
-  return { resultat: ResultatLecture.parse(JSON.parse(texte.text)), modele: reponse.model };
+  return {
+    resultat: ResultatLecture.parse(JSON.parse(texte.text)),
+    modele: reponse.model,
+    jetons: { entree: reponse.usage.input_tokens, sortie: reponse.usage.output_tokens },
+  };
 }
 
 async function lireAvecGemini(image: Uint8Array, typeMime: string): Promise<Lecture> {
@@ -87,7 +99,12 @@ async function lireAvecGemini(image: Uint8Array, typeMime: string): Promise<Lect
     },
   });
   if (!reponse.text) throw new Error("Réponse vide");
-  return { resultat: ResultatLecture.parse(JSON.parse(reponse.text)), modele: MODELE_GEMINI };
+  const u = reponse.usageMetadata;
+  return {
+    resultat: ResultatLecture.parse(JSON.parse(reponse.text)),
+    modele: MODELE_GEMINI,
+    jetons: { entree: u?.promptTokenCount ?? 0, sortie: (u?.candidatesTokenCount ?? 0) + (u?.thoughtsTokenCount ?? 0) },
+  };
 }
 
 // Pour les tests sans clé : une recette fixe, après un court délai.
@@ -96,6 +113,7 @@ async function lectureSimulee(): Promise<Lecture> {
   if (process.env.LECTURE_SIMULEE_ECHEC === "1") throw new Error("Échec simulé");
   return {
     modele: "simulee",
+    jetons: { entree: 1500, sortie: 800 },
     resultat: {
       recettes: [
         {
