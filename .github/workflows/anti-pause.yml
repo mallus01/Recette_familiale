@@ -24,8 +24,11 @@ jobs:
             echo "::error::Secrets SUPABASE_URL et SUPABASE_PUBLISHABLE_KEY manquants (Settings → Secrets and variables → Actions)."
             exit 1
           fi
+          # Tolère une adresse saisie avec « / » final ou « /rest/v1 » (copiée depuis Data API).
+          base="${SUPABASE_URL%/}"
+          base="${base%/rest/v1}"
           reponse=$(curl --silent --show-error --fail-with-body --retry 3 --retry-delay 30 --max-time 60 \
-            -X POST "$SUPABASE_URL/rest/v1/rpc/ping" \
+            -X POST "$base/rest/v1/rpc/ping" \
             -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
             -H "Content-Type: application/json" \
             -d '{}') || { echo "::error::La base n'a pas répondu : $reponse"; exit 1; }
