@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import type { ResultatLecture } from "@/lib/lecture/resultat";
+import { texteNote, type NoteLue, type ResultatLecture } from "@/lib/lecture/resultat";
 import { creerClientNavigateur } from "@/lib/supabase/client";
 
 export type Essai = {
@@ -255,9 +255,10 @@ function Resultat({ resultat }: { resultat: ResultatLecture }) {
               <li key={j}>{e}</li>
             ))}
           </ol>
-          {r.notes.map((n, j) => (
+          {(r.notes as NoteLue[]).map((n, j) => (
             <p key={j} className="italic text-taupe">
-              {n}
+              {typeof n !== "string" && n.etape ? `Étape ${n.etape} : ` : ""}
+              {texteNote(n)}
             </p>
           ))}
         </div>

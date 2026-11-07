@@ -33,8 +33,8 @@ Objectif : transformer une page lue par l'IA en recette publiée et consultable.
 
 | ID | User story | Critères d'acceptation | Statut |
 | --- | --- | --- | --- |
-| US-12 | En tant que contributeur, je veux relire une recette face à son scan, afin de corriger les erreurs de l'IA. | Scan zoomable en haut, champs modifiables en dessous ; titre, ingrédients, étapes et notes modifiables ; mots douteux surlignés à la fois sur le scan et dans les champs. | En cours |
-| US-13 | En tant que contributeur, je veux que les notes du cahier soient identifiées, afin de les distinguer des étapes. | Notes repérées par l'IA marquées comme notes ; rattachables à une étape ou à la recette ; affichées en italique. | À faire |
+| US-12 | En tant que contributeur, je veux relire une recette face à son scan, afin de corriger les erreurs de l'IA. | Scan zoomable en haut, champs modifiables en dessous ; titre, ingrédients, étapes et notes modifiables ; mots douteux surlignés à la fois sur le scan et dans les champs. | Terminée |
+| US-13 | En tant que contributeur, je veux que les notes du cahier soient identifiées, afin de les distinguer des étapes. | Notes repérées par l'IA marquées comme notes ; rattachables à une étape ou à la recette ; affichées en italique. | En cours |
 | US-14 | En tant que contributeur, je veux classer la recette par tags, afin de la retrouver par filtre. | Un type de repas choisi dans sa liste fermée ; une ou plusieurs occasions ; case Classique. | À faire |
 | US-15 | En tant qu'administrateur, je veux gérer les listes fermées, afin de maîtriser les valeurs de tags. | Ajouter, renommer, supprimer une valeur de type de repas ou d'occasion ; icône par défaut pour chaque valeur. | À faire |
 | US-16 | En tant que contributeur, je veux enrichir la recette, afin de garder son histoire. | Champs transmis par (texte libre), souvenir, portions et durée. | À faire |

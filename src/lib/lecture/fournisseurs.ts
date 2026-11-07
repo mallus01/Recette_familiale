@@ -145,7 +145,10 @@ async function lectureSimulee(): Promise<Lecture> {
             },
           ],
           etapes: ["Mélanger le yaourt et la farine.", "Cuire 35 minutes à four moyen."],
-          notes: ["Recette de tante Paule"],
+          notes: [
+            { texte: "Recette de tante Paule", etape: null },
+            { texte: "Ne pas ouvrir le four avant 25 minutes", etape: 2 },
+          ],
         },
       ],
       mots_douteux: [

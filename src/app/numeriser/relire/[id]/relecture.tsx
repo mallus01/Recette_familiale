@@ -14,12 +14,18 @@ export type IngredientARelire = {
   nom: string;
   texte_origine: string;
 };
+// etape : numéro de l'étape que la note complète (1, 2…), ou null pour toute la recette.
+export type NoteARelire = {
+  texte: string;
+  etape: number | null;
+  origine: "cahier" | "membre";
+};
 export type RecetteARelire = {
   id: number;
   titre: string;
   groupes: { nom: string; ingredients: IngredientARelire[] }[];
   etapes: string[];
-  notes: string[];
+  notes: NoteARelire[];
 };
 export type ScanARelire = {
   id: number;
@@ -73,7 +79,7 @@ export function Relecture({
       ...g.ingredients.flatMap((i) => [i.nom, i.texte_origine]),
     ]),
     ...recette.etapes,
-    ...recette.notes,
+    ...recette.notes.map((n) => n.texte),
   ];
   const restants = tousLesMots.filter((mot) =>
     textes.some((t) => contientDouteux(t, motifDouteux([mot]))),
@@ -99,6 +105,11 @@ export function Relecture({
     modifier((r) => ({
       ...r,
       groupes: r.groupes.map((g, k) => (k === gi ? { ...g, ...maj } : g)),
+    }));
+  const majNote = (ni: number, maj: Partial<NoteARelire>) =>
+    modifier((r) => ({
+      ...r,
+      notes: r.notes.map((n, k) => (k === ni ? { ...n, ...maj } : n)),
     }));
   const majIngredient = (
     gi: number,
@@ -345,6 +356,14 @@ export function Relecture({
                   modifier((r) => ({
                     ...r,
                     etapes: r.etapes.filter((_, k) => k !== ei),
+                    // Les notes de l'étape retirée passent à la recette, les suivantes suivent.
+                    notes: r.notes.map((n) =>
+                      n.etape === ei + 1
+                        ? { ...n, etape: null }
+                        : n.etape !== null && n.etape > ei + 1
+                          ? { ...n, etape: n.etape - 1 }
+                          : n,
+                    ),
                   }))
                 }
               />
@@ -359,21 +378,44 @@ export function Relecture({
       </Section>
 
       <Section titre="Notes">
+        <p className="-mt-1 text-sm text-taupe">
+          Remarques ajoutées au texte de la recette, en marge ou entre
+          parenthèses.
+        </p>
         <ul className="flex flex-col gap-3">
           {recette.notes.map((note, ni) => (
             <li key={ni} className="flex items-start gap-2">
-              <ChampSurligne
-                libelle={`Note ${ni + 1}`}
-                valeur={note}
-                motif={motif}
-                onChange={(texte) =>
-                  modifier((r) => ({
-                    ...r,
-                    notes: r.notes.map((t, k) => (k === ni ? texte : t)),
-                  }))
-                }
-                className="flex-1 text-taupe italic"
-              />
+              <div className="flex flex-1 flex-col gap-2">
+                <ChampSurligne
+                  libelle={`Note ${ni + 1}`}
+                  valeur={note.texte}
+                  motif={motif}
+                  onChange={(texte) => majNote(ni, { texte })}
+                  className="text-taupe italic"
+                />
+                <label className="flex items-center gap-2 text-sm text-taupe">
+                  Rattachée à
+                  <select
+                    value={note.etape ?? ""}
+                    onChange={(e) =>
+                      majNote(ni, {
+                        etape: e.target.value ? Number(e.target.value) : null,
+                      })
+                    }
+                    className="min-w-0 flex-1 rounded-lg border border-ardoise/25 bg-white px-2 py-1.5 text-ardoise"
+                  >
+                    <option value="">toute la recette</option>
+                    {recette.etapes.map((t, ei) => (
+                      <option key={ei} value={ei + 1}>
+                        l’étape {ei + 1}
+                        {t.trim()
+                          ? ` : ${t.trim().slice(0, 40)}${t.trim().length > 40 ? "…" : ""}`
+                          : ""}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
               <BoutonRetirer
                 libelle={`Retirer la note ${ni + 1}`}
                 onClick={() =>
@@ -387,7 +429,15 @@ export function Relecture({
           ))}
         </ul>
         <BoutonAjouter
-          onClick={() => modifier((r) => ({ ...r, notes: [...r.notes, ""] }))}
+          onClick={() =>
+            modifier((r) => ({
+              ...r,
+              notes: [
+                ...r.notes,
+                { texte: "", etape: null, origine: "cahier" },
+              ],
+            }))
+          }
         >
           Ajouter une note
         </BoutonAjouter>
