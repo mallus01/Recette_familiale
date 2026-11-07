@@ -372,6 +372,12 @@ Propositions faites lors de la relecture (US-12) :
 - Chaque ingrédient se corrige tel qu'écrit, puis en quantité, unité et nom ; on peut ajouter ou retirer ingrédients, groupes, étapes et notes.
 - Un bouton Enregistrer les corrections garde les changements ; les boutons Plus tard et Valider arrivent avec US-17.
 
+Propositions faites pour les notes du cahier (US-13) :
+
+- L'IA rattache chaque note à l'étape qu'elle complète, ou à toute la recette ; les pages lues avant cette version ont leurs notes rattachées à la recette.
+- En relecture, chaque note se rattache avec un menu « Rattachée à » ; si l'étape est retirée, sa note passe à la recette.
+
+## Journal des décisions
 
 | Date | Sujet | Décision |
 | --- | --- | --- |
