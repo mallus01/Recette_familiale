@@ -337,6 +337,13 @@ Proposition faite lors de la connexion (US-03) :
 - Une adresse sans compte voit le même écran « e-mail envoyé » qu'une adresse connue, mais ne reçoit rien, pour ne pas révéler qui a un compte.
 - La session de 30 jours repart à chaque utilisation de l'appli (on n'est déconnecté qu'après 30 jours sans l'ouvrir).
 
+Propositions faites lors de la capture des pages (US-07) :
+
+- Le recadrage automatique est rectangulaire, sans redresser une page photographiée de travers ; si la page ne se distingue pas du fond, la photo est gardée entière.
+- On peut reprendre la dernière photo ; elle remplace la page du même numéro, qui repart en attente de lecture.
+- Les pages s'envoient pendant qu'on photographie la suivante ; une page en échec d'envoi peut être renvoyée, et Terminer attend la fin des envois.
+- En attendant la file à relire (US-10), Terminer ramène à la fiche du cahier, qui montre ses pages.
+
 ## Journal des décisions
 
 | Date | Sujet | Décision |
