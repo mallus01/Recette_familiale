@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { preparerPage } from "@/lib/images";
+import { lancerLecture } from "@/lib/lecture/lancer";
 import { creerClientNavigateur } from "@/lib/supabase/client";
 
 type Etat = "preparation" | "envoi" | "envoyee" | "echec";
@@ -79,7 +80,7 @@ export function CaptureSerie({
         .upload(chemin, blob, { contentType: "image/jpeg", upsert: true });
       if (envoi.error) throw envoi.error;
       // Une page reprise repart en attente de lecture par l'IA.
-      const { error } = await supabase
+      const { data: page, error } = await supabase
         .from("page_scannee")
         .upsert(
           {
@@ -88,11 +89,16 @@ export function CaptureSerie({
             image_chemin: chemin,
             statut: "en_attente",
             nb_mots_douteux: 0,
+            lecture: null,
           },
           { onConflict: "cahier_id,numero" },
-        );
+        )
+        .select("id")
+        .single();
       if (error) throw error;
       majPrise(numero, { etat: "envoyee" });
+      // La lecture par l'IA démarre aussitôt, en arrière-plan sur le serveur.
+      lancerLecture(page.id);
     } catch {
       majPrise(numero, { etat: "echec" });
     }
