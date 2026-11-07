@@ -12,7 +12,7 @@ export type PageARelire = {
   url?: string;
   statut: StatutPage;
   nb_mots_douteux: number;
-  titres: string[];
+  recettes: { id: number; titre: string }[];
 };
 export type CahierARelire = { id: number; nom: string; pages: PageARelire[] };
 
@@ -64,9 +64,17 @@ export function FileARelire({ cahiers }: { cahiers: CahierARelire[] }) {
                 <img src={p.url} alt={`Page ${p.numero}`} className="h-16 w-12 shrink-0 rounded-md bg-jaune/40 object-cover" />
                 <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                   <span className="font-medium">Page {p.numero}</span>
-                  {p.titres.length > 0 ? <span className="truncate text-sm">{p.titres.join(" · ")}</span> : null}
+                  {p.recettes.map((r) => (
+                    <Link
+                      key={r.id}
+                      href={`/numeriser/relire/${r.id}`}
+                      className="truncate text-sm font-medium underline decoration-ciel decoration-2 underline-offset-4"
+                    >
+                      {r.titre}
+                    </Link>
+                  ))}
                   <span className="text-sm text-taupe">
-                    {p.statut === "prete" && p.titres.length === 0 ? "Aucune recette trouvée" : libelleEtat(p.statut, p.nb_mots_douteux)}
+                    {p.statut === "prete" && p.recettes.length === 0 ? "Aucune recette trouvée" : libelleEtat(p.statut, p.nb_mots_douteux)}
                   </span>
                 </div>
                 <Pastille statut={p.statut} douteux={p.nb_mots_douteux} />

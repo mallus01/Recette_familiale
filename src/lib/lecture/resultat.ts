@@ -25,8 +25,22 @@ export const ResultatLecture = z.object({
       notes: z.array(z.string()),
     }),
   ),
-  mots_douteux: z.array(z.object({ mot: z.string(), contexte: z.string() })),
+  mots_douteux: z.array(
+    z.object({
+      mot: z.string(),
+      contexte: z.string(),
+      // Emplacement du mot sur la photo, en fractions de sa largeur et de sa hauteur
+      // (0 à 1, depuis le coin haut gauche), pour le surligner sur le scan (US-12).
+      zone: z
+        .object({ x: z.number(), y: z.number(), largeur: z.number(), hauteur: z.number() })
+        .nullable(),
+    }),
+  ),
 });
+
+// Mot douteux tel que gardé avec la page (les lectures d'avant US-12 n'ont pas de zone).
+export type MotDouteux = { mot: string; contexte: string; zone?: Zone | null };
+export type Zone = { x: number; y: number; largeur: number; hauteur: number };
 
 export type ResultatLecture = z.infer<typeof ResultatLecture>;
 
@@ -42,4 +56,4 @@ Recopie fidèlement chaque recette de la page, sans rien inventer ni corriger le
 
 Si la page contient plusieurs recettes, renvoie-les toutes. Si une recette commence sur la page précédente ou continue sur la suivante, recopie seulement ce qui est sur cette page. Si la page ne contient aucune recette, renvoie une liste vide.
 
-Pour chaque mot que tu n'arrives pas à lire avec certitude, écris ta meilleure lecture dans le texte, puis ajoute-le à mots_douteux avec quelques mots autour comme contexte.`;
+Pour chaque mot que tu n'arrives pas à lire avec certitude, écris ta meilleure lecture dans le texte, puis ajoute-le à mots_douteux avec quelques mots autour comme contexte, et sa zone sur la photo : x et y du coin haut gauche, largeur et hauteur, en fractions de la largeur et de la hauteur de l'image (de 0 à 1) ; zone null si tu ne sais pas le situer.`;

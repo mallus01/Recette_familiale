@@ -148,7 +148,9 @@ async function lectureSimulee(): Promise<Lecture> {
           notes: ["Recette de tante Paule"],
         },
       ],
-      mots_douteux: [{ mot: "Paule", contexte: "Recette de tante Paule" }],
+      mots_douteux: [
+        { mot: "Paule", contexte: "Recette de tante Paule", zone: { x: 0.55, y: 0.82, largeur: 0.18, hauteur: 0.05 } },
+      ],
     },
   };
 }
