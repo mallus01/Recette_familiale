@@ -42,8 +42,13 @@ type Ligne = {
       ordre: number;
     }[];
   }[];
-  etape: { ordre: number; texte: string }[];
-  note: { id: number; texte: string }[];
+  etape: { id: number; ordre: number; texte: string }[];
+  note: {
+    id: number;
+    texte: string;
+    etape_id: number | null;
+    origine: "cahier" | "membre";
+  }[];
   recette_page: {
     ordre: number;
     page_scannee: {
@@ -68,7 +73,7 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
   const { data: recette } = await supabase
     .from("recette")
     .select(
-      "id, titre, statut, groupe_ingredients(nom, ordre, ingredient(quantite, unite, nom, texte_origine, ordre)), etape(ordre, texte), note(id, texte), recette_page(ordre, page_scannee(id, numero, image_chemin, lecture, cahier(nom)))",
+      "id, titre, statut, groupe_ingredients(nom, ordre, ingredient(quantite, unite, nom, texte_origine, ordre)), etape(id, ordre, texte), note(id, texte, etape_id, origine), recette_page(ordre, page_scannee(id, numero, image_chemin, lecture, cahier(nom)))",
     )
     .eq("id", Number(id))
     .maybeSingle<Ligne>();
@@ -86,6 +91,7 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
     motsDouteux: p.lecture?.mots_douteux ?? [],
   }));
 
+  const etapes = recette.etape.sort(parOrdre);
   const contenu: RecetteARelire = {
     id: recette.id,
     titre: recette.titre,
@@ -99,8 +105,17 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
         texte_origine: i.texte_origine ?? "",
       })),
     })),
-    etapes: recette.etape.sort(parOrdre).map((e) => e.texte),
-    notes: recette.note.sort((a, b) => a.id - b.id).map((n) => n.texte),
+    etapes: etapes.map((e) => e.texte),
+    notes: recette.note
+      .sort((a, b) => a.id - b.id)
+      .map((n) => {
+        const position = etapes.findIndex((e) => e.id === n.etape_id);
+        return {
+          texte: n.texte,
+          etape: position >= 0 ? position + 1 : null,
+          origine: n.origine,
+        };
+      }),
   };
 
   return (

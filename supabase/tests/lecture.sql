@@ -37,7 +37,7 @@ select public.enregistrer_lecture(900, $j${
         {"nom": null, "ingredients": [{"quantite": 4, "unite": null, "nom": "pommes", "texte_origine": "4 pommes"}]}
       ],
       "etapes": ["Faire la pâte.", "  ", "Cuire 30 min."],
-      "notes": ["Meilleure avec des reinettes"]
+      "notes": ["Meilleure avec des reinettes", {"texte": "Couvrir à mi-cuisson", "etape": 3}]
     },
     {"titre": "", "portions": null, "duree_minutes": 10, "groupes": [], "etapes": ["Mélanger."], "notes": []}
   ],
@@ -62,6 +62,8 @@ do $$ begin
   assert exists (select 1 from public.ingredient where nom = 'sel' and quantite is null and texte_origine = 'une pincée de sel'),
          'ingrédient sans quantité';
   assert exists (select 1 from public.note where texte = 'Meilleure avec des reinettes' and origine = 'cahier'), 'note du cahier';
+  assert (select e.texte from public.note n join public.etape e on e.id = n.etape_id where n.texte = 'Couvrir à mi-cuisson') = 'Cuire 30 min.',
+         'note rattachée à l''étape lue';
 end $$;
 
 -- Relecture de la même page : les anciens brouillons sont remplacés, une recette publiée est gardée

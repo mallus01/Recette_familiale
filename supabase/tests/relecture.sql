@@ -87,6 +87,36 @@ do $$ begin
                  where rp.page_id = 901 and r.titre = 'Recette sans titre'), 'titre par défaut';
 end $$;
 
+-- US-13 : notes rattachées à une étape (numéro compté avant les étapes vides ignorées)
+set role authenticated;
+set request.jwt.claim.sub = '00000000-0000-0000-0000-00000000000c';
+select public.enregistrer_relecture((select recette_id from public.recette_page where page_id = 901), $j${
+  "titre": "Crêpes", "groupes": [],
+  "etapes": ["Mélanger.", " ", "Cuire."],
+  "notes": [
+    {"texte": "Pâte meilleure la veille", "etape": 1, "origine": "cahier"},
+    {"texte": "Beurrer la poêle", "etape": 3, "origine": "membre"},
+    {"texte": "Note sur une étape vide", "etape": 2},
+    {"texte": "Étape inexistante", "etape": 9},
+    "Recette de Mamie"
+  ]
+}$j$);
+reset role;
+
+do $$
+declare v_id bigint := (select recette_id from public.recette_page where page_id = 901);
+begin
+  assert (select e.ordre from public.note n join public.etape e on e.id = n.etape_id
+          where n.texte = 'Pâte meilleure la veille') = 1, 'note de l''étape 1';
+  assert (select e.texte from public.note n join public.etape e on e.id = n.etape_id
+          where n.texte = 'Beurrer la poêle') = 'Cuire.', 'note de l''étape 3, devenue la 2e';
+  assert (select origine from public.note where texte = 'Beurrer la poêle') = 'membre', 'origine gardée';
+  assert (select etape_id is null from public.note where texte = 'Note sur une étape vide'), 'étape vide : note de la recette';
+  assert (select etape_id is null from public.note where texte = 'Étape inexistante'), 'étape inconnue : note de la recette';
+  assert (select etape_id is null and origine = 'cahier' from public.note where recette_id = v_id and texte = 'Recette de Mamie'),
+         'note en simple texte';
+end $$;
+
 delete from public.recette where id in (select recette_id from public.recette_page where page_id = 901);
 delete from public.cahier where id = 901;
 \echo 'Tous les tests de relecture passent'
