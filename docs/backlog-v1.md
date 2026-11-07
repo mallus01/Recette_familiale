@@ -24,8 +24,8 @@ Objectif : photographier un cahier entier et voir l'IA en extraire les recettes.
 | US-07 | En tant que contributeur, je veux photographier les pages à la suite, afin de numériser un cahier en une seule fois. | Numéro de page incrémenté automatiquement ; page détectée et recadrée automatiquement ; vignette de la dernière photo ; bouton Terminer. | Terminée |
 | US-08 | En tant que contributeur, je veux que les photos soient compressées à l'envoi, afin de tenir dans l'offre gratuite. | Environ 300 Ko par image ; texte toujours lisible au zoom ; stockage dans Supabase. | Terminée |
 | US-09 | En tant que contributeur, je veux que l'IA lise chaque page, afin de ne pas retaper les recettes. | Traitement en arrière-plan ; renvoie titre, groupes d'ingrédients, ingrédients (quantité, unité, nom, texte d'origine), étapes, notes et mots douteux ; une page en échec peut être relancée. | Terminée |
-| US-10 | En tant que contributeur, je veux une file des pages à relire, afin de suivre l'avancement de la lecture. | États en attente, lecture en cours, prête ; nombre de mots douteux affiché ; pages triées par cahier et numéro. | En cours |
-| US-11 | En tant que développeur, je veux comparer deux ou trois modèles d'IA sur de vraies pages, afin de choisir le plus fiable. | Test sur 10 pages réelles ; comparaison des erreurs et du coût par page ; modèle retenu consigné dans le cahier des charges. | À faire |
+| US-10 | En tant que contributeur, je veux une file des pages à relire, afin de suivre l'avancement de la lecture. | États en attente, lecture en cours, prête ; nombre de mots douteux affiché ; pages triées par cahier et numéro. | Terminée |
+| US-11 | En tant que développeur, je veux comparer deux ou trois modèles d'IA sur de vraies pages, afin de choisir le plus fiable. | Test sur 10 pages réelles ; comparaison des erreurs et du coût par page ; modèle retenu consigné dans le cahier des charges. | En cours |
 
 ## Sprint 2 · Relecture et fiche recette
 

@@ -45,6 +45,11 @@ async function ListeCahiers() {
       >
         Pages à relire
       </Link>
+      {membre?.role === "admin" ? (
+        <Link href="/numeriser/comparer" className="self-start text-sm text-taupe underline underline-offset-4">
+          Comparer les modèles d’IA
+        </Link>
+      ) : null}
       {cahiers && cahiers.length > 0 ? (
         <section className="flex flex-col gap-3">
           <h2 className="font-semibold">Les cahiers</h2>
