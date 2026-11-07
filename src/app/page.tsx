@@ -1,13 +1,8 @@
 import { Suspense } from "react";
-import { creerClientServeur } from "@/lib/supabase/serveur";
+import Link from "next/link";
+import { LIBELLES_ROLE, membreConnecte, peutNumeriser } from "@/lib/membre";
 import { AideInstallation } from "./aide-installation";
 import { BoutonDeconnexion } from "./deconnexion";
-
-const LIBELLES_ROLE: Record<string, string> = {
-  admin: "Administrateur",
-  contributeur: "Contributeur",
-  lecteur: "Lecteur",
-};
 
 export default function Accueil() {
   return (
@@ -32,18 +27,18 @@ export default function Accueil() {
 }
 
 async function MembreConnecte() {
-  const supabase = await creerClientServeur();
-  const { data } = await supabase.auth.getClaims();
-  const claims = data?.claims;
-  if (!claims?.email) return null;
-  const { data: membre } = await supabase.from("membre").select("role").eq("id", claims.sub).maybeSingle();
-  const role = membre ? LIBELLES_ROLE[membre.role] : null;
+  const membre = await membreConnecte();
+  if (!membre) return null;
   return (
     <>
       <p className="text-sm text-taupe">
-        Connecté avec {claims.email}
-        {role ? ` · ${role}` : ""}
+        Connecté avec {membre.email} · {LIBELLES_ROLE[membre.role]}
       </p>
+      {peutNumeriser(membre.role) ? (
+        <Link href="/numeriser" className="rounded-xl bg-ardoise px-5 py-3 text-center font-semibold text-white">
+          Numériser un cahier
+        </Link>
+      ) : null}
       <BoutonDeconnexion />
     </>
   );

@@ -12,7 +12,7 @@ Objectif : une appli vide mais installable, connectée et déployée.
 | US-02 | En tant que développeur, je veux la base Supabase créée selon le modèle de données, afin de stocker cahiers, recettes et membres. | Toutes les tables de la V1 créées ; règles d'accès : un membre ne lit que ses propres listes ; schéma versionné. | Terminée |
 | US-03 | En tant qu'utilisateur, je veux me connecter avec mon seul e-mail, afin d'accéder à l'appli sans mot de passe. | Un seul e-mail via Brevo avec lien magique et code à 6 chiffres ; valable 15 min, usage unique ; lien Renvoyer l'e-mail ; session de 30 jours par appareil. | Terminée |
 | US-04 | En tant qu'administrateur, je veux un compte avec le rôle admin, afin d'accéder à toutes les fonctions. | Compte créé dans Supabase avec le rôle admin ; aucune inscription publique : l'accueil mène uniquement à la connexion. | Terminée |
-| US-05 | En tant qu'administrateur, je veux que la base ne se mette jamais en pause, afin que l'appli reste disponible. | Requête quotidienne planifiée ; un échec de la tâche m'est signalé par e-mail. | En cours |
+| US-05 | En tant qu'administrateur, je veux que la base ne se mette jamais en pause, afin que l'appli reste disponible. | Requête quotidienne planifiée ; un échec de la tâche m'est signalé par e-mail. | Terminée |
 
 ## Sprint 1 · Capture et lecture IA
 
@@ -20,7 +20,7 @@ Objectif : photographier un cahier entier et voir l'IA en extraire les recettes.
 
 | ID | User story | Critères d'acceptation | Statut |
 | --- | --- | --- | --- |
-| US-06 | En tant que contributeur, je veux créer un cahier en photographiant sa couverture, afin de le retrouver facilement. | Saisie du nom du cahier ; la première photo est obligatoirement la couverture ; la couverture n'est pas envoyée à l'IA. | À faire |
+| US-06 | En tant que contributeur, je veux créer un cahier en photographiant sa couverture, afin de le retrouver facilement. | Saisie du nom du cahier ; la première photo est obligatoirement la couverture ; la couverture n'est pas envoyée à l'IA. | En cours |
 | US-07 | En tant que contributeur, je veux photographier les pages à la suite, afin de numériser un cahier en une seule fois. | Numéro de page incrémenté automatiquement ; page détectée et recadrée automatiquement ; vignette de la dernière photo ; bouton Terminer. | À faire |
 | US-08 | En tant que contributeur, je veux que les photos soient compressées à l'envoi, afin de tenir dans l'offre gratuite. | Environ 300 Ko par image ; texte toujours lisible au zoom ; stockage dans Supabase. | À faire |
 | US-09 | En tant que contributeur, je veux que l'IA lise chaque page, afin de ne pas retaper les recettes. | Traitement en arrière-plan ; renvoie titre, groupes d'ingrédients, ingrédients (quantité, unité, nom, texte d'origine), étapes, notes et mots douteux ; une page en échec peut être relancée. | À faire |
