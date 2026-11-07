@@ -17,6 +17,9 @@ export type Lecture = {
 
 const MODELE_CLAUDE = process.env.LECTURE_MODELE_CLAUDE || "claude-opus-5-5";
 const MODELE_GEMINI = process.env.LECTURE_MODELE_GEMINI || "gemini-3.8-flash";
+// Délai maximal d'une lecture : sous la durée de vie de la fonction Vercel (300 s), pour que
+// l'échec soit enregistré au lieu de laisser la page « en cours » pour toujours.
+const DELAI_MAX_MS = 240_000;
 
 export function fournisseurChoisi(): Fournisseur | null {
   const choix = process.env.LECTURE_IA;
@@ -65,7 +68,7 @@ async function lireAvecClaude(image: Uint8Array, typeMime: string): Promise<Lect
           ],
         },
       ],
-    })
+    }, { timeout: DELAI_MAX_MS, maxRetries: 1 })
     .finalMessage();
 
   if (reponse.stop_reason === "refusal") throw new Error("Lecture refusée par le modèle");
@@ -80,8 +83,26 @@ async function lireAvecClaude(image: Uint8Array, typeMime: string): Promise<Lect
 }
 
 async function lireAvecGemini(image: Uint8Array, typeMime: string): Promise<Lecture> {
+  if (!process.env.GEMINI_API_KEY) throw new Error("GEMINI_API_KEY manquante dans Vercel");
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-  const reponse = await ai.models.generateContent({
+  let minuteur: ReturnType<typeof setTimeout> | undefined;
+  const reponse = await Promise.race([
+    appelGemini(ai, image, typeMime),
+    new Promise<never>((_, non) => {
+      minuteur = setTimeout(() => non(new Error("Gemini n’a pas répondu en 4 minutes")), DELAI_MAX_MS);
+    }),
+  ]).finally(() => clearTimeout(minuteur));
+  if (!reponse.text) throw new Error("Réponse vide");
+  const u = reponse.usageMetadata;
+  return {
+    resultat: ResultatLecture.parse(JSON.parse(reponse.text)),
+    modele: MODELE_GEMINI,
+    jetons: { entree: u?.promptTokenCount ?? 0, sortie: (u?.candidatesTokenCount ?? 0) + (u?.thoughtsTokenCount ?? 0) },
+  };
+}
+
+function appelGemini(ai: GoogleGenAI, image: Uint8Array, typeMime: string) {
+  return ai.models.generateContent({
     model: MODELE_GEMINI,
     contents: [
       {
@@ -96,15 +117,9 @@ async function lireAvecGemini(image: Uint8Array, typeMime: string): Promise<Lect
       systemInstruction: CONSIGNE,
       responseMimeType: "application/json",
       responseJsonSchema: z.toJSONSchema(ResultatLecture),
+      abortSignal: AbortSignal.timeout(DELAI_MAX_MS),
     },
   });
-  if (!reponse.text) throw new Error("Réponse vide");
-  const u = reponse.usageMetadata;
-  return {
-    resultat: ResultatLecture.parse(JSON.parse(reponse.text)),
-    modele: MODELE_GEMINI,
-    jetons: { entree: u?.promptTokenCount ?? 0, sortie: (u?.candidatesTokenCount ?? 0) + (u?.thoughtsTokenCount ?? 0) },
-  };
 }
 
 // Pour les tests sans clé : une recette fixe, après un court délai.
