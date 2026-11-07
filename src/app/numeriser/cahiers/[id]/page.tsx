@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Couverture } from "@/components/couverture";
@@ -31,17 +32,48 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
     .eq("id", Number(id))
     .maybeSingle();
   if (!cahier) notFound();
-  const urls = await urlsSignees([cahier.couverture_chemin ?? ""]);
+  const { data: pages } = await supabase
+    .from("page_scannee")
+    .select("id, numero, image_chemin")
+    .eq("cahier_id", cahier.id)
+    .order("numero");
+  const urls = await urlsSignees([cahier.couverture_chemin ?? "", ...(pages ?? []).map((p) => p.image_chemin)]);
+  const nbPages = pages?.length ?? 0;
 
   return (
     <>
       <EnTete titre={cahier.nom} retour={{ href: "/numeriser", libelle: "Numériser" }} />
-      <div className="w-2/3 self-center">
+      <div className="w-1/2 self-center">
         <Couverture url={cahier.couverture_chemin ? urls.get(cahier.couverture_chemin) : undefined} nom={cahier.nom} />
       </div>
-      <p className="rounded-2xl bg-ciel/15 p-5 leading-relaxed">
-        Le cahier est créé. La photo des pages à la suite arrive à la prochaine étape.
-      </p>
+
+      <Link
+        href={`/numeriser/cahiers/${cahier.id}/capture`}
+        className="rounded-xl bg-ardoise px-5 py-3.5 text-center font-semibold text-white"
+      >
+        {nbPages > 0 ? "Photographier d’autres pages" : "Photographier les pages"}
+      </Link>
+
+      {nbPages > 0 ? (
+        <section className="flex flex-col gap-3">
+          <h2 className="font-semibold">{nbPages === 1 ? "1 page" : `${nbPages} pages`}</h2>
+          <ul className="grid grid-cols-3 gap-3">
+            {pages!.map((p) => (
+              <li key={p.id} className="flex flex-col gap-1">
+                {/* eslint-disable-next-line @next/next/no-img-element -- URL signée d'un bucket privé */}
+                <img
+                  src={urls.get(p.image_chemin)}
+                  alt={`Page ${p.numero}`}
+                  className="aspect-[3/4] w-full rounded-lg bg-jaune/40 object-cover"
+                />
+                <span className="text-center text-xs text-taupe">Page {p.numero}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : (
+        <p className="leading-relaxed text-taupe">Aucune page photographiée pour l’instant.</p>
+      )}
     </>
   );
 }

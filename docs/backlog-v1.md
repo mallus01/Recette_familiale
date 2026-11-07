@@ -20,8 +20,8 @@ Objectif : photographier un cahier entier et voir l'IA en extraire les recettes.
 
 | ID | User story | Critères d'acceptation | Statut |
 | --- | --- | --- | --- |
-| US-06 | En tant que contributeur, je veux créer un cahier en photographiant sa couverture, afin de le retrouver facilement. | Saisie du nom du cahier ; la première photo est obligatoirement la couverture ; la couverture n'est pas envoyée à l'IA. | En cours |
-| US-07 | En tant que contributeur, je veux photographier les pages à la suite, afin de numériser un cahier en une seule fois. | Numéro de page incrémenté automatiquement ; page détectée et recadrée automatiquement ; vignette de la dernière photo ; bouton Terminer. | À faire |
+| US-06 | En tant que contributeur, je veux créer un cahier en photographiant sa couverture, afin de le retrouver facilement. | Saisie du nom du cahier ; la première photo est obligatoirement la couverture ; la couverture n'est pas envoyée à l'IA. | Terminée |
+| US-07 | En tant que contributeur, je veux photographier les pages à la suite, afin de numériser un cahier en une seule fois. | Numéro de page incrémenté automatiquement ; page détectée et recadrée automatiquement ; vignette de la dernière photo ; bouton Terminer. | En cours |
 | US-08 | En tant que contributeur, je veux que les photos soient compressées à l'envoi, afin de tenir dans l'offre gratuite. | Environ 300 Ko par image ; texte toujours lisible au zoom ; stockage dans Supabase. | À faire |
 | US-09 | En tant que contributeur, je veux que l'IA lise chaque page, afin de ne pas retaper les recettes. | Traitement en arrière-plan ; renvoie titre, groupes d'ingrédients, ingrédients (quantité, unité, nom, texte d'origine), étapes, notes et mots douteux ; une page en échec peut être relancée. | À faire |
 | US-10 | En tant que contributeur, je veux une file des pages à relire, afin de suivre l'avancement de la lecture. | États en attente, lecture en cours, prête ; nombre de mots douteux affiché ; pages triées par cahier et numéro. | À faire |

@@ -63,7 +63,8 @@ export function FormulaireNouveauCahier({ membreId }: { membreId: string }) {
       return;
     }
 
-    router.replace(`/numeriser/cahiers/${cahier.id}`);
+    // On enchaîne directement sur la photo des pages.
+    router.replace(`/numeriser/cahiers/${cahier.id}/capture`);
     router.refresh();
   }
 
