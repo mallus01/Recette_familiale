@@ -342,13 +342,20 @@ Propositions faites lors de la capture des pages (US-07) :
 - Le recadrage automatique est rectangulaire, sans redresser une page photographiée de travers ; si la page ne se distingue pas du fond, la photo est gardée entière.
 - On peut reprendre la dernière photo ; elle remplace la page du même numéro, qui repart en attente de lecture.
 - Les pages s'envoient pendant qu'on photographie la suivante ; une page en échec d'envoi peut être renvoyée, et Terminer attend la fin des envois.
-- En attendant la file à relire (US-10), Terminer ramène à la fiche du cahier, qui montre ses pages.
+- Terminer mène à la file à relire.
 
 Propositions faites lors de la lecture par l'IA (US-09) :
 
 - La lecture démarre dès qu'une page est envoyée ; chaque recette lue devient une recette brouillon liée à sa page, et une page relue remplace ses brouillons.
 - Le résultat brut de l'IA (dont les mots douteux et leur contexte) est gardé avec la page, pour la relecture et la comparaison des modèles.
-- Une lecture restée « en cours » plus de 10 minutes peut être relancée, comme une page en échec ; en attendant la file à relire (US-10), la relance se fait depuis la fiche du cahier.
+- Une lecture restée « en cours » plus de 10 minutes peut être relancée, comme une page en échec, depuis la file à relire ou la fiche du cahier.
+
+Propositions faites lors de la file à relire (US-10) :
+
+- La file montre aussi les pages en échec, avec un bouton Relancer.
+- Une page quitte la file quand toutes ses recettes sont publiées ; une page lue sans recette y reste avec la mention « Aucune recette trouvée ».
+- Les cahiers sont classés par ordre alphabétique ; chaque page affiche les titres des recettes lues.
+- La file est accessible depuis l'écran Numériser.
 
 ## Journal des décisions
 

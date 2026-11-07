@@ -2,23 +2,16 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { libelleEtat, type StatutPage } from "@/lib/lecture/etat";
 import { lancerLecture } from "@/lib/lecture/lancer";
 
 export type PageAffichee = {
   id: number;
   numero: number;
   url?: string;
-  statut: "en_attente" | "lecture_en_cours" | "prete" | "en_echec";
+  statut: StatutPage;
   nb_mots_douteux: number;
 };
-
-function libelle(p: PageAffichee) {
-  if (p.statut === "en_attente") return "En attente";
-  if (p.statut === "lecture_en_cours") return "Lecture en cours";
-  if (p.statut === "en_echec") return "En échec";
-  if (p.nb_mots_douteux === 0) return "Prête";
-  return `Prête · ${p.nb_mots_douteux} ${p.nb_mots_douteux === 1 ? "mot douteux" : "mots douteux"}`;
-}
 
 export function PagesDuCahier({ pages }: { pages: PageAffichee[] }) {
   const router = useRouter();
@@ -58,7 +51,7 @@ export function PagesDuCahier({ pages }: { pages: PageAffichee[] }) {
             <img src={p.url} alt={`Page ${p.numero}`} className="aspect-[3/4] w-full rounded-lg bg-jaune/40 object-cover" />
             <span className="text-center text-xs font-medium">Page {p.numero}</span>
             <span className={`text-center text-xs ${p.statut === "en_echec" ? "text-ardoise" : "text-taupe"}`}>
-              {libelle(p)}
+              {libelleEtat(p.statut, p.nb_mots_douteux)}
             </span>
             {p.statut === "en_echec" && !relancees.has(p.id) ? (
               <button

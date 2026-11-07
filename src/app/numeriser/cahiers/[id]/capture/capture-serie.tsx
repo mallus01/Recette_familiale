@@ -216,7 +216,7 @@ export function CaptureSerie({
           type="button"
           disabled={enCours > 0}
           onClick={() => {
-            router.push(`/numeriser/cahiers/${cahierId}`);
+            router.push("/numeriser/a-relire");
             router.refresh();
           }}
           className="rounded-xl border border-ardoise px-5 py-3.5 font-semibold text-ardoise disabled:opacity-60"

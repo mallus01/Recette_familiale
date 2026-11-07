@@ -39,6 +39,12 @@ async function ListeCahiers() {
       >
         Nouveau cahier
       </Link>
+      <Link
+        href="/numeriser/a-relire"
+        className="rounded-xl border border-ardoise px-5 py-3.5 text-center font-semibold text-ardoise"
+      >
+        Pages à relire
+      </Link>
       {cahiers && cahiers.length > 0 ? (
         <section className="flex flex-col gap-3">
           <h2 className="font-semibold">Les cahiers</h2>
