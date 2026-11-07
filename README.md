@@ -46,11 +46,13 @@ psql -d essai -f supabase/migrations/20261107160000_lecture_ia.sql
 psql -d essai -f supabase/migrations/20261107170000_comparaison_ia.sql
 psql -d essai -f supabase/migrations/20261108090000_relecture.sql
 psql -d essai -f supabase/migrations/20261108100000_notes_etapes.sql
+psql -d essai -f supabase/migrations/20261108110000_tags_recette.sql
 psql -d essai -f supabase/seed.sql
 psql -d essai -f supabase/tests/rls.sql        # « Tous les tests RLS passent »
 psql -d essai -f supabase/tests/stockage.sql   # « Tous les tests de stockage passent »
 psql -d essai -f supabase/tests/lecture.sql    # « Tous les tests de lecture passent »
 psql -d essai -f supabase/tests/relecture.sql  # « Tous les tests de relecture passent »
+psql -d essai -f supabase/tests/tags.sql       # « Tous les tests de tags passent »
 ```
 
 ## Déploiement sur Vercel

@@ -377,6 +377,11 @@ Propositions faites pour les notes du cahier (US-13) :
 - L'IA rattache chaque note à l'étape qu'elle complète, ou à toute la recette ; les pages lues avant cette version ont leurs notes rattachées à la recette.
 - En relecture, chaque note se rattache avec un menu « Rattachée à » ; si l'étape est retirée, sa note passe à la recette.
 
+Propositions faites pour les tags (US-14) :
+
+- Les tags se choisissent sur un écran Classer la recette, ouvert depuis la relecture une fois les corrections enregistrées ; il rejoindra l'enrichissement avec US-16 et US-17.
+- Les valeurs sont des pastilles à toucher : bleu ciel pour le type de repas (un seul, retiré d'un second toucher), jaune pâle pour les occasions (plusieurs) ; la case Classique est une étoile.
+
 ## Journal des décisions
 
 | Date | Sujet | Décision |
