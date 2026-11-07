@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import type { MotDouteux } from "@/lib/lecture/resultat";
@@ -385,7 +386,7 @@ export function Relecture({
         <ul className="flex flex-col gap-3">
           {recette.notes.map((note, ni) => (
             <li key={ni} className="flex items-start gap-2">
-              <div className="flex flex-1 flex-col gap-2">
+              <div className="flex min-w-0 flex-1 flex-col gap-2">
                 <ChampSurligne
                   libelle={`Note ${ni + 1}`}
                   valeur={note.texte}
@@ -449,22 +450,33 @@ export function Relecture({
             L’enregistrement a échoué. Vérifiez votre connexion et réessayez.
           </p>
         ) : null}
-        <button
-          type="button"
-          onClick={enregistrer}
-          disabled={
-            etat === "enregistrement" || (!modifiee && etat !== "echec")
-          }
-          className="rounded-xl bg-ardoise px-5 py-3.5 font-semibold text-white disabled:opacity-60"
-        >
-          {etat === "enregistrement"
-            ? "Enregistrement…"
-            : etat === "enregistree" && !modifiee
-              ? "Corrections enregistrées"
-              : modifiee
-                ? "Enregistrer les corrections"
-                : "Aucune correction"}
-        </button>
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={enregistrer}
+            disabled={
+              etat === "enregistrement" || (!modifiee && etat !== "echec")
+            }
+            className="flex-1 rounded-xl bg-ardoise px-4 py-3.5 font-semibold text-white disabled:opacity-60"
+          >
+            {etat === "enregistrement"
+              ? "Enregistrement…"
+              : etat === "enregistree" && !modifiee
+                ? "Enregistrées"
+                : modifiee
+                  ? "Enregistrer"
+                  : "Enregistrer"}
+          </button>
+          {/* Les tags se choisissent une fois les corrections enregistrées. */}
+          {!modifiee ? (
+            <Link
+              href={`/numeriser/relire/${recette.id}/classer`}
+              className="flex flex-1 items-center justify-center rounded-xl border border-ardoise px-4 py-3 text-center font-semibold"
+            >
+              Classer la recette
+            </Link>
+          ) : null}
+        </div>
       </div>
     </div>
   );
