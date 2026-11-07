@@ -1,0 +1,45 @@
+import { z } from "zod";
+
+// Ce que l'IA renvoie pour une page (cahier des charges, US-09) : une ou plusieurs
+// recettes, et les mots qu'elle n'a pas su lire avec certitude.
+export const ResultatLecture = z.object({
+  recettes: z.array(
+    z.object({
+      titre: z.string(),
+      portions: z.number().nullable(),
+      duree_minutes: z.number().nullable(),
+      groupes: z.array(
+        z.object({
+          nom: z.string().nullable(),
+          ingredients: z.array(
+            z.object({
+              quantite: z.number().nullable(),
+              unite: z.string().nullable(),
+              nom: z.string(),
+              texte_origine: z.string(),
+            }),
+          ),
+        }),
+      ),
+      etapes: z.array(z.string()),
+      notes: z.array(z.string()),
+    }),
+  ),
+  mots_douteux: z.array(z.object({ mot: z.string(), contexte: z.string() })),
+});
+
+export type ResultatLecture = z.infer<typeof ResultatLecture>;
+
+export const CONSIGNE = `Tu lis une page photographiée d'un cahier de recettes familial, souvent manuscrit et en français.
+
+Recopie fidèlement chaque recette de la page, sans rien inventer ni corriger le fond :
+- titre : tel qu'écrit ; s'il n'y en a pas, un titre court et neutre tiré du contenu.
+- portions et duree_minutes : seulement s'ils sont écrits, sinon null.
+- groupes d'ingrédients : un groupe par sous-titre (« pour la pâte »…), avec nom null s'il n'y a qu'un groupe sans titre.
+- chaque ingrédient : texte_origine exactement comme écrit (mesures d'époque comprises, par exemple « une livre de farine », « un verre de lait ») ; nom de l'ingrédient ; quantite et unite convertis en unités actuelles (g, kg, ml, cl, l, c. à s., c. à c.) quand la conversion est sûre, sinon la quantité écrite avec son unité d'origine, ou null si aucune quantité n'est indiquée.
+- etapes : une entrée par étape, dans l'ordre, en gardant les mots de l'auteur.
+- notes : les remarques, astuces ou annotations ajoutées (en marge, entre parenthèses, d'une autre écriture).
+
+Si la page contient plusieurs recettes, renvoie-les toutes. Si une recette commence sur la page précédente ou continue sur la suivante, recopie seulement ce qui est sur cette page. Si la page ne contient aucune recette, renvoie une liste vide.
+
+Pour chaque mot que tu n'arrives pas à lire avec certitude, écris ta meilleure lecture dans le texte, puis ajoute-le à mots_douteux avec quelques mots autour comme contexte.`;

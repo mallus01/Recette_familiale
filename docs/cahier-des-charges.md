@@ -269,7 +269,7 @@ La webapp repose sur Next.js en PWA, Supabase, un modèle d'IA de vision, Brevo 
 | --- | --- | --- |
 | Interface | Next.js + Tailwind, en PWA (installable) | Interface et logique serveur, mobile first |
 | Connexion, base, images | Supabase, offre gratuite uniquement | Lien magique et code, base Postgres, stockage des scans et photos |
-| Lecture des cahiers | Modèle d'IA multimodal, choisi après un test comparatif sur de vraies pages | Extraction de la recette structurée et des mots douteux |
+| Lecture des cahiers | Modèle d'IA multimodal, choisi après un test comparatif entre Claude (Anthropic) et Gemini (Google) sur de vraies pages | Extraction de la recette structurée et des mots douteux |
 | E-mails | Brevo | Envoi des e-mails de connexion et d'invitation |
 | Hébergement | Vercel | Déploiement de la webapp |
 
@@ -344,6 +344,12 @@ Propositions faites lors de la capture des pages (US-07) :
 - Les pages s'envoient pendant qu'on photographie la suivante ; une page en échec d'envoi peut être renvoyée, et Terminer attend la fin des envois.
 - En attendant la file à relire (US-10), Terminer ramène à la fiche du cahier, qui montre ses pages.
 
+Propositions faites lors de la lecture par l'IA (US-09) :
+
+- La lecture démarre dès qu'une page est envoyée ; chaque recette lue devient une recette brouillon liée à sa page, et une page relue remplace ses brouillons.
+- Le résultat brut de l'IA (dont les mots douteux et leur contexte) est gardé avec la page, pour la relecture et la comparaison des modèles.
+- Une lecture restée « en cours » plus de 10 minutes peut être relancée, comme une page en échec ; en attendant la file à relire (US-10), la relance se fait depuis la fiche du cahier.
+
 ## Journal des décisions
 
 | Date | Sujet | Décision |
@@ -388,3 +394,4 @@ Propositions faites lors de la capture des pages (US-07) :
 | 06/11/2026 | Priorisation | Découpage V1 (cahier numérique), V2 (famille), V3 (bonus) ; V1 organisée en sprints Scrum, numérisation en premier |
 | 06/11/2026 | Organisation | Scrum adapté en solo, sprints de 2 semaines, V1 en cinq sprints (0 à 4) |
 | 06/11/2026 | Numérisation | Première photo d'un cahier = sa couverture, utilisée comme image de couverture dans les menus |
+| 07/11/2026 | Technique | Lecture des cahiers : comparaison entre Claude et Gemini (US-11), modèle interchangeable par variable d'environnement |

@@ -7,6 +7,7 @@ import { EnTete, Page, ReserveAuxContributeurs } from "@/components/mise-en-page
 import { membreConnecte, peutNumeriser } from "@/lib/membre";
 import { urlsSignees } from "@/lib/supabase/images";
 import { creerClientServeur } from "@/lib/supabase/serveur";
+import { PagesDuCahier } from "./pages-du-cahier";
 
 export const metadata: Metadata = { title: "Cahier · Recettes familiales" };
 
@@ -34,7 +35,7 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
   if (!cahier) notFound();
   const { data: pages } = await supabase
     .from("page_scannee")
-    .select("id, numero, image_chemin")
+    .select("id, numero, image_chemin, statut, nb_mots_douteux")
     .eq("cahier_id", cahier.id)
     .order("numero");
   const urls = await urlsSignees([cahier.couverture_chemin ?? "", ...(pages ?? []).map((p) => p.image_chemin)]);
@@ -55,22 +56,7 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
       </Link>
 
       {nbPages > 0 ? (
-        <section className="flex flex-col gap-3">
-          <h2 className="font-semibold">{nbPages === 1 ? "1 page" : `${nbPages} pages`}</h2>
-          <ul className="grid grid-cols-3 gap-3">
-            {pages!.map((p) => (
-              <li key={p.id} className="flex flex-col gap-1">
-                {/* eslint-disable-next-line @next/next/no-img-element -- URL signée d'un bucket privé */}
-                <img
-                  src={urls.get(p.image_chemin)}
-                  alt={`Page ${p.numero}`}
-                  className="aspect-[3/4] w-full rounded-lg bg-jaune/40 object-cover"
-                />
-                <span className="text-center text-xs text-taupe">Page {p.numero}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <PagesDuCahier pages={pages!.map((p) => ({ ...p, url: urls.get(p.image_chemin) }))} />
       ) : (
         <p className="leading-relaxed text-taupe">Aucune page photographiée pour l’instant.</p>
       )}
