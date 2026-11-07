@@ -73,6 +73,18 @@ export function ComparaisonModeles({ pages }: { pages: PageComparee[] }) {
               </div>
               {lancees.has(p.id) && p.essais.length === 0 ? (
                 <span className="text-sm text-taupe">Lancement…</span>
+              ) : p.essais.some((e) => e.statut === "en_cours") && !lancees.has(p.id) ? (
+                // Après un rechargement, une lecture restée bloquée peut être relancée.
+                <span className="flex flex-col items-end text-sm text-taupe">
+                  Lecture en cours…
+                  <button
+                    type="button"
+                    onClick={() => comparer(p.id)}
+                    className="font-medium text-ardoise underline decoration-ciel decoration-2 underline-offset-4"
+                  >
+                    Relancer
+                  </button>
+                </span>
               ) : p.essais.some((e) => e.statut === "en_cours") ? (
                 <span className="text-sm text-taupe">Lecture en cours…</span>
               ) : (
