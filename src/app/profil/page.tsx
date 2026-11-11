@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { Page } from "@/components/mise-en-page";
 import { LIBELLES_ROLE, membreConnecte } from "@/lib/membre";
+import { creerClientServeur } from "@/lib/supabase/serveur";
 import { AideInstallation } from "../aide-installation";
 import { BoutonDeconnexion } from "../deconnexion";
 
@@ -25,6 +26,14 @@ export default function Profil() {
 async function Contenu() {
   const membre = await membreConnecte();
   if (!membre) redirect("/connexion");
+  // US-39 : nombre de photos proposées en attente, pour l'administrateur.
+  const { count: aValider } =
+    membre.role === "admin"
+      ? await (await creerClientServeur())
+          .from("photo")
+          .select("id", { count: "exact", head: true })
+          .eq("statut", "en_attente")
+      : { count: 0 };
   return (
     <>
       <section className="flex flex-col gap-1">
@@ -42,6 +51,17 @@ async function Contenu() {
             className="self-start underline decoration-ciel decoration-2 underline-offset-4"
           >
             Inviter et gérer les membres
+          </Link>
+          <Link
+            href="/profil/photos"
+            className="self-start underline decoration-ciel decoration-2 underline-offset-4"
+          >
+            Valider les photos proposées
+            {aValider ? (
+              <span className="ml-2 rounded-full bg-peche px-2 py-0.5 text-sm font-semibold no-underline">
+                {aValider}
+              </span>
+            ) : null}
           </Link>
           <Link
             href="/numeriser/listes"

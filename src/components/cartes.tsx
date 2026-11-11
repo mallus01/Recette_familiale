@@ -1,12 +1,14 @@
 import Link from "next/link";
 import type { CarteRecette } from "@/lib/recettes";
 
-// Vignette d'une recette : sans photo du plat, un extrait du haut de son scan.
+// Vignette d'une recette : sa première photo validée, sinon un extrait du haut de son scan.
 export function Vignette({
   url,
+  photo = false,
   className = "",
 }: {
   url?: string;
+  photo?: boolean;
   className?: string;
 }) {
   return url ? (
@@ -15,7 +17,7 @@ export function Vignette({
       src={url}
       alt=""
       loading="lazy"
-      className={`bg-jaune/40 object-cover object-top ${className}`}
+      className={`bg-jaune/40 object-cover ${photo ? "" : "object-top"} ${className}`}
     />
   ) : (
     <div className={`bg-jaune/40 ${className}`} />
@@ -31,6 +33,7 @@ export function Carte({ recette }: { recette: CarteRecette }) {
     >
       <Vignette
         url={recette.vignette}
+        photo={recette.photo}
         className="aspect-[3/4] w-full rounded-xl"
       />
       <span className="line-clamp-2 text-sm leading-snug font-medium">
@@ -56,6 +59,7 @@ export function Ligne({
     >
       <Vignette
         url={recette.vignette}
+        photo={recette.photo}
         className="h-16 w-14 shrink-0 rounded-lg"
       />
       <span className="flex min-w-0 flex-col gap-0.5">

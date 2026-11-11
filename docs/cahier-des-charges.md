@@ -408,7 +408,7 @@ Propositions faites pour le sprint 4 (US-26 à US-32) :
 - La barre d'onglets n'apparaît que sur les écrans principaux (accueil, cahier, Mes listes, Numériser, Profil) ; elle est masquée sur la fiche, le mode cuisine, la relecture et la capture, qui ont leur propre barre d'actions en bas.
 - La recherche ignore majuscules et accents, et porte sur le titre, le nom des ingrédients et leur texte d'origine. Dès qu'on tape ou qu'on filtre, les rangées laissent la place à la liste des résultats, avec un lien « Tout effacer ».
 - Les filtres Type de repas et Occasion retiennent une seule valeur chacun ; toucher une vignette la choisit (ou la retire) et referme le panneau ; le bouton affiche alors la valeur choisie. Les filtres se cumulent avec la recherche et Classiques.
-- En attendant les images des valeurs (V2), les vignettes des filtres montrent l'icône par défaut.
+- Sans image choisie, les vignettes des filtres montrent l'icône par défaut (images des valeurs : US-37).
 - Sur la fiche, deux boutons « Favori » et « À cuisiner » ajoutent ou retirent la recette ; Mes listes affiche une liste à la fois, avec un sélecteur Favoris / À cuisiner, les derniers ajouts en premier.
 - Accueil : rangée À cuisiner (derniers ajouts en premier), Les cahiers (couvertures, vers l'écran du cahier), Suggestions (8 recettes au hasard, bouton « Autres idées ») ; la vignette d'une recette est le haut de la première page de son scan.
 - Feuilleter un cahier montre sa couverture puis ses recettes publiées, rangées par numéro de page.
@@ -429,6 +429,15 @@ Propositions faites pour le sprint 5 de la V2 (US-34 à US-36) :
 - Retirer un membre se fait depuis le menu ⋮ de sa ligne, « Retirer de l'appli », puis une confirmation dans la ligne (Garder ou Retirer). Son compte est supprimé ; une invitation restée à son adresse est effacée aussi. L'administrateur n'a pas ce menu sur sa propre ligne.
 - Les ingrédients d'une étape sont repérés automatiquement : un ingrédient est utilisé dans une étape quand son mot principal (« farine » pour « farine de blé », « ail » pour « gousse d'ail ») apparaît dans le texte de l'étape, sans tenir compte des accents ni du pluriel. Pas de saisie à faire en relecture ; si le repérage se trompe trop souvent, on pourra ajouter un choix manuel des ingrédients par étape en relecture.
 - Dans le bandeau, les ingrédients de l'étape en cours passent en tête sur fond orange pêche ; ceux des étapes passées restent à leur place, barrés et grisés ; le bandeau revient au début à chaque changement d'étape.
+
+Propositions faites pour le sprint 6 de la V2 (US-37 à US-40) :
+
+- Sur la fiche, la section des photos du plat se place juste avant le scan d'origine : les photos validées défilent d'un geste horizontal (« Photo x sur y »), dans l'ordre de leur validation. Le bouton « Proposer une photo du plat » est ouvert à tous les membres, lecteurs compris.
+- Le membre qui a proposé une photo voit sur la fiche qu'elle attend la validation ; les autres ne la voient pas avant.
+- Une photo ajoutée par l'administrateur depuis la fiche est validée directement (« Ajouter une photo du plat »). Sur la fiche, il peut aussi supprimer une photo validée.
+- La file des photos à valider s'ouvre depuis Profil, lien « Valider les photos proposées », avec le nombre en attente ; chaque photo montre la recette et qui l'a proposée, avec Refuser et Valider.
+- Dans la gestion des listes de tags, toucher l'image (ou l'icône) d'une valeur permet d'en choisir une nouvelle ; l'image peut aussi être choisie en ajoutant la valeur. L'ancienne image est supprimée du stockage.
+- La table des photos n'a pas de colonne « ordre » : l'ordre de défilement est celui de la validation.
 
 ## Journal des décisions
 
@@ -480,3 +489,4 @@ Propositions faites pour le sprint 5 de la V2 (US-34 à US-36) :
 | 11/11/2026 | Accès | Invitations, rôles et interface d'administration avancés en V1 (US-33) à la demande de Mattis ; le retrait d'un membre reste en V2 |
 | 11/11/2026 | V2 | Backlog V2 écrit (US-34 à US-47, sprints 5 à 8) ; sprint 5 : retrait d'un membre, ingrédients de l'étape surlignés et ingrédients passés barrés en mode cuisine |
 | 11/11/2026 | UX/UI | Grand écran = à partir de 768 px (tablette et ordinateur) ; le swipe reste actif en mode cuisine sur grand écran, en plus des flèches du clavier (US-45) |
+| 11/11/2026 | V2 | Sprint 6 : photos proposées par les membres et validées par l'admin (table photo, première photo validée en vignette), images des valeurs de filtres |

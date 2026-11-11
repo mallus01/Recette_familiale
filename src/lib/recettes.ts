@@ -17,6 +17,8 @@ export type CarteRecette = {
   classique: boolean;
   pageNumero: number | null;
   vignette?: string;
+  // Photo du plat (US-40) plutôt qu'un extrait du scan.
+  photo: boolean;
 };
 
 export const COLONNES_RESUME =
@@ -32,5 +34,6 @@ export function enCartes(
     classique: r.classique,
     pageNumero: r.page_numero,
     vignette: r.vignette_chemin ? urls.get(r.vignette_chemin) : undefined,
+    photo: r.vignette_chemin?.startsWith("photos/") ?? false,
   }));
 }

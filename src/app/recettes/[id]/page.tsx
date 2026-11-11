@@ -15,6 +15,7 @@ import { urlsSignees } from "@/lib/supabase/images";
 import { creerClientServeur } from "@/lib/supabase/serveur";
 import { BoutonsListes } from "./boutons-listes";
 import { Ingredients } from "./ingredients";
+import { Photos } from "./photos";
 
 export const metadata: Metadata = { title: "Recette · Recettes familiales" };
 
@@ -58,6 +59,13 @@ type Ligne = {
   }[];
   etape: { id: number; ordre: number; texte: string }[];
   note: { id: number; texte: string; etape_id: number | null }[];
+  photo: {
+    id: number;
+    image_chemin: string;
+    statut: "en_attente" | "validee";
+    validee_le: string | null;
+    propose_par: string | null;
+  }[];
   recette_page: {
     ordre: number;
     page_scannee: {
@@ -88,7 +96,7 @@ async function Contenu({
   const { data: r } = await supabase
     .from("recette")
     .select(
-      "id, titre, statut, transmis_par, souvenir, portions, duree_minutes, classique, type_repas(nom), recette_occasion(occasion(nom)), groupe_ingredients(id, nom, ordre, ingredient(id, quantite, unite, nom, texte_origine, ordre)), etape(id, ordre, texte), note(id, texte, etape_id), recette_page(ordre, page_scannee(id, numero, image_chemin, cahier(nom)))",
+      "id, titre, statut, transmis_par, souvenir, portions, duree_minutes, classique, type_repas(nom), recette_occasion(occasion(nom)), groupe_ingredients(id, nom, ordre, ingredient(id, quantite, unite, nom, texte_origine, ordre)), etape(id, ordre, texte), note(id, texte, etape_id), recette_page(ordre, page_scannee(id, numero, image_chemin, cahier(nom))), photo(id, image_chemin, statut, validee_le, propose_par)",
     )
     .eq("id", Number(id))
     .maybeSingle<Ligne>();
@@ -102,7 +110,19 @@ async function Contenu({
   const pages = r.recette_page
     .sort(parOrdre)
     .flatMap((rp) => (rp.page_scannee ? [rp.page_scannee] : []));
-  const urls = await urlsSignees(pages.map((p) => p.image_chemin));
+  const photos = r.photo
+    .filter((p) => p.statut === "validee")
+    .sort(
+      (a, b) =>
+        (a.validee_le ?? "").localeCompare(b.validee_le ?? "") || a.id - b.id,
+    );
+  const enAttente = r.photo.filter(
+    (p) => p.statut === "en_attente" && p.propose_par === membre.id,
+  ).length;
+  const urls = await urlsSignees([
+    ...pages.map((p) => p.image_chemin),
+    ...photos.map((p) => p.image_chemin),
+  ]);
   const occasions = r.recette_occasion
     .flatMap((o) => (o.occasion ? [o.occasion.nom] : []))
     .sort((a, b) => a.localeCompare(b, "fr"));
@@ -175,6 +195,17 @@ async function Contenu({
           {r.souvenir}
         </blockquote>
       ) : null}
+
+      <Photos
+        recetteId={r.id}
+        admin={membre.role === "admin"}
+        enAttente={enAttente}
+        photos={photos.map((p) => ({
+          id: p.id,
+          chemin: p.image_chemin,
+          url: urls.get(p.image_chemin),
+        }))}
+      />
 
       {pages.length > 0 ? (
         <section className="flex flex-col gap-2">

@@ -3,13 +3,21 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { IconeOccasion, IconeTypeRepas } from "@/components/icones";
+import { envoyerImage, supprimerImage } from "@/lib/photos";
 import { creerClientNavigateur } from "@/lib/supabase/client";
 
-type Valeur = { id: number; nom: string; nbRecettes: number };
+type Valeur = {
+  id: number;
+  nom: string;
+  nbRecettes: number;
+  imageChemin: string | null;
+  image?: string;
+};
 
 const pluriel = (n: number) => (n === 1 ? "1 recette" : `${n} recettes`);
 
-// Une liste fermée : ajouter, renommer et supprimer ses valeurs.
+// Une liste fermée : ajouter, renommer et supprimer ses valeurs, et choisir leur image
+// (US-37 ; sans image, l'icône par défaut s'affiche dans les filtres).
 export function ListeFermee({
   table,
   titre,
@@ -21,6 +29,7 @@ export function ListeFermee({
 }) {
   const router = useRouter();
   const [nouveau, setNouveau] = useState("");
+  const [imageNouveau, setImageNouveau] = useState<File | null>(null);
   const [enCours, setEnCours] = useState<number | "ajout" | null>(null);
   const [edition, setEdition] = useState<{ id: number; nom: string } | null>(
     null,
@@ -59,11 +68,42 @@ export function ListeFermee({
     if (!nom) return;
     if (existe(nom)) return setErreur(`« ${nom} » existe déjà.`);
     if (
-      await executer("ajout", () =>
-        creerClientNavigateur().from(table).insert({ nom }),
-      )
-    )
+      await executer("ajout", async () => {
+        let image_chemin: string | null = null;
+        try {
+          if (imageNouveau)
+            image_chemin = await envoyerImage(imageNouveau, `filtres/${table}`);
+        } catch {
+          return { error: "image" };
+        }
+        const r = await creerClientNavigateur()
+          .from(table)
+          .insert({ nom, image_chemin });
+        if (r.error) await supprimerImage(image_chemin);
+        return r;
+      })
+    ) {
       setNouveau("");
+      setImageNouveau(null);
+    }
+  }
+
+  async function changerImage(v: Valeur, fichier: File | undefined) {
+    if (!fichier) return;
+    await executer(v.id, async () => {
+      let image_chemin: string;
+      try {
+        image_chemin = await envoyerImage(fichier, `filtres/${table}`);
+      } catch {
+        return { error: "image" };
+      }
+      const r = await creerClientNavigateur()
+        .from(table)
+        .update({ image_chemin })
+        .eq("id", v.id);
+      await supprimerImage(r.error ? image_chemin : v.imageChemin);
+      return r;
+    });
   }
 
   async function renommer(e: React.FormEvent) {
@@ -86,13 +126,20 @@ export function ListeFermee({
       await executer(v.id, () =>
         creerClientNavigateur().from(table).delete().eq("id", v.id),
       )
-    )
+    ) {
       setASupprimer(null);
+      await supprimerImage(v.imageChemin);
+    }
   }
 
   return (
     <section className="flex flex-col gap-3">
-      <h2 className="font-semibold">{titre}</h2>
+      <div className="flex flex-col gap-0.5">
+        <h2 className="font-semibold">{titre}</h2>
+        <p className="text-sm text-taupe">
+          Touchez l’image d’une valeur pour la changer.
+        </p>
+      </div>
       {valeurs.length === 0 ? (
         <p className="text-sm text-taupe">Aucune valeur pour l’instant.</p>
       ) : null}
@@ -100,11 +147,34 @@ export function ListeFermee({
         {valeurs.map((v) => (
           <li key={v.id} className="flex flex-col gap-3 p-3">
             <div className="flex items-center gap-3">
-              <span
-                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${fond}`}
+              <label
+                className={`relative flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl ${fond}`}
               >
-                <Icone />
-              </span>
+                {v.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- URL signée d'un bucket privé
+                  <img
+                    src={v.image}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <Icone />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  aria-label={`Changer l’image de ${v.nom}`}
+                  disabled={enCours === v.id}
+                  onChange={(e) => {
+                    void changerImage(v, e.target.files?.[0]);
+                    e.target.value = "";
+                  }}
+                  className="sr-only"
+                />
+                {enCours === v.id ? (
+                  <span className="absolute inset-0 bg-white/60" />
+                ) : null}
+              </label>
               {edition?.id === v.id ? (
                 <form onSubmit={renommer} className="flex min-w-0 flex-1 gap-2">
                   <input
@@ -193,6 +263,22 @@ export function ListeFermee({
         ))}
       </ul>
       <form onSubmit={ajouter} className="flex gap-2">
+        <label
+          className={`flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl ${fond}`}
+        >
+          {imageNouveau ? (
+            <span className="text-xs font-medium">Image ✓</span>
+          ) : (
+            <Icone />
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            aria-label="Image de la nouvelle valeur (facultatif)"
+            onChange={(e) => setImageNouveau(e.target.files?.[0] ?? null)}
+            className="sr-only"
+          />
+        </label>
         <input
           aria-label={`Ajouter une valeur à ${titre}`}
           placeholder={
