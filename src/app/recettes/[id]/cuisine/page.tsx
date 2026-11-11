@@ -76,6 +76,8 @@ async function Contenu({
 
   return (
     <ModeCuisine
+      recetteId={r.id}
+      membreId={membre.id}
       titre={r.titre}
       retour={
         `/recettes/${r.id}` +

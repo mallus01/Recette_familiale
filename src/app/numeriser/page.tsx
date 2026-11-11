@@ -12,7 +12,7 @@ export const metadata: Metadata = { title: "Numériser · Recettes familiales" }
 export default function Numeriser() {
   return (
     <Page>
-      <EnTete titre="Numériser" retour={{ href: "/", libelle: "Accueil" }} />
+      <EnTete titre="Numériser" />
       <Suspense fallback={<p className="text-taupe">Chargement…</p>}>
         <ListeCahiers />
       </Suspense>
