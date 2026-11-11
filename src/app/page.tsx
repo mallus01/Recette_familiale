@@ -37,8 +37,8 @@ async function Contenu() {
     { data: cahiers },
     { data: suggestions },
   ] = await Promise.all([
-    supabase.from("type_repas").select("id, nom").order("nom"),
-    supabase.from("occasion").select("id, nom").order("nom"),
+    supabase.from("type_repas").select("id, nom, image_chemin").order("nom"),
+    supabase.from("occasion").select("id, nom, image_chemin").order("nom"),
     supabase
       .from("liste_perso")
       .select("recette_id, ajoute_le")
@@ -76,10 +76,22 @@ async function Contenu() {
     ...listeCahiers.flatMap((c) =>
       c.couverture_chemin ? [c.couverture_chemin] : [],
     ),
+    ...[...(types ?? []), ...(occasions ?? [])].flatMap((v) =>
+      v.image_chemin ? [v.image_chemin as string] : [],
+    ),
   ]);
+  // US-37 : image de chaque valeur de filtre (icône par défaut sinon).
+  const avecImage = (
+    l: { id: number; nom: string; image_chemin: string | null }[] | null,
+  ) =>
+    (l ?? []).map((v) => ({
+      id: v.id,
+      nom: v.nom,
+      image: v.image_chemin ? urls.get(v.image_chemin) : undefined,
+    }));
 
   return (
-    <Recherche typesRepas={types ?? []} occasions={occasions ?? []}>
+    <Recherche typesRepas={avecImage(types)} occasions={avecImage(occasions)}>
       <div className="flex flex-col gap-8">
         <Rangee titre="À cuisiner">
           {aCuisiner.length === 0 ? (

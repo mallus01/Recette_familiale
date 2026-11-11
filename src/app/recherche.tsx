@@ -10,7 +10,7 @@ import {
 } from "@/lib/recettes";
 import { creerClientNavigateur } from "@/lib/supabase/client";
 
-type Valeur = { id: number; nom: string };
+type Valeur = { id: number; nom: string; image?: string };
 type Panneau = "type" | "occasion" | null;
 
 // US-26 et US-27 : recherche (nom ou ingrédient) et filtres par tags. Tant que rien
@@ -257,7 +257,16 @@ function Vignettes({
               v.id === choisie ? "ring-2 ring-ardoise" : ""
             }`}
           >
-            {icone}
+            {v.image ? (
+              // eslint-disable-next-line @next/next/no-img-element -- URL signée d'un bucket privé
+              <img
+                src={v.image}
+                alt=""
+                className="h-10 w-14 rounded-lg object-cover"
+              />
+            ) : (
+              icone
+            )}
             <span className="line-clamp-2 leading-tight">{v.nom}</span>
           </button>
         </li>
