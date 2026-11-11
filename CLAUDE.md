@@ -6,14 +6,15 @@ Point d'entrée de Claude Code pour ce projet. À lire en début de chaque sessi
 
 Webapp privée (sur invitation) qui rassemble les recettes de la famille et numérise des cahiers de recettes manuscrits. Mobile first, installable (PWA). Usage prévu : principalement un seul utilisateur au départ (le porteur de projet, administrateur).
 
-Phase actuelle : **cadrage terminé, démarrage du développement de la V1 (sprint 0)**.
+Phase actuelle : **V1 développée (sprints 0 à 4), développement de la V2 (sprint 5)**.
 
 ## Documents de référence
 
 | Fichier | Contenu |
 | --- | --- |
 | `docs/cahier-des-charges.md` | Source de vérité : toutes les décisions validées (fonctionnel, UX/UI, modèle de données, choix techniques, priorisation, Scrum, journal des décisions) |
-| `docs/backlog-v1.md` | Product backlog de la V1 : 32 user stories avec critères d'acceptation, réparties en 5 sprints |
+| `docs/backlog-v1.md` | Product backlog de la V1 : 33 user stories avec critères d'acceptation, réparties en 5 sprints |
+| `docs/backlog-v2.md` | Product backlog de la V2 : 14 user stories (US-34 à US-47), réparties en 4 sprints (5 à 8) |
 | `docs/recherche-initiale.md` | Synthèse de la recherche d'idéation (livres de cuisine, applis, numérisation, choix techniques) et ses sources |
 | `assets/palette.jpeg` | Palette de couleurs fournie (color.adobe.com) |
 
@@ -49,11 +50,11 @@ Les trois couleurs claires ne servent **jamais** de couleur de texte sur fond bl
 
 ## Organisation : Scrum en solo
 
-- Sprints de **2 semaines**, V1 en 5 sprints (0 à 4) — voir `docs/backlog-v1.md`.
+- Sprints de **2 semaines**, V1 en 5 sprints (0 à 4) — voir `docs/backlog-v1.md` ; V2 en 4 sprints (5 à 8) — voir `docs/backlog-v2.md`.
 - Ordre : 0 Fondations → 1 Capture et lecture IA → 2 Relecture et fiche recette → 3 Mode cuisine et quantités → 4 Accueil et listes.
 - **Definition of Done** : fonctionne sur téléphone, testé en conditions réelles, déployé sur Vercel, cahier des charges à jour.
 - En début de session : indiquer le sprint en cours et la ou les stories travaillées.
-- Quand une story est terminée : mettre à jour son statut dans `docs/backlog-v1.md`.
+- Quand une story est terminée : mettre à jour son statut dans `docs/backlog-v1.md` ou `docs/backlog-v2.md`.
 - Toute nouvelle décision validée : la consigner dans `docs/cahier-des-charges.md` (section concernée + ligne datée dans le journal des décisions).
 
 ## Hors périmètre V1 (prévu en V2 / V3)

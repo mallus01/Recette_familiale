@@ -12,7 +12,12 @@ type Groupe = {
   nom: string | null;
   ingredients: { id: number; texte: string }[];
 };
-type Etape = { id: number; texte: string; notes: string[] };
+type Etape = {
+  id: number;
+  texte: string;
+  notes: string[];
+  ingredients: number[];
+};
 
 export function ModeCuisine({
   recetteId,
@@ -41,6 +46,16 @@ export function ModeCuisine({
   const derniere = courante >= total - 1;
   const refsEtapes = useRef<(HTMLLIElement | null)[]>([]);
   const debutSwipe = useRef<{ x: number; y: number } | null>(null);
+  const refBandeau = useRef<HTMLUListElement | null>(null);
+
+  // US-35 : ingrédients de l'étape en cours, placés en tête du bandeau.
+  // US-36 : ingrédients des étapes passées barrés, sauf s'ils resservent maintenant.
+  const maintenant = new Set(etapes[courante]?.ingredients ?? []);
+  const passes = new Set(
+    etapes.slice(0, courante).flatMap((e) => e.ingredients),
+  );
+  const tous = groupes.flatMap((g) => g.ingredients);
+  const enCours = tous.filter((i) => maintenant.has(i.id));
 
   const aller = (sens: 1 | -1) =>
     setCourante((c) => Math.min(Math.max(c + sens, 0), Math.max(total - 1, 0)));
@@ -59,6 +74,7 @@ export function ModeCuisine({
   }, [total]);
 
   useEffect(() => {
+    refBandeau.current?.scrollTo({ left: 0, behavior: "smooth" });
     refsEtapes.current[courante]?.scrollIntoView({
       block: "center",
       behavior: "smooth",
@@ -135,29 +151,56 @@ export function ModeCuisine({
 
         {groupes.some((g) => g.ingredients.length > 0) ? (
           <ul
+            ref={refBandeau}
             aria-label="Ingrédients"
             className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 text-sm"
           >
-            {groupes.flatMap((g) => [
-              ...(g.nom
-                ? [
+            {enCours.map((i) => (
+              <li
+                key={`c${i.id}`}
+                data-etat="en-cours"
+                className="shrink-0 rounded-full bg-peche px-3 py-1.5 font-medium whitespace-nowrap"
+              >
+                {i.texte}
+              </li>
+            ))}
+            {groupes.flatMap((g) => {
+              const restants = g.ingredients.filter(
+                (i) => !maintenant.has(i.id),
+              );
+              if (restants.length === 0) return [];
+              return [
+                ...(g.nom
+                  ? [
+                      <li
+                        key={`g${g.id}`}
+                        className="shrink-0 self-center font-medium text-taupe"
+                      >
+                        {g.nom}
+                      </li>,
+                    ]
+                  : []),
+                ...restants.map((i) =>
+                  passes.has(i.id) ? (
                     <li
-                      key={`g${g.id}`}
-                      className="shrink-0 self-center font-medium text-taupe"
+                      key={i.id}
+                      data-etat="utilise"
+                      className="shrink-0 rounded-full bg-ardoise/5 px-3 py-1.5 whitespace-nowrap text-ardoise/50 line-through"
                     >
-                      {g.nom}
-                    </li>,
-                  ]
-                : []),
-              ...g.ingredients.map((i) => (
-                <li
-                  key={i.id}
-                  className="shrink-0 rounded-full bg-jaune/40 px-3 py-1.5 whitespace-nowrap"
-                >
-                  {i.texte}
-                </li>
-              )),
-            ])}
+                      <span className="sr-only">Déjà utilisé : </span>
+                      {i.texte}
+                    </li>
+                  ) : (
+                    <li
+                      key={i.id}
+                      className="shrink-0 rounded-full bg-jaune/40 px-3 py-1.5 whitespace-nowrap"
+                    >
+                      {i.texte}
+                    </li>
+                  ),
+                ),
+              ];
+            })}
           </ul>
         ) : null}
       </header>

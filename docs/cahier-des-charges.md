@@ -424,6 +424,12 @@ Propositions faites pour les invitations (US-33) :
 - L'invitation est acceptée dès que l'invité ouvre le lien ; il arrive sur la page Bienvenue, puis sur l'accueil une fois son prénom et son nom saisis.
 - L'e-mail d'invitation a son propre modèle (supabase/templates/invitation.html), avec un seul bouton.
 
+Propositions faites pour le sprint 5 de la V2 (US-34 à US-36) :
+
+- Retirer un membre se fait depuis le menu ⋮ de sa ligne, « Retirer de l'appli », puis une confirmation dans la ligne (Garder ou Retirer). Son compte est supprimé ; une invitation restée à son adresse est effacée aussi. L'administrateur n'a pas ce menu sur sa propre ligne.
+- Les ingrédients d'une étape sont repérés automatiquement : un ingrédient est utilisé dans une étape quand son mot principal (« farine » pour « farine de blé », « ail » pour « gousse d'ail ») apparaît dans le texte de l'étape, sans tenir compte des accents ni du pluriel. Pas de saisie à faire en relecture ; si le repérage se trompe trop souvent, on pourra ajouter un choix manuel des ingrédients par étape en relecture.
+- Dans le bandeau, les ingrédients de l'étape en cours passent en tête sur fond orange pêche ; ceux des étapes passées restent à leur place, barrés et grisés ; le bandeau revient au début à chaque changement d'étape.
+
 ## Journal des décisions
 
 | Date | Sujet | Décision |
@@ -472,3 +478,4 @@ Propositions faites pour les invitations (US-33) :
 | 07/11/2026 | Technique | Modèle de lecture retenu : Claude (les lectures Gemini n'aboutissaient pas lors du test) ; LECTURE_IA=claude |
 | 11/11/2026 | Mode cuisine | Bouton « Copier la liste des ingrédients » ; après Terminer, le mode cuisine repart de l'étape 1 |
 | 11/11/2026 | Accès | Invitations, rôles et interface d'administration avancés en V1 (US-33) à la demande de Mattis ; le retrait d'un membre reste en V2 |
+| 11/11/2026 | V2 | Backlog V2 écrit (US-34 à US-47, sprints 5 à 8) ; sprint 5 : retrait d'un membre, ingrédients de l'étape surlignés et ingrédients passés barrés en mode cuisine |

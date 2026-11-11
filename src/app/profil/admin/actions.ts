@@ -150,3 +150,32 @@ export async function changerRole(
   revalidatePath("/profil/admin");
   return {};
 }
+
+// US-34 : retire un membre. Son compte est supprimé, ses listes privées partent avec ;
+// les recettes et cahiers qu'il a créés restent (auteur affiché « Ancien membre »).
+export async function retirer(membreId: string): Promise<Resultat> {
+  const admin = await verifierAdmin();
+  if (membreId === admin.id)
+    return { erreur: "Tu ne peux pas te retirer toi-même." };
+  const supabase = await creerClientServeur();
+  const { data: membre } = await supabase
+    .from("membre")
+    .select("email")
+    .eq("id", membreId)
+    .maybeSingle();
+  if (!membre) return { erreur: "Ce membre n’existe plus." };
+  try {
+    const { error } = await creerClientAdmin().auth.admin.deleteUser(membreId);
+    if (error) throw new Error(error.message);
+  } catch (e) {
+    const message = e instanceof Error ? e.message : "";
+    return {
+      erreur: /secret_key/i.test(message)
+        ? "La clé SUPABASE_SECRET_KEY manque dans Vercel."
+        : "Le membre n’a pas pu être retiré. Réessaie.",
+    };
+  }
+  await supabase.from("invitation").delete().eq("email", membre.email);
+  revalidatePath("/profil/admin");
+  return {};
+}

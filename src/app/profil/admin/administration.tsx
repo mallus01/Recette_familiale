@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { expireLe, ROLES } from "@/lib/invitations";
 import { LIBELLES_ROLE, type Role } from "@/lib/roles";
-import { annuler, changerRole, inviter, renvoyer } from "./actions";
+import { annuler, changerRole, inviter, renvoyer, retirer } from "./actions";
 
 type Invitation = { id: number; email: string; role: Role; envoyee_le: string };
 type Membre = { id: string; nom: string; email: string; role: Role };
@@ -299,9 +299,53 @@ function LigneMembre({
   onMessage: (m: { texte: string; erreur: boolean }) => void;
 }) {
   const [role, setRole] = useState(m.role);
+  const [menu, setMenu] = useState(false);
+  const [confirmation, setConfirmation] = useState(false);
   const [enCours, demarrer] = useTransition();
+
+  // US-34 : retrait avec confirmation.
+  const retirerMembre = () =>
+    demarrer(async () => {
+      const r = await retirer(m.id);
+      setConfirmation(false);
+      onMessage(
+        r.erreur
+          ? { texte: r.erreur, erreur: true }
+          : { texte: `${m.nom} n’a plus accès à l’appli.`, erreur: false },
+      );
+    });
+
+  if (confirmation)
+    return (
+      <li className="flex flex-col gap-3 py-3">
+        <p className="font-medium">Retirer {m.nom} de l’appli ?</p>
+        <p className="text-sm text-taupe">
+          Son accès et ses listes sont supprimés. Les recettes numérisées par ce
+          membre restent, avec « Ancien membre » comme auteur.
+        </p>
+        <div className="flex gap-3">
+          <button
+            type="button"
+            disabled={enCours}
+            onClick={() => setConfirmation(false)}
+            className="flex-1 rounded-xl border border-ardoise/25 py-3 font-medium disabled:opacity-50"
+          >
+            Garder
+          </button>
+          <button
+            type="button"
+            disabled={enCours}
+            onClick={retirerMembre}
+            className="flex-[2] rounded-xl bg-ardoise py-3 font-semibold text-white disabled:opacity-60"
+          >
+            {enCours ? "Retrait…" : "Retirer"}
+          </button>
+        </div>
+      </li>
+    );
+
   return (
-    <li className="flex items-center gap-3 py-3">
+    <li className="relative flex items-center gap-3 py-3">
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="truncate font-medium">
           {m.nom}
@@ -339,6 +383,32 @@ function LigneMembre({
           </option>
         ))}
       </select>
+      {moi ? null : (
+        <button
+          type="button"
+          aria-label={`Options pour ${m.nom}`}
+          aria-expanded={menu}
+          disabled={enCours}
+          onClick={() => setMenu(!menu)}
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xl leading-none disabled:opacity-50"
+        >
+          ⋮
+        </button>
+      )}
+      {menu ? (
+        <div className="absolute top-12 right-0 z-10 rounded-xl border border-ardoise/15 bg-white p-1 shadow-lg">
+          <button
+            type="button"
+            onClick={() => {
+              setMenu(false);
+              setConfirmation(true);
+            }}
+            className="rounded-lg px-4 py-2.5 text-left text-sm whitespace-nowrap"
+          >
+            Retirer de l’appli
+          </button>
+        </div>
+      ) : null}
     </li>
   );
 }
