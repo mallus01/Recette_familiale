@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 import { membreConnecte } from "@/lib/membre";
+import { ingredientsParEtape } from "@/lib/ingredients-etapes";
 import { libelleAdapte, personnesChoisies } from "@/lib/portions";
 import { creerClientServeur } from "@/lib/supabase/serveur";
 import { ModeCuisine } from "./mode-cuisine";
@@ -73,6 +74,13 @@ async function Contenu({
   const facteur = r.portions && nb ? nb / r.portions : 1;
   const notes = [...r.note].sort((a, b) => a.id - b.id);
   const etapes = r.etape.sort(parOrdre);
+  const groupes = r.groupe_ingredients.sort(parOrdre);
+  groupes.forEach((g) => g.ingredient.sort(parOrdre));
+  // US-35 et US-36 : ingrédients cités dans chaque étape.
+  const utilises = ingredientsParEtape(
+    groupes.flatMap((g) => g.ingredient),
+    etapes.map((e) => e.texte),
+  );
 
   return (
     <ModeCuisine
@@ -84,17 +92,18 @@ async function Contenu({
         (nb && nb !== r.portions ? `?personnes=${nb}` : "")
       }
       personnes={nb}
-      groupes={r.groupe_ingredients.sort(parOrdre).map((g) => ({
+      groupes={groupes.map((g) => ({
         id: g.id,
         nom: g.nom,
-        ingredients: g.ingredient.sort(parOrdre).map((i) => ({
+        ingredients: g.ingredient.map((i) => ({
           id: i.id,
           texte: libelleAdapte(i, facteur),
         })),
       }))}
-      etapes={etapes.map((e) => ({
+      etapes={etapes.map((e, k) => ({
         id: e.id,
         texte: e.texte,
+        ingredients: utilises[k],
         notes: notes.filter((n) => n.etape_id === e.id).map((n) => n.texte),
       }))}
       notesRecette={notes
