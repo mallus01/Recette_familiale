@@ -36,10 +36,10 @@ Objectif : transformer une page lue par l'IA en recette publiée et consultable.
 | US-12 | En tant que contributeur, je veux relire une recette face à son scan, afin de corriger les erreurs de l'IA. | Scan zoomable en haut, champs modifiables en dessous ; titre, ingrédients, étapes et notes modifiables ; mots douteux surlignés à la fois sur le scan et dans les champs. | Terminée |
 | US-13 | En tant que contributeur, je veux que les notes du cahier soient identifiées, afin de les distinguer des étapes. | Notes repérées par l'IA marquées comme notes ; rattachables à une étape ou à la recette ; affichées en italique. | Terminée |
 | US-14 | En tant que contributeur, je veux classer la recette par tags, afin de la retrouver par filtre. | Un type de repas choisi dans sa liste fermée ; une ou plusieurs occasions ; case Classique. | Terminée |
-| US-15 | En tant qu'administrateur, je veux gérer les listes fermées, afin de maîtriser les valeurs de tags. | Ajouter, renommer, supprimer une valeur de type de repas ou d'occasion ; icône par défaut pour chaque valeur. | En cours |
-| US-16 | En tant que contributeur, je veux enrichir la recette, afin de garder son histoire. | Champs transmis par (texte libre), souvenir, portions et durée. | En cours |
-| US-17 | En tant que contributeur, je veux valider ou reporter une relecture, afin d'avancer à mon rythme. | Plus tard laisse la recette dans la file ; Valider passe à l'enrichissement puis publie ; statut brouillon puis publiée. | En cours |
-| US-18 | En tant qu'utilisateur, je veux consulter la fiche d'une recette, afin de la lire avant de cuisiner. | Scan d'origine, tags, transmis par, souvenir ; ingrédients groupés ; mesures d'époque avec leur équivalence moderne ; étapes ; notes en italique. | En cours |
+| US-15 | En tant qu'administrateur, je veux gérer les listes fermées, afin de maîtriser les valeurs de tags. | Ajouter, renommer, supprimer une valeur de type de repas ou d'occasion ; icône par défaut pour chaque valeur. | Terminée |
+| US-16 | En tant que contributeur, je veux enrichir la recette, afin de garder son histoire. | Champs transmis par (texte libre), souvenir, portions et durée. | Terminée |
+| US-17 | En tant que contributeur, je veux valider ou reporter une relecture, afin d'avancer à mon rythme. | Plus tard laisse la recette dans la file ; Valider passe à l'enrichissement puis publie ; statut brouillon puis publiée. | Terminée |
+| US-18 | En tant qu'utilisateur, je veux consulter la fiche d'une recette, afin de la lire avant de cuisiner. | Scan d'origine, tags, transmis par, souvenir ; ingrédients groupés ; mesures d'époque avec leur équivalence moderne ; étapes ; notes en italique. | Terminée |
 
 ## Sprint 3 · Mode cuisine et quantités
 
@@ -47,13 +47,13 @@ Objectif : cuisiner une recette de bout en bout avec le téléphone posé sur le
 
 | ID | User story | Critères d'acceptation | Statut |
 | --- | --- | --- | --- |
-| US-19 | En tant qu'utilisateur, je veux lancer le mode cuisine depuis la fiche, l'écran restant allumé, afin de ne pas toucher le téléphone avec les mains sales. | Bouton Lancer le mode cuisine sur la fiche ; écran maintenu allumé tant que le mode est ouvert ; maintien relancé au retour dans l'appli. | À faire |
-| US-20 | En tant qu'utilisateur, je veux voir clairement l'étape en cours, afin de ne pas me perdre. | Police agrandie ; étape en cours en gras ; étapes précédentes et suivantes grisées ; notes en italique sous leur étape. | À faire |
-| US-21 | En tant qu'utilisateur, je veux naviguer entre les étapes, afin d'avancer à mon rythme. | Bouton Suivant plus large que Précédent, en bas de l'écran ; croix pour quitter ; swipe horizontal sur la zone des étapes ; flèches du clavier sur ordinateur. | À faire |
-| US-22 | En tant qu'utilisateur, je veux voir les ingrédients en permanence, afin de ne pas revenir à la fiche. | Bandeau d'ingrédients compact en haut, qui défile, toujours visible. | À faire |
-| US-23 | En tant qu'utilisateur, je veux voir ma progression, afin de savoir ce qu'il reste à faire. | Indicateur « Étape x sur y » et barre de progression. | À faire |
-| US-24 | En tant qu'utilisateur, je veux adapter les quantités au nombre de personnes, afin de cuisiner pour la bonne tablée. | Réglage uniquement sur la fiche ; recalcul proportionnel arrondi à la valeur la plus proche ; ingrédients sans quantité inchangés ; valeur conservée en mode cuisine ; réinitialisée en quittant la recette. | À faire |
-| US-25 | En tant qu'utilisateur, je veux copier les ingrédients, afin de faire ma liste de courses dans mes notes. | Bouton Copier ; texte : nom de la recette et nombre de personnes, puis ingrédients en liste à tirets avec quantités adaptées ; ingrédients sans quantité inclus. | À faire |
+| US-19 | En tant qu'utilisateur, je veux lancer le mode cuisine depuis la fiche, l'écran restant allumé, afin de ne pas toucher le téléphone avec les mains sales. | Bouton Lancer le mode cuisine sur la fiche ; écran maintenu allumé tant que le mode est ouvert ; maintien relancé au retour dans l'appli. | En cours |
+| US-20 | En tant qu'utilisateur, je veux voir clairement l'étape en cours, afin de ne pas me perdre. | Police agrandie ; étape en cours en gras ; étapes précédentes et suivantes grisées ; notes en italique sous leur étape. | En cours |
+| US-21 | En tant qu'utilisateur, je veux naviguer entre les étapes, afin d'avancer à mon rythme. | Bouton Suivant plus large que Précédent, en bas de l'écran ; croix pour quitter ; swipe horizontal sur la zone des étapes ; flèches du clavier sur ordinateur. | En cours |
+| US-22 | En tant qu'utilisateur, je veux voir les ingrédients en permanence, afin de ne pas revenir à la fiche. | Bandeau d'ingrédients compact en haut, qui défile, toujours visible. | En cours |
+| US-23 | En tant qu'utilisateur, je veux voir ma progression, afin de savoir ce qu'il reste à faire. | Indicateur « Étape x sur y » et barre de progression. | En cours |
+| US-24 | En tant qu'utilisateur, je veux adapter les quantités au nombre de personnes, afin de cuisiner pour la bonne tablée. | Réglage uniquement sur la fiche ; recalcul proportionnel arrondi à la valeur la plus proche ; ingrédients sans quantité inchangés ; valeur conservée en mode cuisine ; réinitialisée en quittant la recette. | En cours |
+| US-25 | En tant qu'utilisateur, je veux copier les ingrédients, afin de faire ma liste de courses dans mes notes. | Bouton Copier ; texte : nom de la recette et nombre de personnes, puis ingrédients en liste à tirets avec quantités adaptées ; ingrédients sans quantité inclus. | En cours |
 
 ## Sprint 4 · Accueil et listes
 
