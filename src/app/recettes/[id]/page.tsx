@@ -5,19 +5,27 @@ import { Suspense } from "react";
 import { IconeOccasion, IconeTypeRepas } from "@/components/icones";
 import { EnTete, Page } from "@/components/mise-en-page";
 import { ScanZoomable } from "@/components/scan-zoomable";
-import { duree, equivalence, quantiteModerne } from "@/lib/mesures";
+import { duree } from "@/lib/mesures";
+import {
+  personnes as libellePersonnes,
+  personnesChoisies,
+} from "@/lib/portions";
 import { membreConnecte, peutNumeriser } from "@/lib/membre";
 import { urlsSignees } from "@/lib/supabase/images";
 import { creerClientServeur } from "@/lib/supabase/serveur";
+import { Ingredients } from "./ingredients";
 
 export const metadata: Metadata = { title: "Recette · Recettes familiales" };
 
 // US-18 : fiche d'une recette, à lire avant de cuisiner.
-export default function FicheRecette({ params }: PageProps<"/recettes/[id]">) {
+export default function FicheRecette({
+  params,
+  searchParams,
+}: PageProps<"/recettes/[id]">) {
   return (
     <Page>
       <Suspense fallback={<p className="text-taupe">Chargement…</p>}>
-        <Contenu params={params} />
+        <Contenu params={params} searchParams={searchParams} />
       </Suspense>
     </Page>
   );
@@ -63,8 +71,15 @@ type Ligne = {
 const parOrdre = (a: { ordre: number }, b: { ordre: number }) =>
   a.ordre - b.ordre;
 
-async function Contenu({ params }: { params: Promise<{ id: string }> }) {
+async function Contenu({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
   const { id } = await params;
+  const { personnes } = await searchParams;
   const membre = await membreConnecte();
   if (!membre) redirect("/connexion");
 
@@ -90,14 +105,12 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
     (n) => n.etape_id === null || !r.etape.some((e) => e.id === n.etape_id),
   );
   const infos = [
-    r.portions
-      ? `${r.portions} ${r.portions > 1 ? "personnes" : "personne"}`
-      : null,
+    r.portions ? `Pour ${libellePersonnes(r.portions)}` : null,
     r.duree_minutes ? duree(r.duree_minutes) : null,
   ].filter(Boolean);
 
   return (
-    <article className="flex flex-col gap-7">
+    <article className="flex flex-col gap-7 pb-20">
       <EnTete titre={r.titre} retour={{ href: "/", libelle: "Accueil" }} />
 
       {r.statut === "brouillon" ? (
@@ -169,45 +182,18 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
         </section>
       ) : null}
 
-      <section className="flex flex-col gap-4">
-        <h2 className="text-lg font-semibold">Ingrédients</h2>
-        {r.groupe_ingredients.length === 0 ? (
-          <p className="text-taupe">Aucun ingrédient noté.</p>
-        ) : null}
-        {r.groupe_ingredients.sort(parOrdre).map((g) => (
-          <div key={g.id} className="flex flex-col gap-2">
-            {g.nom ? <h3 className="font-medium">{g.nom}</h3> : null}
-            <ul className="flex flex-col gap-2">
-              {g.ingredient.sort(parOrdre).map((i) => {
-                const texte =
-                  i.texte_origine ||
-                  [quantiteModerne(i.quantite, i.unite), i.nom]
-                    .filter(Boolean)
-                    .join(" ");
-                const moderne = equivalence(
-                  i.texte_origine,
-                  i.quantite,
-                  i.unite,
-                );
-                return (
-                  <li key={i.id} className="flex items-baseline gap-3">
-                    <span
-                      aria-hidden
-                      className="h-1.5 w-1.5 shrink-0 translate-y-[-0.15rem] rounded-full bg-peche"
-                    />
-                    <span>
-                      {texte}
-                      {moderne ? (
-                        <span className="text-taupe"> · {moderne}</span>
-                      ) : null}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        ))}
-      </section>
+      <Ingredients
+        recetteId={r.id}
+        titre={r.titre}
+        portions={r.portions}
+        personnesInitiales={personnesChoisies(personnes)}
+        groupes={r.groupe_ingredients.sort(parOrdre).map((g) => ({
+          id: g.id,
+          nom: g.nom,
+          ingredients: g.ingredient.sort(parOrdre),
+        }))}
+        avecEtapes={r.etape.length > 0}
+      />
 
       <section className="flex flex-col gap-4">
         <h2 className="text-lg font-semibold">Étapes</h2>
