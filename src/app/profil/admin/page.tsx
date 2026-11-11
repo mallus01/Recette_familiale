@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 // US-33 : inviter des membres, suivre les invitations, gérer les rôles.
 export default function PageAdministration() {
   return (
-    <Page>
+    <Page large>
       <EnTete titre="Membres" retour={{ href: "/profil", libelle: "Profil" }} />
       <Suspense fallback={<p className="text-taupe">Chargement…</p>}>
         <Contenu />

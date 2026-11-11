@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-// US-32 : barre d'onglets en bas de l'écran. Masquée sur les écrans de détail qui ont
+// US-32 : barre d'onglets en bas de l'écran ; US-44 : barre latérale à gauche sur grand
+// écran (à partir de 768 px : tablette et ordinateur). Masquée sur les écrans de détail qui ont
 // leur propre barre d'actions (fiche, mode cuisine, relecture, capture) et hors connexion.
 const MASQUEE = [
   /^\/connexion/,
@@ -49,9 +50,12 @@ export function BarreOnglets({ numeriser }: { numeriser: boolean }) {
   return (
     <nav
       aria-label="Navigation principale"
-      className="sticky bottom-0 z-20 border-t border-ardoise/10 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur"
+      className="sticky bottom-0 z-20 border-t border-ardoise/10 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:top-0 md:order-first md:h-dvh md:w-56 md:shrink-0 md:border-t-0 md:border-r md:pt-[max(2rem,env(safe-area-inset-top))]"
     >
-      <ul className="mx-auto flex max-w-md">
+      <p className="hidden px-6 pb-6 text-lg font-semibold tracking-tight md:block">
+        Recettes familiales
+      </p>
+      <ul className="mx-auto flex max-w-md md:flex-col md:gap-1 md:px-3">
         {ONGLETS.filter((o) => numeriser || !o.contributeurs).map((o) => {
           const actif = o.actif(chemin);
           return (
@@ -59,8 +63,10 @@ export function BarreOnglets({ numeriser }: { numeriser: boolean }) {
               <Link
                 href={o.href}
                 aria-current={actif ? "page" : undefined}
-                className={`flex flex-col items-center gap-1 pt-2.5 pb-2 text-xs ${
-                  actif ? "font-semibold text-ardoise" : "text-ardoise/60"
+                className={`flex flex-col items-center gap-1 pt-2.5 pb-2 text-xs md:flex-row md:gap-3 md:rounded-xl md:px-3 md:py-2.5 md:text-base ${
+                  actif
+                    ? "font-semibold text-ardoise md:bg-ardoise/10"
+                    : "text-ardoise/60 md:hover:bg-ardoise/5"
                 }`}
               >
                 <svg

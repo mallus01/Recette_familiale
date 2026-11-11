@@ -446,6 +446,14 @@ Propositions faites pour le sprint 7 de la V2 (US-41 à US-43) :
 - Fusionner ajoute à la suite les groupes d'ingrédients, étapes, notes, photos et le scan de la recette suivante, puis la supprime ; les corrections en cours sont enregistrées avant.
 - « Séparer en deux recettes » : on choisit l'étape où commence la nouvelle recette, à partir de quel ingrédient elle emporte les ingrédients (ou aucun), et son titre. Les notes suivent leur étape ; les notes de toute la recette restent sur la première. La nouvelle recette est un brouillon lié aux mêmes pages, à relire à son tour.
 
+Propositions faites pour le sprint 8 de la V2 (US-44 à US-47) :
+
+- À partir de 768 px, la barre latérale (nom de l'appli, puis Accueil, Mes listes, Numériser, Profil) reste fixe à gauche ; comme la barre d'onglets, elle est masquée sur la fiche, le mode cuisine, la relecture et la capture.
+- Mode cuisine : la colonne des ingrédients garde l'ordre de la recette ; ceux de l'étape en cours y sont surlignés en orange pêche sur place (sans passer en tête), ceux des étapes passées barrés.
+- Relecture : scan à gauche, qui reste visible pendant qu'on fait défiler les champs à droite.
+- Membres : en-têtes Membre (ou Adresse), Rôle, Statut ; les invitations ont le statut « Invitée, expire dans x min » ou « Expirée ».
+- Accueil, Mes listes et cahier : page élargie, listes de recettes sur deux colonnes, vignettes des filtres sur cinq colonnes. Fiche : ingrédients et étapes côte à côte.
+
 ## Journal des décisions
 
 | Date | Sujet | Décision |
@@ -498,3 +506,4 @@ Propositions faites pour le sprint 7 de la V2 (US-41 à US-43) :
 | 11/11/2026 | UX/UI | Grand écran = à partir de 768 px (tablette et ordinateur) ; le swipe reste actif en mode cuisine sur grand écran, en plus des flèches du clavier (US-45) |
 | 11/11/2026 | V2 | Sprint 6 : photos proposées par les membres et validées par l'admin (table photo, première photo validée en vignette), images des valeurs de filtres |
 | 11/11/2026 | V2 | Sprint 7 : recettes d'une même page signalées en relecture, fusion avec la page suivante (proposée par l'IA ou à la main), séparation d'une recette en deux |
+| 11/11/2026 | V2 | Sprint 8 : barre latérale, mode cuisine en deux colonnes, relecture face au scan, membres en tableau, pages élargies (à partir de 768 px) |

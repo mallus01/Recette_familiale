@@ -29,7 +29,7 @@ const LISTES = [
 // US-28 : les deux listes privées, séparées.
 export default function MesListes({ searchParams }: PageProps<"/listes">) {
   return (
-    <Page>
+    <Page large>
       <h1 className="text-2xl font-semibold tracking-tight">Mes listes</h1>
       <Suspense fallback={<p className="text-taupe">Chargement…</p>}>
         <Contenu searchParams={searchParams} />
@@ -90,7 +90,7 @@ async function Contenu({
       {recettes.length === 0 ? (
         <p className="leading-relaxed text-taupe">{liste.vide}</p>
       ) : (
-        <ul className="flex flex-col divide-y divide-ardoise/10">
+        <ul className="flex flex-col divide-y divide-ardoise/10 md:grid md:grid-cols-2 md:gap-x-10 md:divide-y-0">
           {enCartes(recettes, urls).map((r) => (
             <li key={r.id}>
               <Ligne recette={r} />

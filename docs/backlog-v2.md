@@ -39,9 +39,9 @@ Objectif : numériser sans contorsion les pages à plusieurs recettes et les rec
 
 Objectif : profiter de la tablette et de l'ordinateur. Grand écran = à partir de 768 px de large (tablette en portrait ou en paysage, ordinateur) ; un téléphone, même en paysage, garde la mise en page mobile.
 
-| ID    | User story                                                                                                    | Critères d'acceptation                                                                                   | Statut  |
-| ----- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------- |
-| US-44 | En tant qu'utilisateur sur grand écran, je veux une barre latérale, afin de naviguer sans barre d'onglets.    | À partir de la largeur tablette, la barre d'onglets devient une barre latérale à gauche, mêmes sections. | À faire |
-| US-45 | En tant qu'utilisateur sur grand écran, je veux le mode cuisine en deux colonnes, afin de tout voir.          | Ingrédients dans une colonne fixe à gauche, étapes à droite ; swipe et flèches du clavier.               | À faire |
-| US-46 | En tant que contributeur sur grand écran, je veux relire face au scan, afin de comparer d'un regard.          | Scan à gauche, champs à droite, chacun défilant séparément.                                              | À faire |
-| US-47 | En tant qu'administrateur sur grand écran, je veux les membres en tableau, afin de les gérer d'un coup d'œil. | Tableau membre, rôle, statut ; accueil et fiche recette élargis en plusieurs colonnes.                   | À faire |
+| ID    | User story                                                                                                    | Critères d'acceptation                                                                                   | Statut   |
+| ----- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------- |
+| US-44 | En tant qu'utilisateur sur grand écran, je veux une barre latérale, afin de naviguer sans barre d'onglets.    | À partir de la largeur tablette, la barre d'onglets devient une barre latérale à gauche, mêmes sections. | En cours |
+| US-45 | En tant qu'utilisateur sur grand écran, je veux le mode cuisine en deux colonnes, afin de tout voir.          | Ingrédients dans une colonne fixe à gauche, étapes à droite ; swipe et flèches du clavier.               | En cours |
+| US-46 | En tant que contributeur sur grand écran, je veux relire face au scan, afin de comparer d'un regard.          | Scan à gauche, champs à droite, chacun défilant séparément.                                              | En cours |
+| US-47 | En tant qu'administrateur sur grand écran, je veux les membres en tableau, afin de les gérer d'un coup d'œil. | Tableau membre, rôle, statut ; accueil et fiche recette élargis en plusieurs colonnes.                   | En cours |

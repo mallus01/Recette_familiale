@@ -20,7 +20,7 @@ export default function PageRelecture({
   params,
 }: PageProps<"/numeriser/relire/[id]">) {
   return (
-    <Page>
+    <Page large>
       <Suspense fallback={<p className="text-taupe">Chargement…</p>}>
         <Contenu params={params} />
       </Suspense>

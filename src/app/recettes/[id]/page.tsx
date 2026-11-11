@@ -25,7 +25,7 @@ export default function FicheRecette({
   searchParams,
 }: PageProps<"/recettes/[id]">) {
   return (
-    <Page>
+    <Page large>
       <Suspense fallback={<p className="text-taupe">Chargement…</p>}>
         <Contenu params={params} searchParams={searchParams} />
       </Suspense>
@@ -208,7 +208,7 @@ async function Contenu({
       />
 
       {pages.length > 0 ? (
-        <section className="flex flex-col gap-2">
+        <section className="flex flex-col gap-2 md:max-w-2xl">
           <h2 className="font-semibold">Scan d’origine</h2>
           {pages.map((p) => (
             <figure key={p.id} className="flex flex-col gap-1">
@@ -225,44 +225,47 @@ async function Contenu({
         </section>
       ) : null}
 
-      <Ingredients
-        recetteId={r.id}
-        titre={r.titre}
-        portions={r.portions}
-        personnesInitiales={personnesChoisies(personnes)}
-        groupes={r.groupe_ingredients.sort(parOrdre).map((g) => ({
-          id: g.id,
-          nom: g.nom,
-          ingredients: g.ingredient.sort(parOrdre),
-        }))}
-        avecEtapes={r.etape.length > 0}
-      />
+      {/* US-47 : sur grand écran, ingrédients et étapes côte à côte. */}
+      <div className="flex flex-col gap-7 md:grid md:grid-cols-[2fr_3fr] md:items-start md:gap-12">
+        <Ingredients
+          recetteId={r.id}
+          titre={r.titre}
+          portions={r.portions}
+          personnesInitiales={personnesChoisies(personnes)}
+          groupes={r.groupe_ingredients.sort(parOrdre).map((g) => ({
+            id: g.id,
+            nom: g.nom,
+            ingredients: g.ingredient.sort(parOrdre),
+          }))}
+          avecEtapes={r.etape.length > 0}
+        />
 
-      <section className="flex flex-col gap-4">
-        <h2 className="text-lg font-semibold">Étapes</h2>
-        {r.etape.length === 0 ? (
-          <p className="text-taupe">Aucune étape notée.</p>
-        ) : null}
-        <ol className="flex flex-col gap-4">
-          {r.etape.sort(parOrdre).map((e, k) => (
-            <li key={e.id} className="flex gap-3">
-              <span className="w-6 shrink-0 text-right font-semibold">
-                {k + 1}.
-              </span>
-              <div className="flex flex-col gap-1.5 leading-relaxed">
-                <p>{e.texte}</p>
-                {notes
-                  .filter((n) => n.etape_id === e.id)
-                  .map((n) => (
-                    <p key={n.id} className="text-taupe italic">
-                      {n.texte}
-                    </p>
-                  ))}
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
+        <section className="flex flex-col gap-4">
+          <h2 className="text-lg font-semibold">Étapes</h2>
+          {r.etape.length === 0 ? (
+            <p className="text-taupe">Aucune étape notée.</p>
+          ) : null}
+          <ol className="flex flex-col gap-4">
+            {r.etape.sort(parOrdre).map((e, k) => (
+              <li key={e.id} className="flex gap-3">
+                <span className="w-6 shrink-0 text-right font-semibold">
+                  {k + 1}.
+                </span>
+                <div className="flex flex-col gap-1.5 leading-relaxed">
+                  <p>{e.texte}</p>
+                  {notes
+                    .filter((n) => n.etape_id === e.id)
+                    .map((n) => (
+                      <p key={n.id} className="text-taupe italic">
+                        {n.texte}
+                      </p>
+                    ))}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      </div>
 
       {notesRecette.length > 0 ? (
         <section className="flex flex-col gap-2">

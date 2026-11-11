@@ -47,7 +47,7 @@ export function Administration({
             setFormulaire(true);
             setMessage(null);
           }}
-          className="rounded-xl bg-ardoise px-5 py-3 font-semibold text-white"
+          className="rounded-xl bg-ardoise px-5 py-3 font-semibold text-white md:self-start"
         >
           Inviter un membre
         </button>
@@ -102,6 +102,10 @@ export function Administration({
   );
 }
 
+// Colonnes du tableau des membres et des invitations sur grand écran.
+const GRILLE =
+  "md:grid md:grid-cols-[minmax(0,1fr)_11rem_9rem_7rem] md:items-center md:gap-4";
+
 // Heure courante, rafraîchie toutes les 30 secondes pour le temps restant.
 function useMaintenant() {
   const [maintenant, setMaintenant] = useState(() => Date.now());
@@ -127,7 +131,21 @@ function Section({
       {children.length === 0 && vide ? (
         <p className="text-sm text-taupe">{vide}</p>
       ) : (
-        <ul className="flex flex-col divide-y divide-ardoise/10">{children}</ul>
+        <>
+          {/* US-47 : sur grand écran, la liste se lit comme un tableau. */}
+          <div
+            aria-hidden
+            className={`hidden border-b border-ardoise/10 pb-2 text-sm font-medium text-taupe ${GRILLE}`}
+          >
+            <span>{titre.startsWith("Membres") ? "Membre" : "Adresse"}</span>
+            <span>Rôle</span>
+            <span>Statut</span>
+            <span />
+          </div>
+          <ul className="flex flex-col divide-y divide-ardoise/10">
+            {children}
+          </ul>
+        </>
       )}
     </section>
   );
@@ -242,36 +260,42 @@ function LigneInvitation({
     });
 
   return (
-    <li className="relative flex items-center gap-3 py-3">
+    <li className={`relative flex items-center gap-3 py-3 ${GRILLE}`}>
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="truncate font-medium">{i.email}</span>
-        <span className="text-sm text-taupe">
+        <span className="text-sm text-taupe md:hidden">
           {LIBELLES_ROLE[i.role]} ·{" "}
           {expiree ? "expirée" : `expire dans ${restant} min`}
         </span>
       </div>
-      {expiree ? (
+      <span className="hidden text-sm md:block">{LIBELLES_ROLE[i.role]}</span>
+      <span className="hidden text-sm text-taupe md:block">
+        {expiree ? "Expirée" : `Invitée, expire dans ${restant} min`}
+      </span>
+      <div className="flex items-center gap-2 md:justify-self-end">
+        {expiree ? (
+          <button
+            type="button"
+            disabled={enCours}
+            onClick={() =>
+              agir(() => renvoyer(i.id), `Invitation renvoyée à ${i.email}.`)
+            }
+            className="rounded-full border border-ardoise/25 px-3 py-1.5 text-sm font-medium disabled:opacity-50"
+          >
+            Renvoyer
+          </button>
+        ) : null}
         <button
           type="button"
+          aria-label={`Options pour ${i.email}`}
+          aria-expanded={menu}
           disabled={enCours}
-          onClick={() =>
-            agir(() => renvoyer(i.id), `Invitation renvoyée à ${i.email}.`)
-          }
-          className="rounded-full border border-ardoise/25 px-3 py-1.5 text-sm font-medium disabled:opacity-50"
+          onClick={() => setMenu(!menu)}
+          className="flex h-9 w-9 items-center justify-center rounded-full text-xl leading-none disabled:opacity-50"
         >
-          Renvoyer
+          ⋮
         </button>
-      ) : null}
-      <button
-        type="button"
-        aria-label={`Options pour ${i.email}`}
-        aria-expanded={menu}
-        disabled={enCours}
-        onClick={() => setMenu(!menu)}
-        className="flex h-9 w-9 items-center justify-center rounded-full text-xl leading-none disabled:opacity-50"
-      >
-        ⋮
-      </button>
+      </div>
       {menu ? (
         <div className="absolute top-12 right-0 z-10 rounded-xl border border-ardoise/15 bg-white p-1 shadow-lg">
           <button
@@ -345,7 +369,7 @@ function LigneMembre({
     );
 
   return (
-    <li className="relative flex items-center gap-3 py-3">
+    <li className={`relative flex items-center gap-3 py-3 ${GRILLE}`}>
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="truncate font-medium">
           {m.nom}
@@ -383,14 +407,17 @@ function LigneMembre({
           </option>
         ))}
       </select>
-      {moi ? null : (
+      <span className="hidden text-sm text-taupe md:block">Actif</span>
+      {moi ? (
+        <span className="hidden md:block" />
+      ) : (
         <button
           type="button"
           aria-label={`Options pour ${m.nom}`}
           aria-expanded={menu}
           disabled={enCours}
           onClick={() => setMenu(!menu)}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xl leading-none disabled:opacity-50"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xl leading-none disabled:opacity-50 md:justify-self-end"
         >
           ⋮
         </button>

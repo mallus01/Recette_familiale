@@ -16,7 +16,7 @@ export default function FeuilleterCahier({
   params,
 }: PageProps<"/cahiers/[id]">) {
   return (
-    <Page>
+    <Page large>
       <Suspense fallback={<p className="text-taupe">Chargement…</p>}>
         <Contenu params={params} />
       </Suspense>
@@ -80,7 +80,7 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
           Aucune recette de ce cahier n’est encore publiée.
         </p>
       ) : (
-        <ul className="flex flex-col divide-y divide-ardoise/10">
+        <ul className="flex flex-col divide-y divide-ardoise/10 md:grid md:grid-cols-2 md:gap-x-10 md:divide-y-0">
           {enCartes(recettes, urls).map((r) => (
             <li key={r.id}>
               <Ligne
