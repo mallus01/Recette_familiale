@@ -35,9 +35,29 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
   if (!cahier) notFound();
   const { data: pages } = await supabase
     .from("page_scannee")
-    .select("id, numero, image_chemin, statut, nb_mots_douteux")
+    .select("id, numero, image_chemin, statut, nb_mots_douteux, recette_page(recette(id, titre, statut))")
     .eq("cahier_id", cahier.id)
-    .order("numero");
+    .order("numero")
+    .returns<
+      {
+        id: number;
+        numero: number;
+        image_chemin: string;
+        statut: "en_attente" | "lecture_en_cours" | "prete" | "en_echec";
+        nb_mots_douteux: number;
+        recette_page: { recette: { id: number; titre: string; statut: string } | null }[];
+      }[]
+    >();
+  // Recettes publiées de ce cahier, dans l'ordre des pages (une recette sur deux pages
+  // n'apparaît qu'une fois).
+  const publiees = [
+    ...new Map(
+      (pages ?? [])
+        .flatMap((p) => p.recette_page.map((rp) => rp.recette))
+        .filter((r) => r?.statut === "publiee")
+        .map((r) => [r!.id, r!]),
+    ).values(),
+  ];
   const urls = await urlsSignees([cahier.couverture_chemin ?? "", ...(pages ?? []).map((p) => p.image_chemin)]);
   const nbPages = pages?.length ?? 0;
 
@@ -54,6 +74,21 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
       >
         {nbPages > 0 ? "Photographier d’autres pages" : "Photographier les pages"}
       </Link>
+
+      {publiees.length > 0 ? (
+        <section className="flex flex-col gap-2">
+          <h2 className="font-semibold">Recettes publiées</h2>
+          <ul className="flex flex-col gap-1.5">
+            {publiees.map((r) => (
+              <li key={r.id}>
+                <Link href={`/recettes/${r.id}`} className="underline decoration-ciel decoration-2 underline-offset-4">
+                  {r.titre}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {nbPages > 0 ? (
         <PagesDuCahier pages={pages!.map((p) => ({ ...p, url: urls.get(p.image_chemin) }))} />
