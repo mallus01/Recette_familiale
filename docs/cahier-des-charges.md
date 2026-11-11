@@ -185,9 +185,11 @@ Le parcours se fait en trois écrans, réservés aux contributeurs et à l'admin
 - Une photo validée est utilisée comme vignette de la recette dans les menus.
 - L'interface d'administration comprend une file des photos à valider.
 
-### Idées pour de futurs tests A/B
+### Test A/B des cartes À cuisiner (V3)
 
 - Rangée À cuisiner en grandes cartes avec image de la recette, face aux cartes standard.
+- Chaque membre reçoit une variante au hasard, gardée sur tous ses appareils ; l'administrateur suit les résultats depuis Profil et retient une variante, qui s'applique alors à tous.
+- Mesures anonymes : l'administrateur ne voit que des totaux par variante, jamais le contenu des listes À cuisiner.
 
 ## Adaptation des quantités
 
@@ -251,6 +253,8 @@ Le modèle compte trois blocs : le cœur des recettes, les membres et l'accès, 
 | Occasion | nom unique, image | plusieurs par recette (table de liaison) |
 | Liste perso | type (favori, à cuisiner), date d'ajout | un membre, une recette ; privée |
 | Photo | image, statut (en attente, validée), ordre | une recette ; proposée par un membre, validée par l'admin |
+| Test A/B | code, variantes, statut (en cours, terminé), variante retenue | attribue une variante à chaque membre |
+| Mesure A/B | type (affichage, ouverture, cuisinée), variante, jour | un test, un membre ; lue seulement en totaux par l'admin |
 
 Règles associées :
 
@@ -321,7 +325,7 @@ La V1 est développée selon Scrum, adapté à un projet solo, en sprints de 2 s
 | Sprint 3 | Mode cuisine et quantités | Écran allumé, étapes, panneau d'ingrédients, progression, boutons et swipe, nombre de personnes, bouton Copier |
 | Sprint 4 | Accueil et listes | Recherche, filtres à panneau dépliant, rangées Cahiers et Suggestions, Favoris et À cuisiner avec retrait automatique |
 
-Le détail des user stories et leur suivi : `docs/backlog-v1.md`.
+Le détail des user stories et leur suivi : `docs/backlog-v1.md`. La V2 (sprints 5 à 8) : `docs/backlog-v2.md`. La V3 (sprint 9, test A/B des grandes cartes À cuisiner) : `docs/backlog-v3.md`.
 
 ## Points ouverts à valider
 
@@ -454,6 +458,16 @@ Propositions faites pour le sprint 8 de la V2 (US-44 à US-47) :
 - Membres : en-têtes Membre (ou Adresse), Rôle, Statut ; les invitations ont le statut « Invitée, expire dans x min » ou « Expirée ».
 - Accueil, Mes listes et cahier : page élargie, listes de recettes sur deux colonnes, vignettes des filtres sur cinq colonnes. Fiche : ingrédients et étapes côte à côte.
 
+Propositions faites pour le sprint 9 de la V3 (US-48 à US-50) :
+
+- Variante attribuée à la première visite de l'accueil, en équilibrant les effectifs (au hasard en cas d'égalité) ; elle est enregistrée en base, donc identique sur tous les appareils du membre.
+- Grande carte : environ les trois quarts de la largeur du téléphone (320 px au plus sur grand écran), image 4/3, titre en gras dessous ; défilement aimanté sur chaque carte.
+- Mesures : jours où la rangée non vide a été vue (une fois par jour et par membre), recettes ouvertes depuis la rangée, recettes de À cuisiner cuisinées jusqu'au bout ; indicateur principal : ouvertures par jour vu. Aucune mesure ne garde l'identifiant de la recette.
+- Seuil indicatif de 20 jours vus par variante avant de conclure, rappelé sur l'écran des résultats.
+- L'administrateur peut changer sa propre variante pendant le test pour essayer l'autre affichage (ses visites comptent alors pour la variante choisie).
+- Terminer le test applique la variante retenue à tous et arrête les mesures ; le test peut être repris, chacun retrouvant sa variante.
+- Avec un seul membre actif, le test ne départage rien : il prend son sens quand plusieurs membres utilisent l'accueil.
+
 ## Journal des décisions
 
 | Date | Sujet | Décision |
@@ -507,3 +521,4 @@ Propositions faites pour le sprint 8 de la V2 (US-44 à US-47) :
 | 11/11/2026 | V2 | Sprint 6 : photos proposées par les membres et validées par l'admin (table photo, première photo validée en vignette), images des valeurs de filtres |
 | 11/11/2026 | V2 | Sprint 7 : recettes d'une même page signalées en relecture, fusion avec la page suivante (proposée par l'IA ou à la main), séparation d'une recette en deux |
 | 11/11/2026 | V2 | Sprint 8 : barre latérale, mode cuisine en deux colonnes, relecture face au scan, membres en tableau, pages élargies (à partir de 768 px) |
+| 11/11/2026 | V3 | V2 validée (US-26 à US-47 terminées) ; backlog V3 écrit (US-48 à US-50, sprint 9) : test A/B des grandes cartes À cuisiner, variante au hasard par membre, mesures anonymes, résultats et choix de la variante dans Profil |

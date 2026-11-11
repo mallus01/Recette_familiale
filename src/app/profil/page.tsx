@@ -64,6 +64,12 @@ async function Contenu() {
             ) : null}
           </Link>
           <Link
+            href="/profil/test-cartes"
+            className="self-start underline decoration-ciel decoration-2 underline-offset-4"
+          >
+            Test des cartes À cuisiner
+          </Link>
+          <Link
             href="/numeriser/listes"
             className="self-start underline decoration-ciel decoration-2 underline-offset-4"
           >

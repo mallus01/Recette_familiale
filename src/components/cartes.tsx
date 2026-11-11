@@ -44,6 +44,26 @@ export function Carte({ recette }: { recette: CarteRecette }) {
   );
 }
 
+// US-48 : grande carte de la rangée À cuisiner (variante « grandes » du test A/B).
+export function GrandeCarte({ recette }: { recette: CarteRecette }) {
+  return (
+    <Link
+      href={`/recettes/${recette.id}`}
+      className="flex w-[78%] max-w-80 shrink-0 snap-start flex-col gap-2.5"
+    >
+      <Vignette
+        url={recette.vignette}
+        photo={recette.photo}
+        className="aspect-[4/3] w-full rounded-2xl"
+      />
+      <span className="line-clamp-2 text-base leading-snug font-semibold">
+        {recette.classique ? <span aria-label="Classique">★ </span> : null}
+        {recette.titre}
+      </span>
+    </Link>
+  );
+}
+
 // Ligne d'une liste (Mes listes, recherche, cahier).
 export function Ligne({
   recette,
@@ -77,10 +97,13 @@ export function Ligne({
 export function Rangee({
   titre,
   action,
+  aimantee = false,
   children,
 }: {
   titre: string;
   action?: React.ReactNode;
+  // Défilement qui s'arrête sur chaque carte (grandes cartes).
+  aimantee?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -89,7 +112,11 @@ export function Rangee({
         <h2 className="text-lg font-semibold">{titre}</h2>
         {action}
       </div>
-      <div className="-mx-6 flex gap-3 overflow-x-auto px-6 pb-1">
+      <div
+        className={`-mx-6 flex gap-3 overflow-x-auto px-6 pb-1 ${
+          aimantee ? "snap-x snap-mandatory scroll-px-6" : ""
+        }`}
+      >
         {children}
       </div>
     </section>
