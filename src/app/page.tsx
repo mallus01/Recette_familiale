@@ -1,45 +1,139 @@
-import { Suspense } from "react";
 import Link from "next/link";
-import { LIBELLES_ROLE, membreConnecte, peutNumeriser } from "@/lib/membre";
-import { AideInstallation } from "./aide-installation";
-import { BoutonDeconnexion } from "./deconnexion";
+import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import { Carte, Rangee } from "@/components/cartes";
+import { Couverture } from "@/components/couverture";
+import { Page } from "@/components/mise-en-page";
+import { membreConnecte } from "@/lib/membre";
+import { COLONNES_RESUME, enCartes, type RecetteResume } from "@/lib/recettes";
+import { urlsSignees } from "@/lib/supabase/images";
+import { creerClientServeur } from "@/lib/supabase/serveur";
+import { Recherche } from "./recherche";
+import { RelancerSuggestions } from "./relancer-suggestions";
 
+// US-30 : accueil avec recherche, filtres et trois rangées.
 export default function Accueil() {
   return (
-    <main className="mx-auto flex w-full max-w-md flex-1 flex-col gap-6 px-6 pt-[max(3rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))]">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-3xl font-semibold tracking-tight">Recettes familiales</h1>
-        <p className="text-taupe leading-relaxed">
-          Les recettes de la famille, et les cahiers manuscrits qui les ont gardées.
-        </p>
-      </header>
-
-      <section className="flex flex-col gap-3 rounded-2xl bg-jaune/40 p-5 leading-relaxed">
-        <p>L’appli est en construction.</p>
-        <Suspense>
-          <MembreConnecte />
-        </Suspense>
-      </section>
-
-      <AideInstallation />
-    </main>
+    <Page>
+      <h1 className="text-2xl font-semibold tracking-tight">
+        Recettes familiales
+      </h1>
+      <Suspense fallback={<p className="text-taupe">Chargement…</p>}>
+        <Contenu />
+      </Suspense>
+    </Page>
   );
 }
 
-async function MembreConnecte() {
+async function Contenu() {
   const membre = await membreConnecte();
-  if (!membre) return null;
+  if (!membre) redirect("/connexion");
+  const supabase = await creerClientServeur();
+
+  const [
+    { data: types },
+    { data: occasions },
+    { data: liste },
+    { data: cahiers },
+    { data: suggestions },
+  ] = await Promise.all([
+    supabase.from("type_repas").select("id, nom").order("nom"),
+    supabase.from("occasion").select("id, nom").order("nom"),
+    supabase
+      .from("liste_perso")
+      .select("recette_id, ajoute_le")
+      .eq("membre_id", membre.id)
+      .eq("type", "a_cuisiner")
+      .order("ajoute_le", { ascending: false }),
+    supabase
+      .from("cahier")
+      .select("id, nom, couverture_chemin")
+      .order("cree_le"),
+    supabase.rpc("suggestions_recettes", { p_nombre: 8 }),
+  ]);
+
+  const idsACuisiner = (liste ?? []).map((l) => l.recette_id as number);
+  const { data: aCuisinerBrut } = idsACuisiner.length
+    ? await supabase
+        .from("recette_resume")
+        .select(COLONNES_RESUME)
+        .in("id", idsACuisiner)
+    : { data: [] };
+  const aCuisiner = idsACuisiner
+    .map((id) => (aCuisinerBrut as RecetteResume[]).find((r) => r.id === id))
+    .filter((r): r is RecetteResume => Boolean(r));
+  const proposees = (suggestions ?? []) as RecetteResume[];
+  const listeCahiers = (cahiers ?? []) as {
+    id: number;
+    nom: string;
+    couverture_chemin: string | null;
+  }[];
+
+  const urls = await urlsSignees([
+    ...[...aCuisiner, ...proposees].flatMap((r) =>
+      r.vignette_chemin ? [r.vignette_chemin] : [],
+    ),
+    ...listeCahiers.flatMap((c) =>
+      c.couverture_chemin ? [c.couverture_chemin] : [],
+    ),
+  ]);
+
   return (
-    <>
-      <p className="text-sm text-taupe">
-        Connecté avec {membre.email} · {LIBELLES_ROLE[membre.role]}
-      </p>
-      {peutNumeriser(membre.role) ? (
-        <Link href="/numeriser" className="rounded-xl bg-ardoise px-5 py-3 text-center font-semibold text-white">
-          Numériser un cahier
-        </Link>
-      ) : null}
-      <BoutonDeconnexion />
-    </>
+    <Recherche typesRepas={types ?? []} occasions={occasions ?? []}>
+      <div className="flex flex-col gap-8">
+        <Rangee titre="À cuisiner">
+          {aCuisiner.length === 0 ? (
+            <p className="text-sm leading-relaxed text-taupe">
+              Ajoute des recettes depuis leur fiche pour les retrouver ici.
+            </p>
+          ) : (
+            enCartes(aCuisiner, urls).map((r) => (
+              <Carte key={r.id} recette={r} />
+            ))
+          )}
+        </Rangee>
+
+        <Rangee titre="Les cahiers">
+          {listeCahiers.length === 0 ? (
+            <p className="text-sm text-taupe">Aucun cahier pour l’instant.</p>
+          ) : (
+            listeCahiers.map((c) => (
+              <Link
+                key={c.id}
+                href={`/cahiers/${c.id}`}
+                className="flex w-32 shrink-0 flex-col gap-2"
+              >
+                <Couverture
+                  url={
+                    c.couverture_chemin
+                      ? urls.get(c.couverture_chemin)
+                      : undefined
+                  }
+                  nom={c.nom}
+                />
+                <span className="line-clamp-2 text-sm leading-snug font-medium">
+                  {c.nom}
+                </span>
+              </Link>
+            ))
+          )}
+        </Rangee>
+
+        <Rangee
+          titre="Suggestions"
+          action={proposees.length > 1 ? <RelancerSuggestions /> : null}
+        >
+          {proposees.length === 0 ? (
+            <p className="text-sm text-taupe">
+              Aucune recette publiée pour l’instant.
+            </p>
+          ) : (
+            enCartes(proposees, urls).map((r) => (
+              <Carte key={r.id} recette={r} />
+            ))
+          )}
+        </Rangee>
+      </div>
+    </Recherche>
   );
 }

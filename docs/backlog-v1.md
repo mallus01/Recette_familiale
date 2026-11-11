@@ -47,13 +47,13 @@ Objectif : cuisiner une recette de bout en bout avec le téléphone posé sur le
 
 | ID | User story | Critères d'acceptation | Statut |
 | --- | --- | --- | --- |
-| US-19 | En tant qu'utilisateur, je veux lancer le mode cuisine depuis la fiche, l'écran restant allumé, afin de ne pas toucher le téléphone avec les mains sales. | Bouton Lancer le mode cuisine sur la fiche ; écran maintenu allumé tant que le mode est ouvert ; maintien relancé au retour dans l'appli. | En cours |
-| US-20 | En tant qu'utilisateur, je veux voir clairement l'étape en cours, afin de ne pas me perdre. | Police agrandie ; étape en cours en gras ; étapes précédentes et suivantes grisées ; notes en italique sous leur étape. | En cours |
-| US-21 | En tant qu'utilisateur, je veux naviguer entre les étapes, afin d'avancer à mon rythme. | Bouton Suivant plus large que Précédent, en bas de l'écran ; croix pour quitter ; swipe horizontal sur la zone des étapes ; flèches du clavier sur ordinateur. | En cours |
-| US-22 | En tant qu'utilisateur, je veux voir les ingrédients en permanence, afin de ne pas revenir à la fiche. | Bandeau d'ingrédients compact en haut, qui défile, toujours visible. | En cours |
-| US-23 | En tant qu'utilisateur, je veux voir ma progression, afin de savoir ce qu'il reste à faire. | Indicateur « Étape x sur y » et barre de progression. | En cours |
-| US-24 | En tant qu'utilisateur, je veux adapter les quantités au nombre de personnes, afin de cuisiner pour la bonne tablée. | Réglage uniquement sur la fiche ; recalcul proportionnel arrondi à la valeur la plus proche ; ingrédients sans quantité inchangés ; valeur conservée en mode cuisine ; réinitialisée en quittant la recette. | En cours |
-| US-25 | En tant qu'utilisateur, je veux copier les ingrédients, afin de faire ma liste de courses dans mes notes. | Bouton Copier ; texte : nom de la recette et nombre de personnes, puis ingrédients en liste à tirets avec quantités adaptées ; ingrédients sans quantité inclus. | En cours |
+| US-19 | En tant qu'utilisateur, je veux lancer le mode cuisine depuis la fiche, l'écran restant allumé, afin de ne pas toucher le téléphone avec les mains sales. | Bouton Lancer le mode cuisine sur la fiche ; écran maintenu allumé tant que le mode est ouvert ; maintien relancé au retour dans l'appli. | Terminée |
+| US-20 | En tant qu'utilisateur, je veux voir clairement l'étape en cours, afin de ne pas me perdre. | Police agrandie ; étape en cours en gras ; étapes précédentes et suivantes grisées ; notes en italique sous leur étape. | Terminée |
+| US-21 | En tant qu'utilisateur, je veux naviguer entre les étapes, afin d'avancer à mon rythme. | Bouton Suivant plus large que Précédent, en bas de l'écran ; croix pour quitter ; swipe horizontal sur la zone des étapes ; flèches du clavier sur ordinateur. | Terminée |
+| US-22 | En tant qu'utilisateur, je veux voir les ingrédients en permanence, afin de ne pas revenir à la fiche. | Bandeau d'ingrédients compact en haut, qui défile, toujours visible. | Terminée |
+| US-23 | En tant qu'utilisateur, je veux voir ma progression, afin de savoir ce qu'il reste à faire. | Indicateur « Étape x sur y » et barre de progression. | Terminée |
+| US-24 | En tant qu'utilisateur, je veux adapter les quantités au nombre de personnes, afin de cuisiner pour la bonne tablée. | Réglage uniquement sur la fiche ; recalcul proportionnel arrondi à la valeur la plus proche ; ingrédients sans quantité inchangés ; valeur conservée en mode cuisine ; réinitialisée en quittant la recette. | Terminée |
+| US-25 | En tant qu'utilisateur, je veux copier les ingrédients, afin de faire ma liste de courses dans mes notes. | Bouton Copier ; texte : nom de la recette et nombre de personnes, puis ingrédients en liste à tirets avec quantités adaptées ; ingrédients sans quantité inclus. | Terminée |
 
 ## Sprint 4 · Accueil et listes
 
@@ -61,10 +61,10 @@ Objectif : retrouver une recette en quelques secondes et organiser ce qu'on veut
 
 | ID | User story | Critères d'acceptation | Statut |
 | --- | --- | --- | --- |
-| US-26 | En tant qu'utilisateur, je veux chercher une recette, afin de la retrouver vite. | Barre de recherche en haut de l'accueil ; recherche par nom de recette ou par ingrédient. | À faire |
-| US-27 | En tant qu'utilisateur, je veux filtrer par tags, afin de trouver une idée selon le repas ou l'occasion. | Boutons Type de repas et Occasion dépliant un panneau de vignettes ; un seul panneau ouvert à la fois ; fermeture en touchant le bouton ou en faisant défiler ; bouton étoile pour Classiques. | À faire |
-| US-28 | En tant qu'utilisateur, je veux mes listes Favoris et À cuisiner, afin de mettre des recettes de côté. | Ajout et retrait depuis la fiche ; listes privées ; onglet Mes listes avec les deux listes séparées. | À faire |
-| US-29 | En tant qu'utilisateur, je veux qu'une recette cuisinée quitte À cuisiner, afin que la liste reste à jour. | Retrait automatique quand on passe la dernière étape du mode cuisine. | À faire |
-| US-30 | En tant qu'utilisateur, je veux un accueil organisé en rangées, afin de naviguer facilement. | Rangées À cuisiner, Les cahiers (avec leur couverture) et Suggestions ; suggestions tirées au hasard à chaque ouverture, avec bouton de relance ; extrait du scan comme vignette d'une recette sans photo. | À faire |
-| US-31 | En tant qu'utilisateur, je veux feuilleter un cahier, afin de retrouver ses recettes dans l'ordre d'origine. | Depuis la rangée Les cahiers ; recettes listées par numéro de page ; accès à la fiche de chaque recette. | À faire |
-| US-32 | En tant qu'utilisateur, je veux une barre d'onglets, afin de passer d'une section à l'autre. | Onglets Accueil, Mes listes, Numériser et Profil ; Numériser visible seulement pour les contributeurs et l'admin ; barre latérale sur grand écran reportée en V2. | À faire |
+| US-26 | En tant qu'utilisateur, je veux chercher une recette, afin de la retrouver vite. | Barre de recherche en haut de l'accueil ; recherche par nom de recette ou par ingrédient. | En cours |
+| US-27 | En tant qu'utilisateur, je veux filtrer par tags, afin de trouver une idée selon le repas ou l'occasion. | Boutons Type de repas et Occasion dépliant un panneau de vignettes ; un seul panneau ouvert à la fois ; fermeture en touchant le bouton ou en faisant défiler ; bouton étoile pour Classiques. | En cours |
+| US-28 | En tant qu'utilisateur, je veux mes listes Favoris et À cuisiner, afin de mettre des recettes de côté. | Ajout et retrait depuis la fiche ; listes privées ; onglet Mes listes avec les deux listes séparées. | En cours |
+| US-29 | En tant qu'utilisateur, je veux qu'une recette cuisinée quitte À cuisiner, afin que la liste reste à jour. | Retrait automatique quand on passe la dernière étape du mode cuisine. | En cours |
+| US-30 | En tant qu'utilisateur, je veux un accueil organisé en rangées, afin de naviguer facilement. | Rangées À cuisiner, Les cahiers (avec leur couverture) et Suggestions ; suggestions tirées au hasard à chaque ouverture, avec bouton de relance ; extrait du scan comme vignette d'une recette sans photo. | En cours |
+| US-31 | En tant qu'utilisateur, je veux feuilleter un cahier, afin de retrouver ses recettes dans l'ordre d'origine. | Depuis la rangée Les cahiers ; recettes listées par numéro de page ; accès à la fiche de chaque recette. | En cours |
+| US-32 | En tant qu'utilisateur, je veux une barre d'onglets, afin de passer d'une section à l'autre. | Onglets Accueil, Mes listes, Numériser et Profil ; Numériser visible seulement pour les contributeurs et l'admin ; barre latérale sur grand écran reportée en V2. | En cours |

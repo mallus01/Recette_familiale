@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useEcranAllume } from "@/lib/ecran-allume";
+import { creerClientNavigateur } from "@/lib/supabase/client";
 import { personnes as libellePersonnes } from "@/lib/portions";
 
 type Groupe = {
@@ -13,6 +15,8 @@ type Groupe = {
 type Etape = { id: number; texte: string; notes: string[] };
 
 export function ModeCuisine({
+  recetteId,
+  membreId,
   titre,
   retour,
   personnes,
@@ -20,6 +24,8 @@ export function ModeCuisine({
   etapes,
   notesRecette,
 }: {
+  recetteId: number;
+  membreId: string;
   titre: string;
   retour: string;
   personnes: number | null;
@@ -28,6 +34,8 @@ export function ModeCuisine({
   notesRecette: string[];
 }) {
   useEcranAllume();
+  const router = useRouter();
+  const [fin, setFin] = useState(false);
   const [courante, setCourante] = useState(0);
   const total = etapes.length;
   const derniere = courante >= total - 1;
@@ -56,6 +64,21 @@ export function ModeCuisine({
       behavior: "smooth",
     });
   }, [courante]);
+
+  // US-29 : passer la dernière étape retire la recette de À cuisiner, puis ramène à la
+  // fiche ; le prochain passage en mode cuisine repart de l'étape 1.
+  async function terminer() {
+    setFin(true);
+    await creerClientNavigateur()
+      .from("liste_perso")
+      .delete()
+      .eq("membre_id", membreId)
+      .eq("recette_id", recetteId)
+      .eq("type", "a_cuisiner");
+    setCourante(0);
+    setFin(false);
+    router.push(retour);
+  }
 
   // Swipe horizontal, uniquement sur la zone des étapes.
   function finSwipe(x: number, y: number) {
@@ -206,13 +229,14 @@ export function ModeCuisine({
             Précédent
           </button>
           {derniere ? (
-            <Link
-              href={retour}
-              onClick={() => setCourante(0)}
-              className="flex-[2] rounded-full bg-ardoise py-4 text-center font-semibold text-white"
+            <button
+              type="button"
+              disabled={fin}
+              onClick={terminer}
+              className="flex-[2] rounded-full bg-ardoise py-4 font-semibold text-white disabled:opacity-60"
             >
               Terminer
-            </Link>
+            </button>
           ) : (
             <button
               type="button"

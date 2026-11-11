@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
+import { Suspense } from "react";
+import { BarreOnglets } from "@/components/barre-onglets";
+import { membreConnecte, peutNumeriser } from "@/lib/membre";
 import { EnregistrementServiceWorker } from "./enregistrement-service-worker";
 import "./globals.css";
 
@@ -32,8 +35,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="fr" className={`${geist.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-sans">
         {children}
+        <Suspense>
+          <Onglets />
+        </Suspense>
         <EnregistrementServiceWorker />
       </body>
     </html>
   );
+}
+
+async function Onglets() {
+  const membre = await membreConnecte();
+  if (!membre) return null;
+  return <BarreOnglets numeriser={peutNumeriser(membre.role)} />;
 }

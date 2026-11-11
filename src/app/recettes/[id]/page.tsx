@@ -13,6 +13,7 @@ import {
 import { membreConnecte, peutNumeriser } from "@/lib/membre";
 import { urlsSignees } from "@/lib/supabase/images";
 import { creerClientServeur } from "@/lib/supabase/serveur";
+import { BoutonsListes } from "./boutons-listes";
 import { Ingredients } from "./ingredients";
 
 export const metadata: Metadata = { title: "Recette · Recettes familiales" };
@@ -92,6 +93,11 @@ async function Contenu({
     .eq("id", Number(id))
     .maybeSingle<Ligne>();
   if (!r) notFound();
+  const { data: listes } = await supabase
+    .from("liste_perso")
+    .select("type")
+    .eq("recette_id", r.id)
+    .eq("membre_id", membre.id);
 
   const pages = r.recette_page
     .sort(parOrdre)
@@ -157,6 +163,12 @@ async function Contenu({
           ) : null}
         </div>
       ) : null}
+
+      <BoutonsListes
+        recetteId={r.id}
+        membreId={membre.id}
+        initiales={(listes ?? []).map((l) => l.type as "favori" | "a_cuisiner")}
+      />
 
       {r.souvenir ? (
         <blockquote className="border-l-4 border-jaune pl-4 leading-relaxed whitespace-pre-line text-taupe italic">

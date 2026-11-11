@@ -403,6 +403,18 @@ Propositions faites pour le sprint 3 (US-19 à US-25) :
 - Toucher une étape la rend courante. À la dernière étape, Suivant devient Terminer et ramène à la fiche ; relancer ensuite le mode cuisine repart de l'étape 1. La croix, elle, garde l'étape en cours si on revient (le retrait de À cuisiner s'y branchera au sprint 4).
 - Le nombre de personnes est gardé dans l'adresse de la fiche et du mode cuisine (`?personnes=8`) : il survit à l'aller-retour en mode cuisine et disparaît dès qu'on ouvre la recette depuis ailleurs.
 
+Propositions faites pour le sprint 4 (US-26 à US-32) :
+
+- La barre d'onglets n'apparaît que sur les écrans principaux (accueil, cahier, Mes listes, Numériser, Profil) ; elle est masquée sur la fiche, le mode cuisine, la relecture et la capture, qui ont leur propre barre d'actions en bas.
+- La recherche ignore majuscules et accents, et porte sur le titre, le nom des ingrédients et leur texte d'origine. Dès qu'on tape ou qu'on filtre, les rangées laissent la place à la liste des résultats, avec un lien « Tout effacer ».
+- Les filtres Type de repas et Occasion retiennent une seule valeur chacun ; toucher une vignette la choisit (ou la retire) et referme le panneau ; le bouton affiche alors la valeur choisie. Les filtres se cumulent avec la recherche et Classiques.
+- En attendant les images des valeurs (V2), les vignettes des filtres montrent l'icône par défaut.
+- Sur la fiche, deux boutons « Favori » et « À cuisiner » ajoutent ou retirent la recette ; Mes listes affiche une liste à la fois, avec un sélecteur Favoris / À cuisiner, les derniers ajouts en premier.
+- Accueil : rangée À cuisiner (derniers ajouts en premier), Les cahiers (couvertures, vers l'écran du cahier), Suggestions (8 recettes au hasard, bouton « Autres idées ») ; la vignette d'une recette est le haut de la première page de son scan.
+- Feuilleter un cahier montre sa couverture puis ses recettes publiées, rangées par numéro de page.
+- Profil montre le prénom, l'e-mail, le rôle, l'aide à l'installation et la déconnexion ; l'administrateur y trouve le lien « Gérer les listes de tags ».
+- Seules les recettes publiées apparaissent dans l'accueil, la recherche et les cahiers, y compris pour les contributeurs (les brouillons restent dans Numériser).
+
 ## Journal des décisions
 
 | Date | Sujet | Décision |
