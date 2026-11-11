@@ -1,15 +1,17 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import { Carte, Rangee } from "@/components/cartes";
+import { Carte, GrandeCarte, Rangee } from "@/components/cartes";
 import { Couverture } from "@/components/couverture";
 import { Page } from "@/components/mise-en-page";
 import { membreConnecte } from "@/lib/membre";
 import { COLONNES_RESUME, enCartes, type RecetteResume } from "@/lib/recettes";
 import { urlsSignees } from "@/lib/supabase/images";
 import { creerClientServeur } from "@/lib/supabase/serveur";
+import { TEST_CARTES } from "@/lib/test-ab";
 import { Recherche } from "./recherche";
 import { RelancerSuggestions } from "./relancer-suggestions";
+import { SuiviACuisiner } from "./suivi-a-cuisiner";
 
 // US-30 : accueil avec recherche, filtres et trois rangées.
 export default function Accueil() {
@@ -36,6 +38,8 @@ async function Contenu() {
     { data: liste },
     { data: cahiers },
     { data: suggestions },
+    { data: variante },
+    { data: test },
   ] = await Promise.all([
     supabase.from("type_repas").select("id, nom, image_chemin").order("nom"),
     supabase.from("occasion").select("id, nom, image_chemin").order("nom"),
@@ -50,7 +54,16 @@ async function Contenu() {
       .select("id, nom, couverture_chemin")
       .order("cree_le"),
     supabase.rpc("suggestions_recettes", { p_nombre: 8 }),
+    // V3 : variante du test A/B des cartes À cuisiner (gagnante une fois terminé).
+    supabase.rpc("variante_ab", { p_test: TEST_CARTES }),
+    supabase
+      .from("test_ab")
+      .select("statut")
+      .eq("code", TEST_CARTES)
+      .maybeSingle(),
   ]);
+  const grandes = variante === "grandes";
+  const testEnCours = test?.statut === "en_cours";
 
   const idsACuisiner = (liste ?? []).map((l) => l.recette_id as number);
   const { data: aCuisinerBrut } = idsACuisiner.length
@@ -93,15 +106,21 @@ async function Contenu() {
   return (
     <Recherche typesRepas={avecImage(types)} occasions={avecImage(occasions)}>
       <div className="flex flex-col gap-8">
-        <Rangee titre="À cuisiner">
+        <Rangee titre="À cuisiner" aimantee={grandes && aCuisiner.length > 0}>
           {aCuisiner.length === 0 ? (
             <p className="text-sm leading-relaxed text-taupe">
               Ajoute des recettes depuis leur fiche pour les retrouver ici.
             </p>
           ) : (
-            enCartes(aCuisiner, urls).map((r) => (
-              <Carte key={r.id} recette={r} />
-            ))
+            <Suivi actif={testEnCours}>
+              {enCartes(aCuisiner, urls).map((r) =>
+                grandes ? (
+                  <GrandeCarte key={r.id} recette={r} />
+                ) : (
+                  <Carte key={r.id} recette={r} />
+                ),
+              )}
+            </Suivi>
           )}
         </Rangee>
 
@@ -148,4 +167,15 @@ async function Contenu() {
       </div>
     </Recherche>
   );
+}
+
+// Les mesures ne sont prises que pendant le test.
+function Suivi({
+  actif,
+  children,
+}: {
+  actif: boolean;
+  children: React.ReactNode;
+}) {
+  return actif ? <SuiviACuisiner>{children}</SuiviACuisiner> : <>{children}</>;
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useEcranAllume } from "@/lib/ecran-allume";
+import { mesurerAb } from "@/lib/mesurer-ab";
 import { creerClientNavigateur } from "@/lib/supabase/client";
 import { personnes as libellePersonnes } from "@/lib/portions";
 
@@ -85,12 +86,15 @@ export function ModeCuisine({
   // fiche ; le prochain passage en mode cuisine repart de l'étape 1.
   async function terminer() {
     setFin(true);
-    await creerClientNavigateur()
+    const { data: retirees } = await creerClientNavigateur()
       .from("liste_perso")
       .delete()
       .eq("membre_id", membreId)
       .eq("recette_id", recetteId)
-      .eq("type", "a_cuisiner");
+      .eq("type", "a_cuisiner")
+      .select("recette_id");
+    // V3 (US-49) : une recette de À cuisiner cuisinée jusqu'au bout.
+    if (retirees?.length) mesurerAb("cuisinee");
     setCourante(0);
     setFin(false);
     router.push(retour);
