@@ -73,26 +73,7 @@ export function Ingredients({
 
   return (
     <section className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold">Ingrédients</h2>
-        {groupes.length > 0 ? (
-          <button
-            type="button"
-            onClick={copier}
-            className="rounded-full border border-ardoise/25 px-4 py-1.5 text-sm font-medium"
-          >
-            {copie === "ok" ? "Copié" : "Copier"}
-          </button>
-        ) : null}
-      </div>
-      <p role="status" className="sr-only">
-        {copie === "ok" ? "Ingrédients copiés" : ""}
-      </p>
-      {copie === "erreur" ? (
-        <p className="-mt-2 text-sm">
-          La copie n’a pas marché sur cet appareil.
-        </p>
-      ) : null}
+      <h2 className="text-lg font-semibold">Ingrédients</h2>
 
       {portions && nb ? (
         <div className="flex items-center gap-3">
@@ -148,6 +129,26 @@ export function Ingredients({
           </ul>
         </div>
       ))}
+
+      {groupes.length > 0 ? (
+        <div className="flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={copier}
+            className="self-start rounded-full border border-ardoise/25 px-4 py-2.5 text-sm font-medium"
+          >
+            {copie === "ok"
+              ? "Liste des ingrédients copiée"
+              : "Copier la liste des ingrédients"}
+          </button>
+          <p role="status" className="sr-only">
+            {copie === "ok" ? "Liste des ingrédients copiée" : ""}
+          </p>
+          {copie === "erreur" ? (
+            <p className="text-sm">La copie n’a pas marché sur cet appareil.</p>
+          ) : null}
+        </div>
+      ) : null}
 
       {avecEtapes ? (
         <div className="fixed inset-x-0 bottom-0 z-10 border-t border-ardoise/10 bg-white/95 px-6 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur">

@@ -208,6 +208,7 @@ export function ModeCuisine({
           {derniere ? (
             <Link
               href={retour}
+              onClick={() => setCourante(0)}
               className="flex-[2] rounded-full bg-ardoise py-4 text-center font-semibold text-white"
             >
               Terminer

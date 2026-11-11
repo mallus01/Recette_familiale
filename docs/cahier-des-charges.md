@@ -397,10 +397,10 @@ Propositions faites pour le sprint 3 (US-19 à US-25) :
 - Sur la fiche, le nombre de personnes se règle avec deux boutons − et + (de 1 à 50), avec un lien « Revenir à » la valeur de la recette ; sans portions renseignées, pas de réglage et les quantités restent telles qu'écrites.
 - Tant que le nombre de personnes est celui de la recette, la fiche montre les ingrédients tels qu'écrits ; dès qu'il change, elle montre les quantités modernes adaptées (« 330 g de farine »).
 - Règles d'arrondi : sans unité, à l'unité près (au demi en dessous de 1) ; grammes et millilitres au gramme sous 20, à 5 sous 250, à 10 sous 1000, puis à 50 ; kilos et litres sur le même principe ; centilitres et décilitres au demi sous 10 puis à l'unité ; cuillères, verres et autres mesures au demi.
-- Le bouton Copier est à côté du titre Ingrédients ; il affiche « Copié » quelques secondes.
+- Le bouton « Copier la liste des ingrédients » est sous la liste ; il affiche « Liste des ingrédients copiée » quelques secondes.
 - Le bouton Lancer le mode cuisine reste en bas de l'écran de la fiche, dans la zone du pouce.
 - En mode cuisine, le bandeau d'ingrédients défile horizontalement (pastilles jaune pâle) avec les quantités modernes adaptées ; la croix, le titre et le nombre de personnes sont en haut, avec « Étape x sur y » et la barre de progression.
-- Toucher une étape la rend courante. À la dernière étape, Suivant devient Terminer et ramène à la fiche (le retrait de À cuisiner s'y branchera au sprint 4).
+- Toucher une étape la rend courante. À la dernière étape, Suivant devient Terminer et ramène à la fiche ; relancer ensuite le mode cuisine repart de l'étape 1. La croix, elle, garde l'étape en cours si on revient (le retrait de À cuisiner s'y branchera au sprint 4).
 - Le nombre de personnes est gardé dans l'adresse de la fiche et du mode cuisine (`?personnes=8`) : il survit à l'aller-retour en mode cuisine et disparaît dès qu'on ouvre la recette depuis ailleurs.
 
 ## Journal des décisions
@@ -449,3 +449,4 @@ Propositions faites pour le sprint 3 (US-19 à US-25) :
 | 06/11/2026 | Numérisation | Première photo d'un cahier = sa couverture, utilisée comme image de couverture dans les menus |
 | 07/11/2026 | Technique | Lecture des cahiers : comparaison entre Claude et Gemini (US-11), modèle interchangeable par variable d'environnement |
 | 07/11/2026 | Technique | Modèle de lecture retenu : Claude (les lectures Gemini n'aboutissaient pas lors du test) ; LECTURE_IA=claude |
+| 11/11/2026 | Mode cuisine | Bouton « Copier la liste des ingrédients » ; après Terminer, le mode cuisine repart de l'étape 1 |
