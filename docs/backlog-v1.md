@@ -1,6 +1,6 @@
 # Product backlog V1
 
-32 user stories réparties sur les cinq sprints de la V1. Mettre à jour la colonne Statut au fil de l'avancement : `À faire`, `En cours` ou `Terminée`.
+33 user stories réparties sur les cinq sprints de la V1 (US-33 ajoutée le 11/11/2026). Mettre à jour la colonne Statut au fil de l'avancement : `À faire`, `En cours` ou `Terminée`.
 
 ## Sprint 0 · Fondations
 
@@ -68,3 +68,4 @@ Objectif : retrouver une recette en quelques secondes et organiser ce qu'on veut
 | US-30 | En tant qu'utilisateur, je veux un accueil organisé en rangées, afin de naviguer facilement. | Rangées À cuisiner, Les cahiers (avec leur couverture) et Suggestions ; suggestions tirées au hasard à chaque ouverture, avec bouton de relance ; extrait du scan comme vignette d'une recette sans photo. | En cours |
 | US-31 | En tant qu'utilisateur, je veux feuilleter un cahier, afin de retrouver ses recettes dans l'ordre d'origine. | Depuis la rangée Les cahiers ; recettes listées par numéro de page ; accès à la fiche de chaque recette. | En cours |
 | US-32 | En tant qu'utilisateur, je veux une barre d'onglets, afin de passer d'une section à l'autre. | Onglets Accueil, Mes listes, Numériser et Profil ; Numériser visible seulement pour les contributeurs et l'admin ; barre latérale sur grand écran reportée en V2. | En cours |
+| US-33 | En tant qu'administrateur, je veux inviter des membres depuis l'appli, afin d'ouvrir l'accès à la famille. | Bouton Inviter un membre (e-mail et rôle) ; invitations en attente avec temps restant et menu ⋮ pour annuler ; invitations expirées avec Renvoyer et menu ⋮ pour annuler ; rôle des membres actifs modifiable ; l'invité arrive sur une page qui dit qui l'invite et avec quel rôle, e-mail prérempli et verrouillé, prénom et nom demandés. | En cours |

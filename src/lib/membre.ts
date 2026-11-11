@@ -1,12 +1,7 @@
 import { creerClientServeur } from "@/lib/supabase/serveur";
+import type { Role } from "./roles";
 
-export type Role = "admin" | "contributeur" | "lecteur";
-
-export const LIBELLES_ROLE: Record<Role, string> = {
-  admin: "Administrateur",
-  contributeur: "Contributeur",
-  lecteur: "Lecteur",
-};
+export { LIBELLES_ROLE, type Role } from "./roles";
 
 // Membre connecté (null si pas de session ou pas de fiche membre).
 export async function membreConnecte() {
@@ -19,7 +14,12 @@ export async function membreConnecte() {
     .select("id, email, prenom, role")
     .eq("id", claims.sub)
     .maybeSingle();
-  return membre as { id: string; email: string; prenom: string | null; role: Role } | null;
+  return membre as {
+    id: string;
+    email: string;
+    prenom: string | null;
+    role: Role;
+  } | null;
 }
 
 export function peutNumeriser(role: Role | undefined) {

@@ -60,10 +60,10 @@ Les trois couleurs claires ne servent **jamais** de couleur de texte sur fond bl
 
 Ne pas développer en V1, sauf demande explicite :
 
-- V2 : invitations, rôles et interface d'administration ; retrait d'un membre ; photos proposées et validation ; images des valeurs de filtres ; ingrédients surlignés et barrés en mode cuisine ; séparation et fusion de pages ; mises en page dédiées aux grands écrans (dont barre latérale).
+- V2 : retrait d'un membre ; photos proposées et validation ; images des valeurs de filtres ; ingrédients surlignés et barrés en mode cuisine ; séparation et fusion de pages ; mises en page dédiées aux grands écrans (dont barre latérale).
 - V3 : test A/B des grandes cartes « À cuisiner ».
 
-En V1, le compte administrateur unique est créé directement dans Supabase.
+En V1, le compte administrateur est créé directement dans Supabase ; les autres membres sont invités depuis Profil → Inviter et gérer les membres (US-33, avancée en V1 le 11/11/2026).
 
 ## Conventions
 

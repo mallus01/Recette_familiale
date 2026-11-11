@@ -48,3 +48,13 @@ En V1, le compte est créé à la main (US-04) :
 - Une adresse inconnue ne reçoit rien, mais l'écran affiche la même chose que pour une adresse connue, pour ne pas révéler qui a un compte.
 - Renvoyer l'e-mail est possible après 60 secondes (limite de Supabase).
 - La session dure 30 jours sur l'appareil, et repart pour 30 jours à chaque utilisation de l'appli.
+
+## 6. Inviter des membres (US-33)
+
+À faire une seule fois, avant la première invitation :
+
+1. SQL Editor : coller le contenu de `supabase/migrations/20261112100000_invitations.sql`, puis Run.
+2. Authentication → Emails → Templates → **Invite user** : sujet `Vous êtes invité à rejoindre Recettes familiales`, corps = contenu de `supabase/templates/invitation.html`.
+3. Project Settings → API Keys → **Secret keys** : copier une clé secrète (`sb_secret_…`), puis dans Vercel → Settings → Environment Variables ajouter `SUPABASE_SECRET_KEY` avec cette valeur (Production et Preview, cocher Sensitive), puis redéployer. Cette clé donne tous les droits sur la base : elle ne va jamais dans le code ni dans un message.
+
+Ensuite : Profil → **Inviter et gérer les membres** → Inviter un membre. L'invité reçoit un e-mail (envoyé par Brevo), valable 15 minutes ; en ouvrant le lien, il arrive sur la page Bienvenue, où il saisit son prénom et son nom. Si le lien a expiré, l'invitation passe dans « Invitations expirées » avec un bouton Renvoyer.

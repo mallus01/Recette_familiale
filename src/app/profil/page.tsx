@@ -38,6 +38,12 @@ async function Contenu() {
         <section className="flex flex-col gap-2">
           <h2 className="font-semibold">Administration</h2>
           <Link
+            href="/profil/admin"
+            className="self-start underline decoration-ciel decoration-2 underline-offset-4"
+          >
+            Inviter et gérer les membres
+          </Link>
+          <Link
             href="/numeriser/listes"
             className="self-start underline decoration-ciel decoration-2 underline-offset-4"
           >
