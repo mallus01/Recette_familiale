@@ -6,6 +6,7 @@ import type { MotDouteux } from "@/lib/lecture/resultat";
 import { contientDouteux, motifDouteux } from "@/lib/mots-douteux";
 import { creerClientNavigateur } from "@/lib/supabase/client";
 import { ChampSurligne } from "./champ-surligne";
+import { Organisation, type Voisines } from "./organisation";
 import { ScanZoomable } from "@/components/scan-zoomable";
 
 export type IngredientARelire = {
@@ -42,6 +43,24 @@ const INGREDIENT_VIDE: IngredientARelire = {
   texte_origine: "",
 };
 
+// Contenu au format attendu par enregistrer_relecture (et separer_recette).
+function enJson(r: Omit<RecetteARelire, "id">) {
+  return {
+    titre: r.titre,
+    groupes: r.groupes.map((g) => ({
+      nom: g.nom,
+      ingredients: g.ingredients.map((i) => ({
+        quantite: enNombre(i.quantite),
+        unite: i.unite,
+        nom: i.nom,
+        texte_origine: i.texte_origine,
+      })),
+    })),
+    etapes: r.etapes,
+    notes: r.notes,
+  };
+}
+
 // « 1,5 » ou « 1.5 » → 1.5 ; vide ou illisible → null.
 function enNombre(s: string) {
   const n = Number(s.trim().replace(",", "."));
@@ -52,10 +71,12 @@ export function Relecture({
   recette: initiale,
   scans,
   publiee,
+  voisines,
 }: {
   recette: RecetteARelire;
   scans: ScanARelire[];
   publiee: boolean;
+  voisines: Voisines;
 }) {
   const router = useRouter();
   const [recette, setRecette] = useState(initiale);
@@ -128,20 +149,7 @@ export function Relecture({
     const supabase = creerClientNavigateur();
     const { error } = await supabase.rpc("enregistrer_relecture", {
       p_recette_id: recette.id,
-      p_recette: {
-        titre: recette.titre,
-        groupes: recette.groupes.map((g) => ({
-          nom: g.nom,
-          ingredients: g.ingredients.map((i) => ({
-            quantite: enNombre(i.quantite),
-            unite: i.unite,
-            nom: i.nom,
-            texte_origine: i.texte_origine,
-          })),
-        })),
-        etapes: recette.etapes,
-        notes: recette.notes,
-      },
+      p_recette: enJson(recette),
     });
     if (error) {
       setEtat("echec");
@@ -456,6 +464,18 @@ export function Relecture({
           Ajouter une note
         </BoutonAjouter>
       </Section>
+
+      <Organisation
+        recette={recette}
+        voisines={voisines}
+        enJson={enJson}
+        avantAction={async () => !modifiee || (await enregistrer())}
+        onSeparee={(avant) => {
+          setRecette(avant);
+          setModifiee(false);
+          setEtat("repos");
+        }}
+      />
 
       <div className="sticky bottom-0 -mx-6 flex flex-col gap-2 bg-white px-6 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
         {etat === "echec" ? (

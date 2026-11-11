@@ -29,11 +29,11 @@ Objectif : des recettes et des filtres plus parlants grâce aux photos.
 
 Objectif : numériser sans contorsion les pages à plusieurs recettes et les recettes sur plusieurs pages.
 
-| ID    | User story                                                                                                               | Critères d'acceptation                                                                                                                                 | Statut  |
-| ----- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| US-41 | En tant que contributeur, je veux que l'IA repère une page à plusieurs recettes, afin de ne pas photographier deux fois. | La lecture renvoie une recette par recette trouvée ; la relecture propose de les séparer, chacune devenant une recette liée à la même page.            | À faire |
-| US-42 | En tant que contributeur, je veux que l'IA repère une recette sur plusieurs pages, afin de la retrouver entière.         | Quand une recette semble continuer sur la page suivante, la relecture propose de fusionner ; la recette fusionnée garde les deux scans dans l'ordre.   | À faire |
-| US-43 | En tant que contributeur, je veux séparer ou fusionner à la main, afin de corriger l'IA.                                 | Depuis la relecture : « Séparer » crée une nouvelle recette à partir d'une étape choisie ; « Fusionner avec la page suivante » regroupe deux recettes. | À faire |
+| ID    | User story                                                                                                               | Critères d'acceptation                                                                                                                                 | Statut   |
+| ----- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| US-41 | En tant que contributeur, je veux que l'IA repère une page à plusieurs recettes, afin de ne pas photographier deux fois. | La lecture renvoie une recette par recette trouvée ; la relecture propose de les séparer, chacune devenant une recette liée à la même page.            | En cours |
+| US-42 | En tant que contributeur, je veux que l'IA repère une recette sur plusieurs pages, afin de la retrouver entière.         | Quand une recette semble continuer sur la page suivante, la relecture propose de fusionner ; la recette fusionnée garde les deux scans dans l'ordre.   | En cours |
+| US-43 | En tant que contributeur, je veux séparer ou fusionner à la main, afin de corriger l'IA.                                 | Depuis la relecture : « Séparer » crée une nouvelle recette à partir d'une étape choisie ; « Fusionner avec la page suivante » regroupe deux recettes. | En cours |
 
 ## Sprint 8 · Grands écrans
 

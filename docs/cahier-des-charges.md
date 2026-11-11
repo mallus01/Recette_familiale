@@ -294,7 +294,7 @@ La V1 doit permettre à un utilisateur seul de numériser ses cahiers et de cuis
 Aménagements de la V1 :
 
 - Mode cuisine sans surlignage ni barrage des ingrédients ; le panneau d'ingrédients reste toujours visible.
-- Une page contenant deux recettes est photographiée deux fois, une fois par recette.
+- Une page contenant deux recettes donne deux recettes à la lecture (voir US-41) ; une recette sur deux pages se fusionne en relecture (US-42, US-43).
 - Sur grand écran, la disposition mobile est élargie ; les icônes par défaut servent de vignettes de filtres.
 - La V1 est découpée en sprints selon la méthode Scrum, en commençant par la numérisation pour tester tôt la lecture des cahiers.
 
@@ -439,6 +439,13 @@ Propositions faites pour le sprint 6 de la V2 (US-37 à US-40) :
 - Dans la gestion des listes de tags, toucher l'image (ou l'icône) d'une valeur permet d'en choisir une nouvelle ; l'image peut aussi être choisie en ajoutant la valeur. L'ancienne image est supprimée du stockage.
 - La table des photos n'a pas de colonne « ordre » : l'ordre de défilement est celui de la validation.
 
+Propositions faites pour le sprint 7 de la V2 (US-41 à US-43) :
+
+- Une page à plusieurs recettes donne déjà, à la lecture, une recette par recette trouvée, liées à la même page (en place depuis la V1) ; la relecture de chacune rappelle les autres recettes de la page, avec un lien pour les relire.
+- L'IA indique pour chaque recette si elle commence sur la page précédente ou continue sur la suivante. Si oui, la relecture le signale et propose « Fusionner avec la page suivante » (la première recette de la page suivante du même cahier) ; sans signal de l'IA, le même bouton reste disponible plus discrètement.
+- Fusionner ajoute à la suite les groupes d'ingrédients, étapes, notes, photos et le scan de la recette suivante, puis la supprime ; les corrections en cours sont enregistrées avant.
+- « Séparer en deux recettes » : on choisit l'étape où commence la nouvelle recette, à partir de quel ingrédient elle emporte les ingrédients (ou aucun), et son titre. Les notes suivent leur étape ; les notes de toute la recette restent sur la première. La nouvelle recette est un brouillon lié aux mêmes pages, à relire à son tour.
+
 ## Journal des décisions
 
 | Date | Sujet | Décision |
@@ -490,3 +497,4 @@ Propositions faites pour le sprint 6 de la V2 (US-37 à US-40) :
 | 11/11/2026 | V2 | Backlog V2 écrit (US-34 à US-47, sprints 5 à 8) ; sprint 5 : retrait d'un membre, ingrédients de l'étape surlignés et ingrédients passés barrés en mode cuisine |
 | 11/11/2026 | UX/UI | Grand écran = à partir de 768 px (tablette et ordinateur) ; le swipe reste actif en mode cuisine sur grand écran, en plus des flèches du clavier (US-45) |
 | 11/11/2026 | V2 | Sprint 6 : photos proposées par les membres et validées par l'admin (table photo, première photo validée en vignette), images des valeurs de filtres |
+| 11/11/2026 | V2 | Sprint 7 : recettes d'une même page signalées en relecture, fusion avec la page suivante (proposée par l'IA ou à la main), séparation d'une recette en deux |

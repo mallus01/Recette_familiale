@@ -6,7 +6,7 @@ Point d'entrée de Claude Code pour ce projet. À lire en début de chaque sessi
 
 Webapp privée (sur invitation) qui rassemble les recettes de la famille et numérise des cahiers de recettes manuscrits. Mobile first, installable (PWA). Usage prévu : principalement un seul utilisateur au départ (le porteur de projet, administrateur).
 
-Phase actuelle : **V1 développée (sprints 0 à 4), développement de la V2 (sprint 6)**.
+Phase actuelle : **V1 développée (sprints 0 à 4), développement de la V2 (sprint 7)**.
 
 ## Documents de référence
 
