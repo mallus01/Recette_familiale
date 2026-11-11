@@ -1,5 +1,5 @@
 // Adaptation des quantités au nombre de personnes (US-24) et liste de courses (US-25).
-import { nombre } from "./mesures";
+import { nombre, uniteAffichee } from "./mesures";
 
 export type IngredientQuantifie = {
   quantite: number | null;
@@ -13,9 +13,10 @@ const pas = (valeur: number, pas: number) =>
 
 // Arrondi à la valeur pratique la plus proche : 1,33 œuf donne 1 œuf, 133 g donnent 135 g.
 export function arrondiPratique(valeur: number, unite: string | null) {
-  const u = (unite ?? "").trim().toLowerCase();
+  const u = (uniteAffichee(unite) ?? "").toLowerCase();
   if (["g", "ml", "mg"].includes(u)) return paliers(valeur);
-  if (u === "cl" || u === "dl") return valeur < 10 ? pas(valeur, 0.5) : pas(valeur, 1);
+  if (u === "cl" || u === "dl")
+    return valeur < 10 ? pas(valeur, 0.5) : pas(valeur, 1);
   if (["kg", "l"].includes(u)) return paliers(valeur * 1000) / 1000;
   if (!u) return valeur < 1 ? pas(valeur, 0.5) : Math.round(valeur);
   // Cuillères, pincées, verres… : au demi près.
@@ -46,7 +47,7 @@ export function libelleAdapte(i: IngredientQuantifie, facteur: number) {
   const nom = i.nom.trim();
   if (i.quantite === null) return i.texte_origine?.trim() || nom;
   const q = nombre(quantiteAdaptee(i.quantite, i.unite, facteur));
-  const unite = i.unite?.trim();
+  const unite = uniteAffichee(i.unite);
   if (!unite) return `${q} ${nom}`;
   if (/^(de |d’|d'|du |des )/i.test(nom)) return `${q} ${unite} ${nom}`;
   return `${q} ${unite} ${commenceParVoyelle(nom) ? "d’" : "de "}${nom}`;

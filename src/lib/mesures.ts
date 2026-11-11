@@ -3,9 +3,18 @@
 export const nombre = (n: number) =>
   n.toLocaleString("fr-FR", { maximumFractionDigits: 2 });
 
+// Unité telle qu'affichée : le litre s'écrit « L » (comme « g » pour le gramme), pour
+// ne pas confondre un « l » minuscule avec le chiffre 1.
+export function uniteAffichee(unite: string | null) {
+  const u = unite?.trim();
+  if (!u) return null;
+  return /^(l|litres?)$/i.test(u) ? "L" : u;
+}
+
 export function quantiteModerne(quantite: number | null, unite: string | null) {
   if (quantite === null) return null;
-  return unite ? `${nombre(quantite)} ${unite}` : nombre(quantite);
+  const u = uniteAffichee(unite);
+  return u ? `${nombre(quantite)} ${u}` : nombre(quantite);
 }
 
 // Équivalence moderne d'une mesure d'époque : affichée seulement quand le texte du
