@@ -51,6 +51,7 @@ psql -d essai -f supabase/migrations/20261111090000_publication.sql
 psql -d essai -f supabase/migrations/20261112090000_accueil.sql
 psql -d essai -f supabase/migrations/20261112100000_invitations.sql
 psql -d essai -f supabase/migrations/20261113090000_photos.sql
+psql -d essai -f supabase/migrations/20261114090000_separer_fusionner.sql
 psql -d essai -f supabase/seed.sql
 psql -d essai -f supabase/tests/rls.sql        # « Tous les tests RLS passent »
 psql -d essai -f supabase/tests/stockage.sql   # « Tous les tests de stockage passent »
@@ -61,6 +62,7 @@ psql -d essai -f supabase/tests/publication.sql # « Tous les tests de publicati
 psql -d essai -f supabase/tests/accueil.sql     # « Tous les tests de l'accueil passent »
 psql -d essai -f supabase/tests/invitations.sql # « Tous les tests d'invitation passent »
 psql -d essai -f supabase/tests/photos.sql      # « Tous les tests des photos passent »
+psql -d essai -f supabase/tests/separer-fusionner.sql # « Tous les tests de séparation et fusion passent »
 ```
 
 ## Déploiement sur Vercel

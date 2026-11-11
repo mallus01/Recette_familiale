@@ -149,6 +149,8 @@ async function lectureSimulee(): Promise<Lecture> {
             { texte: "Recette de tante Paule", etape: null },
             { texte: "Ne pas ouvrir le four avant 25 minutes", etape: 2 },
           ],
+          commence_page_precedente: false,
+          continue_page_suivante: false,
         },
       ],
       mots_douteux: [
