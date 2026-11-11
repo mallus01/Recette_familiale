@@ -181,7 +181,7 @@ export function Recherche({
               Tout effacer
             </button>
           </div>
-          <ul className="flex flex-col divide-y divide-ardoise/10">
+          <ul className="flex flex-col divide-y divide-ardoise/10 md:grid md:grid-cols-2 md:gap-x-10 md:divide-y-0">
             {(resultats ?? []).map((r) => (
               <li key={r.id}>
                 <Ligne recette={r} />
@@ -246,7 +246,7 @@ function Vignettes({
       <p className="text-sm text-taupe">Aucune valeur dans cette liste.</p>
     );
   return (
-    <ul className="grid grid-cols-3 gap-2">
+    <ul className="grid grid-cols-3 gap-2 md:grid-cols-5">
       {valeurs.map((v) => (
         <li key={v.id}>
           <button

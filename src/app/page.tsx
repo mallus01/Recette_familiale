@@ -14,7 +14,7 @@ import { RelancerSuggestions } from "./relancer-suggestions";
 // US-30 : accueil avec recherche, filtres et trois rangées.
 export default function Accueil() {
   return (
-    <Page>
+    <Page large>
       <h1 className="text-2xl font-semibold tracking-tight">
         Recettes familiales
       </h1>
