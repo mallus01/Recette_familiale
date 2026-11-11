@@ -78,7 +78,7 @@ Un affichage dédié pour suivre la recette pendant qu'on cuisine.
 
 ## UX/UI
 
-Les interfaces sont conçues d'abord pour le téléphone, puis adaptées aux grands écrans.
+Les interfaces sont conçues d'abord pour le téléphone, puis adaptées aux grands écrans. Un grand écran commence à 768 px de large : tablette (portrait ou paysage) et ordinateur ; un téléphone en paysage garde la mise en page mobile.
 
 ### Mode cuisine sur téléphone
 
@@ -89,7 +89,7 @@ Les interfaces sont conçues d'abord pour le téléphone, puis adaptées aux gra
 ### Mode cuisine sur grand écran
 
 - Ingrédients dans une colonne fixe à gauche, étapes à droite.
-- Pas de swipe ; navigation possible avec les flèches du clavier.
+- Swipe sur la zone des étapes (tablettes) et flèches du clavier (ordinateur).
 
 ### Ingrédients en mode cuisine (tous écrans)
 
@@ -479,3 +479,4 @@ Propositions faites pour le sprint 5 de la V2 (US-34 à US-36) :
 | 11/11/2026 | Mode cuisine | Bouton « Copier la liste des ingrédients » ; après Terminer, le mode cuisine repart de l'étape 1 |
 | 11/11/2026 | Accès | Invitations, rôles et interface d'administration avancés en V1 (US-33) à la demande de Mattis ; le retrait d'un membre reste en V2 |
 | 11/11/2026 | V2 | Backlog V2 écrit (US-34 à US-47, sprints 5 à 8) ; sprint 5 : retrait d'un membre, ingrédients de l'étape surlignés et ingrédients passés barrés en mode cuisine |
+| 11/11/2026 | UX/UI | Grand écran = à partir de 768 px (tablette et ordinateur) ; le swipe reste actif en mode cuisine sur grand écran, en plus des flèches du clavier (US-45) |
