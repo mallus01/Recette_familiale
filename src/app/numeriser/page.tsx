@@ -50,6 +50,11 @@ async function ListeCahiers() {
           Comparer les modèles d’IA
         </Link>
       ) : null}
+      {membre?.role === "admin" ? (
+        <Link href="/numeriser/listes" className="-mt-3 self-start text-sm text-taupe underline underline-offset-4">
+          Gérer les listes de tags
+        </Link>
+      ) : null}
       {cahiers && cahiers.length > 0 ? (
         <section className="flex flex-col gap-3">
           <h2 className="font-semibold">Les cahiers</h2>

@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import type { MotDouteux } from "@/lib/lecture/resultat";
 import { contientDouteux, motifDouteux } from "@/lib/mots-douteux";
 import { creerClientNavigateur } from "@/lib/supabase/client";
 import { ChampSurligne } from "./champ-surligne";
-import { ScanZoomable } from "./scan-zoomable";
+import { ScanZoomable } from "@/components/scan-zoomable";
 
 export type IngredientARelire = {
   quantite: string;
@@ -62,6 +61,7 @@ export function Relecture({
   const [recette, setRecette] = useState(initiale);
   const [scanVu, setScanVu] = useState(0);
   const [modifiee, setModifiee] = useState(false);
+  const [suite, setSuite] = useState<"plus-tard" | "valider" | null>(null);
   const [etat, setEtat] = useState<
     "repos" | "enregistrement" | "enregistree" | "echec"
   >("repos");
@@ -145,10 +145,23 @@ export function Relecture({
     });
     if (error) {
       setEtat("echec");
-      return;
+      return false;
     }
     setModifiee(false);
     setEtat("enregistree");
+    return true;
+  }
+
+  // US-17 : Plus tard garde la recette dans la file ; Valider passe à l'enrichissement.
+  // Dans les deux cas, les corrections en cours sont d'abord enregistrées.
+  async function continuer(suite: "plus-tard" | "valider") {
+    setSuite(suite);
+    if (modifiee && !(await enregistrer())) return setSuite(null);
+    router.push(
+      suite === "valider"
+        ? `/numeriser/relire/${recette.id}/enrichir`
+        : "/numeriser/a-relire",
+    );
     router.refresh();
   }
 
@@ -453,29 +466,20 @@ export function Relecture({
         <div className="flex gap-2">
           <button
             type="button"
-            onClick={enregistrer}
-            disabled={
-              etat === "enregistrement" || (!modifiee && etat !== "echec")
-            }
-            className="flex-1 rounded-xl bg-ardoise px-4 py-3.5 font-semibold text-white disabled:opacity-60"
+            onClick={() => continuer("plus-tard")}
+            disabled={suite !== null}
+            className="flex-1 rounded-xl border border-ardoise px-4 py-3.5 font-semibold disabled:opacity-60"
           >
-            {etat === "enregistrement"
-              ? "Enregistrement…"
-              : etat === "enregistree" && !modifiee
-                ? "Enregistrées"
-                : modifiee
-                  ? "Enregistrer"
-                  : "Enregistrer"}
+            {suite === "plus-tard" ? "Enregistrement…" : "Plus tard"}
           </button>
-          {/* Les tags se choisissent une fois les corrections enregistrées. */}
-          {!modifiee ? (
-            <Link
-              href={`/numeriser/relire/${recette.id}/classer`}
-              className="flex flex-1 items-center justify-center rounded-xl border border-ardoise px-4 py-3 text-center font-semibold"
-            >
-              Classer la recette
-            </Link>
-          ) : null}
+          <button
+            type="button"
+            onClick={() => continuer("valider")}
+            disabled={suite !== null}
+            className="flex-[2] rounded-xl bg-ardoise px-4 py-3.5 font-semibold text-white disabled:opacity-60"
+          >
+            {suite === "valider" ? "Enregistrement…" : "Valider"}
+          </button>
         </div>
       </div>
     </div>

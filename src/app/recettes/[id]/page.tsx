@@ -1,0 +1,267 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
+import { Suspense } from "react";
+import { IconeOccasion, IconeTypeRepas } from "@/components/icones";
+import { EnTete, Page } from "@/components/mise-en-page";
+import { ScanZoomable } from "@/components/scan-zoomable";
+import { duree, equivalence, quantiteModerne } from "@/lib/mesures";
+import { membreConnecte, peutNumeriser } from "@/lib/membre";
+import { urlsSignees } from "@/lib/supabase/images";
+import { creerClientServeur } from "@/lib/supabase/serveur";
+
+export const metadata: Metadata = { title: "Recette · Recettes familiales" };
+
+// US-18 : fiche d'une recette, à lire avant de cuisiner.
+export default function FicheRecette({ params }: PageProps<"/recettes/[id]">) {
+  return (
+    <Page>
+      <Suspense fallback={<p className="text-taupe">Chargement…</p>}>
+        <Contenu params={params} />
+      </Suspense>
+    </Page>
+  );
+}
+
+type Ligne = {
+  id: number;
+  titre: string;
+  statut: "brouillon" | "publiee";
+  transmis_par: string | null;
+  souvenir: string | null;
+  portions: number | null;
+  duree_minutes: number | null;
+  classique: boolean;
+  type_repas: { nom: string } | null;
+  recette_occasion: { occasion: { nom: string } | null }[];
+  groupe_ingredients: {
+    id: number;
+    nom: string | null;
+    ordre: number;
+    ingredient: {
+      id: number;
+      quantite: number | null;
+      unite: string | null;
+      nom: string;
+      texte_origine: string | null;
+      ordre: number;
+    }[];
+  }[];
+  etape: { id: number; ordre: number; texte: string }[];
+  note: { id: number; texte: string; etape_id: number | null }[];
+  recette_page: {
+    ordre: number;
+    page_scannee: {
+      id: number;
+      numero: number;
+      image_chemin: string;
+      cahier: { nom: string } | null;
+    } | null;
+  }[];
+};
+
+const parOrdre = (a: { ordre: number }, b: { ordre: number }) =>
+  a.ordre - b.ordre;
+
+async function Contenu({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const membre = await membreConnecte();
+  if (!membre) redirect("/connexion");
+
+  const supabase = await creerClientServeur();
+  const { data: r } = await supabase
+    .from("recette")
+    .select(
+      "id, titre, statut, transmis_par, souvenir, portions, duree_minutes, classique, type_repas(nom), recette_occasion(occasion(nom)), groupe_ingredients(id, nom, ordre, ingredient(id, quantite, unite, nom, texte_origine, ordre)), etape(id, ordre, texte), note(id, texte, etape_id), recette_page(ordre, page_scannee(id, numero, image_chemin, cahier(nom)))",
+    )
+    .eq("id", Number(id))
+    .maybeSingle<Ligne>();
+  if (!r) notFound();
+
+  const pages = r.recette_page
+    .sort(parOrdre)
+    .flatMap((rp) => (rp.page_scannee ? [rp.page_scannee] : []));
+  const urls = await urlsSignees(pages.map((p) => p.image_chemin));
+  const occasions = r.recette_occasion
+    .flatMap((o) => (o.occasion ? [o.occasion.nom] : []))
+    .sort((a, b) => a.localeCompare(b, "fr"));
+  const notes = [...r.note].sort((a, b) => a.id - b.id);
+  const notesRecette = notes.filter(
+    (n) => n.etape_id === null || !r.etape.some((e) => e.id === n.etape_id),
+  );
+  const infos = [
+    r.portions
+      ? `${r.portions} ${r.portions > 1 ? "personnes" : "personne"}`
+      : null,
+    r.duree_minutes ? duree(r.duree_minutes) : null,
+  ].filter(Boolean);
+
+  return (
+    <article className="flex flex-col gap-7">
+      <EnTete titre={r.titre} retour={{ href: "/", libelle: "Accueil" }} />
+
+      {r.statut === "brouillon" ? (
+        <p className="-mt-3 rounded-xl bg-ciel/15 px-4 py-3 text-sm">
+          Brouillon : cette recette n’est pas encore publiée.
+        </p>
+      ) : null}
+
+      {r.type_repas || occasions.length > 0 || r.classique ? (
+        <ul
+          className="-mt-3 flex flex-wrap gap-2 text-sm font-medium"
+          aria-label="Tags"
+        >
+          {r.type_repas ? (
+            <li className="flex items-center gap-1.5 rounded-full bg-ciel px-3 py-1">
+              <IconeTypeRepas className="h-4 w-4" />
+              {r.type_repas.nom}
+            </li>
+          ) : null}
+          {occasions.map((o) => (
+            <li
+              key={o}
+              className="flex items-center gap-1.5 rounded-full bg-jaune px-3 py-1"
+            >
+              <IconeOccasion className="h-4 w-4" />
+              {o}
+            </li>
+          ))}
+          {r.classique ? (
+            <li className="rounded-full border border-ardoise/25 px-3 py-1">
+              ★ Classique
+            </li>
+          ) : null}
+        </ul>
+      ) : null}
+
+      {r.transmis_par || infos.length > 0 ? (
+        <div className="-mt-2 flex flex-col gap-1">
+          {r.transmis_par ? (
+            <p className="text-taupe">Transmis par {r.transmis_par}</p>
+          ) : null}
+          {infos.length > 0 ? (
+            <p className="text-sm text-taupe">{infos.join(" · ")}</p>
+          ) : null}
+        </div>
+      ) : null}
+
+      {r.souvenir ? (
+        <blockquote className="border-l-4 border-jaune pl-4 leading-relaxed whitespace-pre-line text-taupe italic">
+          {r.souvenir}
+        </blockquote>
+      ) : null}
+
+      {pages.length > 0 ? (
+        <section className="flex flex-col gap-2">
+          <h2 className="font-semibold">Scan d’origine</h2>
+          {pages.map((p) => (
+            <figure key={p.id} className="flex flex-col gap-1">
+              <ScanZoomable
+                url={urls.get(p.image_chemin)}
+                alt={`Page ${p.numero} du cahier`}
+                zones={[]}
+              />
+              <figcaption className="text-sm text-taupe">
+                {p.cahier?.nom} · page {p.numero}
+              </figcaption>
+            </figure>
+          ))}
+        </section>
+      ) : null}
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-lg font-semibold">Ingrédients</h2>
+        {r.groupe_ingredients.length === 0 ? (
+          <p className="text-taupe">Aucun ingrédient noté.</p>
+        ) : null}
+        {r.groupe_ingredients.sort(parOrdre).map((g) => (
+          <div key={g.id} className="flex flex-col gap-2">
+            {g.nom ? <h3 className="font-medium">{g.nom}</h3> : null}
+            <ul className="flex flex-col gap-2">
+              {g.ingredient.sort(parOrdre).map((i) => {
+                const texte =
+                  i.texte_origine ||
+                  [quantiteModerne(i.quantite, i.unite), i.nom]
+                    .filter(Boolean)
+                    .join(" ");
+                const moderne = equivalence(
+                  i.texte_origine,
+                  i.quantite,
+                  i.unite,
+                );
+                return (
+                  <li key={i.id} className="flex items-baseline gap-3">
+                    <span
+                      aria-hidden
+                      className="h-1.5 w-1.5 shrink-0 translate-y-[-0.15rem] rounded-full bg-peche"
+                    />
+                    <span>
+                      {texte}
+                      {moderne ? (
+                        <span className="text-taupe"> · {moderne}</span>
+                      ) : null}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ))}
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-lg font-semibold">Étapes</h2>
+        {r.etape.length === 0 ? (
+          <p className="text-taupe">Aucune étape notée.</p>
+        ) : null}
+        <ol className="flex flex-col gap-4">
+          {r.etape.sort(parOrdre).map((e, k) => (
+            <li key={e.id} className="flex gap-3">
+              <span className="w-6 shrink-0 text-right font-semibold">
+                {k + 1}.
+              </span>
+              <div className="flex flex-col gap-1.5 leading-relaxed">
+                <p>{e.texte}</p>
+                {notes
+                  .filter((n) => n.etape_id === e.id)
+                  .map((n) => (
+                    <p key={n.id} className="text-taupe italic">
+                      {n.texte}
+                    </p>
+                  ))}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {notesRecette.length > 0 ? (
+        <section className="flex flex-col gap-2">
+          <h2 className="text-lg font-semibold">Notes</h2>
+          {notesRecette.map((n) => (
+            <p key={n.id} className="leading-relaxed text-taupe italic">
+              {n.texte}
+            </p>
+          ))}
+        </section>
+      ) : null}
+
+      {peutNumeriser(membre.role) ? (
+        <div className="flex flex-col gap-2 border-t border-ardoise/10 pt-5 text-sm">
+          <Link
+            href={`/numeriser/relire/${r.id}`}
+            className="self-start underline decoration-ciel decoration-2 underline-offset-4"
+          >
+            Corriger la recette
+          </Link>
+          <Link
+            href={`/numeriser/relire/${r.id}/enrichir`}
+            className="self-start underline decoration-ciel decoration-2 underline-offset-4"
+          >
+            Modifier les informations et les tags
+          </Link>
+        </div>
+      ) : null}
+    </article>
+  );
+}

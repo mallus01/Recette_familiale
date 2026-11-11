@@ -8,16 +8,17 @@ import {
 } from "@/components/mise-en-page";
 import { membreConnecte, peutNumeriser } from "@/lib/membre";
 import { creerClientServeur } from "@/lib/supabase/serveur";
-import { ChoixTags } from "./choix-tags";
+import { Enrichissement } from "./enrichissement";
 
 export const metadata: Metadata = {
-  title: "Classer la recette · Recettes familiales",
+  title: "Enrichir la recette · Recettes familiales",
 };
 
-// US-14 : classer une recette par type de repas, occasions et case Classique.
-export default function PageClasser({
+// US-16 et US-17 : après Valider, on enrichit la recette (transmis par, souvenir,
+// portions, durée, tags), puis on la publie.
+export default function PageEnrichir({
   params,
-}: PageProps<"/numeriser/relire/[id]/classer">) {
+}: PageProps<"/numeriser/relire/[id]/enrichir">) {
   return (
     <Page>
       <Suspense fallback={<p className="text-taupe">Chargement…</p>}>
@@ -26,6 +27,19 @@ export default function PageClasser({
     </Page>
   );
 }
+
+type Ligne = {
+  id: number;
+  titre: string;
+  statut: "brouillon" | "publiee";
+  transmis_par: string | null;
+  souvenir: string | null;
+  portions: number | null;
+  duree_minutes: number | null;
+  type_repas_id: number | null;
+  classique: boolean;
+  recette_occasion: { occasion_id: number }[];
+};
 
 async function Contenu({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -38,16 +52,10 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
       supabase
         .from("recette")
         .select(
-          "id, titre, type_repas_id, classique, recette_occasion(occasion_id)",
+          "id, titre, statut, transmis_par, souvenir, portions, duree_minutes, type_repas_id, classique, recette_occasion(occasion_id)",
         )
         .eq("id", Number(id))
-        .maybeSingle<{
-          id: number;
-          titre: string;
-          type_repas_id: number | null;
-          classique: boolean;
-          recette_occasion: { occasion_id: number }[];
-        }>(),
+        .maybeSingle<Ligne>(),
       supabase.from("type_repas").select("id, nom").order("nom"),
       supabase.from("occasion").select("id, nom").order("nom"),
     ]);
@@ -56,18 +64,24 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
   return (
     <>
       <EnTete
-        titre="Classer la recette"
+        titre="Enrichir la recette"
         retour={{
           href: `/numeriser/relire/${recette.id}`,
           libelle: "Relecture",
         }}
       />
       <p className="-mt-3 font-medium">{recette.titre}</p>
-      <ChoixTags
+      <Enrichissement
         recetteId={recette.id}
+        publiee={recette.statut === "publiee"}
         types={types ?? []}
         occasions={occasions ?? []}
         initial={{
+          transmis_par: recette.transmis_par ?? "",
+          souvenir: recette.souvenir ?? "",
+          portions: recette.portions === null ? "" : String(recette.portions),
+          duree_minutes:
+            recette.duree_minutes === null ? "" : String(recette.duree_minutes),
           type: recette.type_repas_id,
           occasions: recette.recette_occasion.map((o) => o.occasion_id),
           classique: recette.classique,

@@ -379,8 +379,18 @@ Propositions faites pour les notes du cahier (US-13) :
 
 Propositions faites pour les tags (US-14) :
 
-- Les tags se choisissent sur un écran Classer la recette, ouvert depuis la relecture une fois les corrections enregistrées ; il rejoindra l'enrichissement avec US-16 et US-17.
+- Les tags se choisissent sur l'écran d'enrichissement, après Valider (voir US-16 et US-17).
 - Les valeurs sont des pastilles à toucher : bleu ciel pour le type de repas (un seul, retiré d'un second toucher), jaune pâle pour les occasions (plusieurs) ; la case Classique est une étoile.
+
+Propositions faites pour la fin du sprint 2 (US-15 à US-18) :
+
+- Les listes de tags se gèrent depuis Numériser, lien « Gérer les listes de tags » réservé à l'administrateur ; chaque valeur affiche une icône par défaut (assiette pour les types de repas, calendrier pour les occasions) et son nombre de recettes.
+- Supprimer une valeur demande une confirmation qui indique combien de recettes perdront ce tag ; deux valeurs d'une même liste ne peuvent pas porter le même nom, sans tenir compte des majuscules.
+- La relecture se termine par deux boutons : Plus tard (enregistre et revient à la file à relire) et Valider (enregistre et passe à l'enrichissement).
+- L'enrichissement regroupe transmis par, souvenir, portions, durée en minutes et tags ; il se termine par Plus tard (la recette reste en brouillon) ou Publier la recette, qui ouvre sa fiche.
+- La fiche montre les tags, transmis par, portions et durée, le souvenir, le scan d'origine zoomable, les ingrédients tels qu'écrits avec leur équivalence moderne (« 1/2 livre de farine · ≈ 250 g ») quand le cahier ne donne pas déjà ce nombre, les étapes avec leurs notes, puis les notes de la recette.
+- Avant l'accueil (sprint 4), on retrouve les fiches publiées depuis l'écran du cahier, rubrique « Recettes publiées ». Un contributeur peut corriger ou enrichir une recette depuis sa fiche.
+- Un lecteur voit le scan d'origine des recettes publiées, mais pas les autres pages des cahiers.
 
 ## Journal des décisions
 
