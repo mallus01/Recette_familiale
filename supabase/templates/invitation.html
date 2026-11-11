@@ -1,0 +1,18 @@
+<!-- Modèle « Invite user » de Supabase (Authentication → Emails → Invite user).
+     Sujet : Vous êtes invité à rejoindre Recettes familiales -->
+<div style="font-family: system-ui, -apple-system, Segoe UI, sans-serif; color: #5c707d; max-width: 480px; margin: 0 auto; padding: 24px;">
+  <h1 style="font-size: 22px; margin: 0 0 16px;">Recettes familiales</h1>
+  <p style="line-height: 1.5; margin: 0 0 24px;">
+    Vous êtes invité à rejoindre les recettes de la famille. Touchez le bouton pour entrer dans l’appli :
+  </p>
+  <p style="margin: 0 0 32px;">
+    <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite"
+       style="background: #5c707d; color: #ffffff; text-decoration: none; padding: 14px 22px; border-radius: 12px; font-weight: 600; display: inline-block;">
+      Rejoindre Recettes familiales
+    </a>
+  </p>
+  <p style="color: #7d735c; font-size: 14px; line-height: 1.5; margin: 0;">
+    Ce lien est valable 15 minutes et ne sert qu’une fois. S’il a expiré, demandez à
+    l’administrateur de vous renvoyer l’invitation.
+  </p>
+</div>

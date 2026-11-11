@@ -49,6 +49,7 @@ psql -d essai -f supabase/migrations/20261108100000_notes_etapes.sql
 psql -d essai -f supabase/migrations/20261108110000_tags_recette.sql
 psql -d essai -f supabase/migrations/20261111090000_publication.sql
 psql -d essai -f supabase/migrations/20261112090000_accueil.sql
+psql -d essai -f supabase/migrations/20261112100000_invitations.sql
 psql -d essai -f supabase/seed.sql
 psql -d essai -f supabase/tests/rls.sql        # « Tous les tests RLS passent »
 psql -d essai -f supabase/tests/stockage.sql   # « Tous les tests de stockage passent »
@@ -57,6 +58,7 @@ psql -d essai -f supabase/tests/relecture.sql  # « Tous les tests de relecture 
 psql -d essai -f supabase/tests/tags.sql       # « Tous les tests de tags passent »
 psql -d essai -f supabase/tests/publication.sql # « Tous les tests de publication passent »
 psql -d essai -f supabase/tests/accueil.sql     # « Tous les tests de l'accueil passent »
+psql -d essai -f supabase/tests/invitations.sql # « Tous les tests d'invitation passent »
 ```
 
 ## Déploiement sur Vercel

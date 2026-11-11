@@ -288,7 +288,7 @@ La V1 doit permettre à un utilisateur seul de numériser ses cahiers et de cuis
 | Version | Objectif | Contenu |
 | --- | --- | --- |
 | V1 | Le cahier numérique, utilisable seul | Connexion lien et code (compte admin unique créé dans Supabase) ; capture en série, file à relire, relecture ; fiche recette avec scan et notes ; tags et gestion des listes fermées ; mode cuisine (écran allumé, étapes, panneau d'ingrédients, progression, swipe, boutons) ; adaptation des quantités et copie ; accueil (recherche, filtres, cahiers, suggestions) ; Favoris et À cuisiner ; tâche anti-pause et compression des images |
-| V2 | La famille | Invitations, rôles et interface d'administration ; retrait d'un membre ; photos proposées et validation ; images des valeurs de filtres ; ingrédients surlignés et barrés en mode cuisine ; séparation et fusion de pages ; mises en page dédiées aux grands écrans |
+| V2 | La famille | Retrait d'un membre ; photos proposées et validation ; images des valeurs de filtres ; ingrédients surlignés et barrés en mode cuisine ; séparation et fusion de pages ; mises en page dédiées aux grands écrans |
 | V3 | Les bonus | Test A/B des grandes cartes À cuisiner |
 
 Aménagements de la V1 :
@@ -415,6 +415,15 @@ Propositions faites pour le sprint 4 (US-26 à US-32) :
 - Profil montre le prénom, l'e-mail, le rôle, l'aide à l'installation et la déconnexion ; l'administrateur y trouve le lien « Gérer les listes de tags ».
 - Seules les recettes publiées apparaissent dans l'accueil, la recherche et les cahiers, y compris pour les contributeurs (les brouillons restent dans Numériser).
 
+Propositions faites pour les invitations (US-33) :
+
+- L'administration des membres s'ouvre depuis Profil, lien « Inviter et gérer les membres ». Le formulaire d'invitation s'ouvre avec le bouton principal Inviter un membre ; le rôle proposé par défaut est Lecteur.
+- Une adresse déjà membre, ou qui a déjà une invitation en cours, est refusée avec un message ; l'invitation existante se renvoie depuis la liste.
+- Renvoyer une invitation expirée recrée le compte en attente et envoie un nouvel e-mail, valable 15 minutes ; annuler supprime le compte en attente.
+- L'administrateur ne peut pas changer son propre rôle (pour ne jamais se retrouver sans administrateur).
+- L'invitation est acceptée dès que l'invité ouvre le lien ; il arrive sur la page Bienvenue, puis sur l'accueil une fois son prénom et son nom saisis.
+- L'e-mail d'invitation a son propre modèle (supabase/templates/invitation.html), avec un seul bouton.
+
 ## Journal des décisions
 
 | Date | Sujet | Décision |
@@ -462,3 +471,4 @@ Propositions faites pour le sprint 4 (US-26 à US-32) :
 | 07/11/2026 | Technique | Lecture des cahiers : comparaison entre Claude et Gemini (US-11), modèle interchangeable par variable d'environnement |
 | 07/11/2026 | Technique | Modèle de lecture retenu : Claude (les lectures Gemini n'aboutissaient pas lors du test) ; LECTURE_IA=claude |
 | 11/11/2026 | Mode cuisine | Bouton « Copier la liste des ingrédients » ; après Terminer, le mode cuisine repart de l'étape 1 |
+| 11/11/2026 | Accès | Invitations, rôles et interface d'administration avancés en V1 (US-33) à la demande de Mattis ; le retrait d'un membre reste en V2 |
