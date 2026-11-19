@@ -40,6 +40,12 @@ async function ListeCahiers() {
         Nouveau cahier
       </Link>
       <Link
+        href="/numeriser/nouvelle-recette"
+        className="rounded-xl border border-ardoise px-5 py-3.5 text-center font-semibold text-ardoise"
+      >
+        Ajouter une recette à la main
+      </Link>
+      <Link
         href="/numeriser/a-relire"
         className="rounded-xl border border-ardoise px-5 py-3.5 text-center font-semibold text-ardoise"
       >

@@ -79,7 +79,18 @@ export function Relecture({
   voisines: Voisines;
 }) {
   const router = useRouter();
-  const [recette, setRecette] = useState(initiale);
+  // Version 2.0 : une recette saisie à la main n'a pas de scan ; on part d'un ingrédient
+  // et d'une étape vides à remplir.
+  const aLaMain = scans.length === 0;
+  const [recette, setRecette] = useState(() =>
+    aLaMain && initiale.groupes.length === 0 && initiale.etapes.length === 0
+      ? {
+          ...initiale,
+          groupes: [{ nom: "", ingredients: [{ ...INGREDIENT_VIDE }] }],
+          etapes: [""],
+        }
+      : initiale,
+  );
   const [scanVu, setScanVu] = useState(0);
   const [modifiee, setModifiee] = useState(false);
   const [suite, setSuite] = useState<"plus-tard" | "valider" | null>(null);
@@ -181,39 +192,49 @@ export function Relecture({
 
   return (
     // US-46 : sur grand écran, le scan reste à gauche et les champs défilent à droite.
-    <div className="flex flex-col gap-6 md:grid md:grid-cols-2 md:items-start md:gap-10">
-      <div className="sticky top-0 z-10 -mx-6 flex flex-col gap-2 bg-white px-6 pt-2 pb-3 md:top-4 md:mx-0 md:max-h-[calc(100dvh-2rem)] md:overflow-y-auto md:px-0">
-        <ScanZoomable
-          key={scan?.id}
-          url={scan?.url}
-          alt={scan ? `Scan de la page ${scan.numero}` : "Scan"}
-          zones={zones}
-        />
-        <div className="flex items-center justify-between gap-3 text-sm text-taupe">
-          <span className="truncate">
-            {scan ? `${scan.cahier} · page ${scan.numero}` : "Aucune page liée"}
-          </span>
-          {scans.length > 1 ? (
-            <span className="flex shrink-0 gap-3">
-              {scans.map((s, i) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  onClick={() => setScanVu(i)}
-                  aria-pressed={i === scanVu}
-                  className={
-                    i === scanVu
-                      ? "font-semibold text-ardoise"
-                      : "underline underline-offset-4"
-                  }
-                >
-                  p. {s.numero}
-                </button>
-              ))}
+    <div
+      className={
+        aLaMain
+          ? "flex flex-col gap-6 md:mx-auto md:w-full md:max-w-2xl"
+          : "flex flex-col gap-6 md:grid md:grid-cols-2 md:items-start md:gap-10"
+      }
+    >
+      {aLaMain ? null : (
+        <div className="sticky top-0 z-10 -mx-6 flex flex-col gap-2 bg-white px-6 pt-2 pb-3 md:top-4 md:mx-0 md:max-h-[calc(100dvh-2rem)] md:overflow-y-auto md:px-0">
+          <ScanZoomable
+            key={scan?.id}
+            url={scan?.url}
+            alt={scan ? `Scan de la page ${scan.numero}` : "Scan"}
+            zones={zones}
+          />
+          <div className="flex items-center justify-between gap-3 text-sm text-taupe">
+            <span className="truncate">
+              {scan
+                ? `${scan.cahier} · page ${scan.numero}`
+                : "Aucune page liée"}
             </span>
-          ) : null}
+            {scans.length > 1 ? (
+              <span className="flex shrink-0 gap-3">
+                {scans.map((s, i) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => setScanVu(i)}
+                    aria-pressed={i === scanVu}
+                    className={
+                      i === scanVu
+                        ? "font-semibold text-ardoise"
+                        : "underline underline-offset-4"
+                    }
+                  >
+                    p. {s.numero}
+                  </button>
+                ))}
+              </span>
+            ) : null}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="flex min-w-0 flex-col gap-6">
         {publiee ? (
@@ -272,59 +293,76 @@ export function Relecture({
                     key={ii}
                     className="flex flex-col gap-2 rounded-xl border border-ardoise/15 p-3"
                   >
+                    {aLaMain && !ing.texte_origine ? null : (
+                      <div className="flex items-start gap-2">
+                        <ChampSurligne
+                          libelle={`Ingrédient ${ii + 1}, tel qu’écrit`}
+                          placeholder="Tel qu’écrit dans le cahier"
+                          valeur={ing.texte_origine}
+                          motif={motif}
+                          onChange={(texte_origine) =>
+                            majIngredient(gi, ii, { texte_origine })
+                          }
+                          className="flex-1"
+                        />
+                        <BoutonRetirer
+                          libelle={`Retirer l’ingrédient ${ii + 1}`}
+                          onClick={() =>
+                            majGroupe(gi, {
+                              ingredients: g.ingredients.filter(
+                                (_, k) => k !== ii,
+                              ),
+                            })
+                          }
+                        />
+                      </div>
+                    )}
                     <div className="flex items-start gap-2">
-                      <ChampSurligne
-                        libelle={`Ingrédient ${ii + 1}, tel qu’écrit`}
-                        placeholder="Tel qu’écrit dans le cahier"
-                        valeur={ing.texte_origine}
-                        motif={motif}
-                        onChange={(texte_origine) =>
-                          majIngredient(gi, ii, { texte_origine })
-                        }
-                        className="flex-1"
-                      />
-                      <BoutonRetirer
-                        libelle={`Retirer l’ingrédient ${ii + 1}`}
-                        onClick={() =>
-                          majGroupe(gi, {
-                            ingredients: g.ingredients.filter(
-                              (_, k) => k !== ii,
-                            ),
-                          })
-                        }
-                      />
-                    </div>
-                    <div className="grid grid-cols-[4.5rem_4.5rem_1fr] gap-2">
-                      <input
-                        aria-label={`Quantité de l’ingrédient ${ii + 1}`}
-                        placeholder="Qté"
-                        inputMode="decimal"
-                        value={ing.quantite}
-                        onChange={(e) =>
-                          majIngredient(gi, ii, { quantite: e.target.value })
-                        }
-                        className={`rounded-lg border px-3 py-2 ${
-                          ing.quantite.trim() && enNombre(ing.quantite) === null
-                            ? "border-peche"
-                            : "border-ardoise/25"
-                        }`}
-                      />
-                      <input
-                        aria-label={`Unité de l’ingrédient ${ii + 1}`}
-                        placeholder="Unité"
-                        value={ing.unite}
-                        onChange={(e) =>
-                          majIngredient(gi, ii, { unite: e.target.value })
-                        }
-                        className="rounded-lg border border-ardoise/25 px-3 py-2"
-                      />
-                      <ChampSurligne
-                        libelle={`Nom de l’ingrédient ${ii + 1}`}
-                        placeholder="Ingrédient"
-                        valeur={ing.nom}
-                        motif={motif}
-                        onChange={(nom) => majIngredient(gi, ii, { nom })}
-                      />
+                      <div className="grid min-w-0 flex-1 grid-cols-[4.5rem_4.5rem_1fr] gap-2">
+                        <input
+                          aria-label={`Quantité de l’ingrédient ${ii + 1}`}
+                          placeholder="Qté"
+                          inputMode="decimal"
+                          value={ing.quantite}
+                          onChange={(e) =>
+                            majIngredient(gi, ii, { quantite: e.target.value })
+                          }
+                          className={`rounded-lg border px-3 py-2 ${
+                            ing.quantite.trim() &&
+                            enNombre(ing.quantite) === null
+                              ? "border-peche"
+                              : "border-ardoise/25"
+                          }`}
+                        />
+                        <input
+                          aria-label={`Unité de l’ingrédient ${ii + 1}`}
+                          placeholder="Unité"
+                          value={ing.unite}
+                          onChange={(e) =>
+                            majIngredient(gi, ii, { unite: e.target.value })
+                          }
+                          className="rounded-lg border border-ardoise/25 px-3 py-2"
+                        />
+                        <ChampSurligne
+                          libelle={`Nom de l’ingrédient ${ii + 1}`}
+                          placeholder="Ingrédient"
+                          valeur={ing.nom}
+                          motif={motif}
+                          onChange={(nom) => majIngredient(gi, ii, { nom })}
+                        />
+                      </div>
+                      {aLaMain && !ing.texte_origine ? (
+                        <BoutonRetirer
+                          libelle={`Retirer l’ingrédient ${ii + 1}`}
+                          onClick={() =>
+                            majGroupe(gi, {
+                              ingredients: g.ingredients.filter(
+                                (_, k) => k !== ii,
+                              ),
+                            })
+                          }
+                        />
+                      ) : null}
                     </div>
                   </li>
                 ))}
@@ -407,8 +445,9 @@ export function Relecture({
 
         <Section titre="Notes">
           <p className="-mt-1 text-sm text-taupe">
-            Remarques ajoutées au texte de la recette, en marge ou entre
-            parenthèses.
+            {aLaMain
+              ? "Astuces ou remarques à garder avec la recette."
+              : "Remarques ajoutées au texte de la recette, en marge ou entre parenthèses."}
           </p>
           <ul className="flex flex-col gap-3">
             {recette.notes.map((note, ni) => (
@@ -462,7 +501,11 @@ export function Relecture({
                 ...r,
                 notes: [
                   ...r.notes,
-                  { texte: "", etape: null, origine: "cahier" },
+                  {
+                    texte: "",
+                    etape: null,
+                    origine: aLaMain ? "membre" : "cahier",
+                  },
                 ],
               }))
             }
