@@ -132,7 +132,7 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
   return (
     <>
       <EnTete
-        titre="Relecture"
+        titre={scans.length === 0 ? "Recette saisie à la main" : "Relecture"}
         retour={{ href: "/numeriser/a-relire", libelle: "À relire" }}
       />
       <Relecture

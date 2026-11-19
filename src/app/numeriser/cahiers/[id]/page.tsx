@@ -7,6 +7,7 @@ import { EnTete, Page, ReserveAuxContributeurs } from "@/components/mise-en-page
 import { membreConnecte, peutNumeriser } from "@/lib/membre";
 import { urlsSignees } from "@/lib/supabase/images";
 import { creerClientServeur } from "@/lib/supabase/serveur";
+import { ModifierCahier } from "./modifier-cahier";
 import { PagesDuCahier } from "./pages-du-cahier";
 
 export const metadata: Metadata = { title: "Cahier · Recettes familiales" };
@@ -29,7 +30,7 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
   const supabase = await creerClientServeur();
   const { data: cahier } = await supabase
     .from("cahier")
-    .select("id, nom, couverture_chemin")
+    .select("id, nom, description, couverture_chemin")
     .eq("id", Number(id))
     .maybeSingle();
   if (!cahier) notFound();
@@ -67,6 +68,12 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
       <div className="w-1/2 self-center">
         <Couverture url={cahier.couverture_chemin ? urls.get(cahier.couverture_chemin) : undefined} nom={cahier.nom} />
       </div>
+      <ModifierCahier
+        key={`${cahier.nom}|${cahier.description ?? ""}`}
+        id={cahier.id}
+        nom={cahier.nom}
+        description={cahier.description ?? ""}
+      />
 
       <Link
         href={`/numeriser/cahiers/${cahier.id}/capture`}
