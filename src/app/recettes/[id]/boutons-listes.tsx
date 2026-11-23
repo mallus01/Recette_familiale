@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { creerClientNavigateur } from "@/lib/supabase/client";
+import { AjoutListes } from "./ajout-listes";
 
 type Type = "favori" | "a_cuisiner";
 
@@ -78,6 +79,7 @@ export function BoutonsListes({
         {bouton("favori", "♥ Dans mes favoris", "♡ Favori")}
         {bouton("a_cuisiner", "✓ À cuisiner", "+ À cuisiner")}
       </div>
+      <AjoutListes recetteId={recetteId} />
       {erreur ? (
         <p className="text-sm">La liste n’a pas pu être modifiée. Réessaie.</p>
       ) : null}
