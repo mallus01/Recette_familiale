@@ -5,8 +5,10 @@ import { Suspense } from "react";
 import { Page } from "@/components/mise-en-page";
 import { LIBELLES_ROLE, membreConnecte } from "@/lib/membre";
 import { creerClientServeur } from "@/lib/supabase/serveur";
+import type { Taille } from "@/lib/affichage";
 import { AideInstallation } from "../aide-installation";
 import { BoutonDeconnexion } from "../deconnexion";
+import { ReglagesAffichage } from "./reglages-affichage";
 
 export const metadata: Metadata = { title: "Profil · Recettes familiales" };
 
@@ -34,6 +36,12 @@ async function Contenu() {
           .select("id", { count: "exact", head: true })
           .eq("statut", "en_attente")
       : { count: 0 };
+  // US-56 et US-57 : réglages d'affichage (colonnes ajoutées par la migration affichage).
+  const { data: affichage } = await (await creerClientServeur())
+    .from("membre")
+    .select("taille_texte, contraste_renforce")
+    .eq("id", membre.id)
+    .maybeSingle<{ taille_texte: Taille; contraste_renforce: boolean }>();
   return (
     <>
       <section className="flex flex-col gap-1">
@@ -43,6 +51,12 @@ async function Contenu() {
         <p className="text-taupe">{membre.email}</p>
         <p className="text-sm text-taupe">{LIBELLES_ROLE[membre.role]}</p>
       </section>
+      <ReglagesAffichage
+        initial={{
+          taille: affichage?.taille_texte ?? "normale",
+          contraste: affichage?.contraste_renforce ?? false,
+        }}
+      />
       {membre.role === "admin" ? (
         <section className="flex flex-col gap-2">
           <h2 className="font-semibold">Administration</h2>

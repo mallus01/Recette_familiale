@@ -160,7 +160,7 @@ function BoutonZoom({
       aria-label={libelle}
       onClick={onClick}
       disabled={disabled}
-      className="flex h-10 w-10 items-center justify-center rounded-full bg-ardoise text-xl font-semibold text-white shadow disabled:opacity-40"
+      className="flex h-12 w-12 items-center justify-center rounded-full bg-ardoise text-xl font-semibold text-white shadow disabled:opacity-40"
     >
       {children}
     </button>

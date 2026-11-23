@@ -264,7 +264,7 @@ export function ListeFermee({
       </ul>
       <form onSubmit={ajouter} className="flex gap-2">
         <label
-          className={`flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl ${fond}`}
+          className={`flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-xl ${fond}`}
         >
           {imageNouveau ? (
             <span className="text-xs font-medium">Image ✓</span>

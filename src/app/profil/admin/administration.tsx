@@ -291,7 +291,7 @@ function LigneInvitation({
           aria-expanded={menu}
           disabled={enCours}
           onClick={() => setMenu(!menu)}
-          className="flex h-9 w-9 items-center justify-center rounded-full text-xl leading-none disabled:opacity-50"
+          className="flex h-12 w-12 items-center justify-center rounded-full text-xl leading-none disabled:opacity-50"
         >
           ⋮
         </button>
@@ -417,7 +417,7 @@ function LigneMembre({
           aria-expanded={menu}
           disabled={enCours}
           onClick={() => setMenu(!menu)}
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xl leading-none disabled:opacity-50 md:justify-self-end"
+          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl leading-none disabled:opacity-50 md:justify-self-end"
         >
           ⋮
         </button>

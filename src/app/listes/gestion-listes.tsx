@@ -38,7 +38,7 @@ export function NouvelleListe() {
       <button
         type="button"
         onClick={() => setOuvert(true)}
-        className="flex min-h-11 shrink-0 items-center rounded-full border border-dashed border-ardoise/50 px-4 whitespace-nowrap"
+        className="flex min-h-12 shrink-0 items-center rounded-full border border-dashed border-ardoise/50 px-4 whitespace-nowrap"
       >
         + Nouvelle liste
       </button>
@@ -240,14 +240,14 @@ export function GererListe({
       <button
         type="button"
         onClick={() => setMode("renommer")}
-        className="min-h-11 font-medium underline decoration-ciel decoration-2 underline-offset-4"
+        className="min-h-12 font-medium underline decoration-ciel decoration-2 underline-offset-4"
       >
         Renommer la liste
       </button>
       <button
         type="button"
         onClick={() => setMode("supprimer")}
-        className="min-h-11 font-medium underline decoration-peche decoration-2 underline-offset-4"
+        className="min-h-12 font-medium underline decoration-peche decoration-2 underline-offset-4"
       >
         Supprimer la liste
       </button>
