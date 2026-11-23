@@ -110,7 +110,7 @@ async function Contenu({
             href={`/listes?liste=${l.cle}`}
             replace
             aria-current={l.actif ? "page" : undefined}
-            className={`flex min-h-11 shrink-0 items-center rounded-full border px-4 whitespace-nowrap ${
+            className={`flex min-h-12 shrink-0 items-center rounded-full border px-4 whitespace-nowrap ${
               l.actif
                 ? "border-ardoise bg-ardoise text-white"
                 : "border-ardoise/25"

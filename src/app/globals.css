@@ -19,3 +19,41 @@ body {
   background: #ffffff;
   color: var(--color-ardoise);
 }
+
+/* US-56 : taille du texte choisie dans Profil. Toutes les tailles de l'appli sont en rem :
+   textes, boutons et espacements grandissent ensemble. */
+html[data-taille="grande"] {
+  font-size: 115%;
+}
+html[data-taille="tres_grande"] {
+  font-size: 130%;
+}
+
+/* US-57 : contraste renforcé. Le texte principal et le texte secondaire foncent (contraste
+   supérieur à 9:1 sur blanc) ; les bordures et textes atténués, calculés à partir de ces
+   couleurs, foncent avec eux. Les couleurs claires restent des fonds. */
+html[data-contraste="renforce"] {
+  --color-ardoise: #2b3a44;
+  --color-taupe: #4d4632;
+}
+html[data-contraste="renforce"] a {
+  text-decoration-thickness: 3px;
+}
+
+/* US-58 : zones à toucher d'au moins 48 px et focus clavier toujours visible. */
+@layer base {
+  button,
+  select,
+  input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]) {
+    min-height: 3rem;
+  }
+  a.self-start {
+    display: inline-flex;
+    align-items: center;
+    min-height: 3rem;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-ardoise);
+    outline-offset: 2px;
+  }
+}

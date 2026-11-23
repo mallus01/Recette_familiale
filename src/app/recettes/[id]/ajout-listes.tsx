@@ -82,7 +82,7 @@ export function AjoutListes({ recetteId }: { recetteId: number }) {
         type="button"
         onClick={() => setOuvert(true)}
         aria-haspopup="dialog"
-        className={`min-h-11 rounded-full border px-4 py-2.5 text-sm font-medium ${
+        className={`min-h-12 rounded-full border px-4 py-2.5 text-sm font-medium ${
           nombre > 0 ? "border-ardoise bg-ardoise/10" : "border-ardoise/25"
         }`}
       >

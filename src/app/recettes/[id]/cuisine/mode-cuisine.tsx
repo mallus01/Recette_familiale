@@ -115,12 +115,16 @@ export function ModeCuisine({
     <div className="mx-auto flex h-dvh w-full max-w-md flex-col md:max-w-6xl">
       <header className="flex flex-col gap-3 border-b border-ardoise/10 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-3">
         <div className="flex items-center gap-3">
+          {/* US-58 : la croix est accompagnée d'un libellé écrit. */}
           <Link
             href={retour}
             aria-label="Quitter le mode cuisine"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-ardoise/25 text-2xl leading-none"
+            className="flex h-12 shrink-0 items-center gap-1.5 rounded-full border border-ardoise/25 pr-4 pl-3 font-medium"
           >
-            ×
+            <span aria-hidden className="text-2xl leading-none">
+              ×
+            </span>
+            Quitter
           </Link>
           <div className="min-w-0 flex-1">
             <p className="truncate font-semibold">{titre}</p>

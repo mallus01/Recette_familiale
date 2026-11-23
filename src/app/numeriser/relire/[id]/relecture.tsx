@@ -601,7 +601,7 @@ function BoutonRetirer({
       type="button"
       aria-label={libelle}
       onClick={onClick}
-      className="flex h-10 w-8 shrink-0 items-center justify-center text-xl text-taupe"
+      className="flex h-12 w-12 shrink-0 items-center justify-center text-2xl text-taupe"
     >
       ×
     </button>
