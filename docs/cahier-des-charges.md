@@ -240,7 +240,7 @@ Le modèle compte trois blocs : le cœur des recettes, les membres et l'accès, 
 
 | Entité | Attributs principaux | Relations |
 | --- | --- | --- |
-| Membre | prénom, nom (stocké en entier, initiale affichée), e-mail unique, rôle | envoie des invitations, ouvre des sessions |
+| Membre | prénom, nom (stocké en entier, initiale affichée), e-mail unique, rôle ; chaque membre ne lit que sa fiche, l'admin lit toutes les fiches | envoie des invitations, ouvre des sessions |
 | Invitation | e-mail, rôle, expiration (15 min), statut ; gérée par le mécanisme d'invitation de Supabase | envoyée par l'admin |
 | Jeton de connexion | empreinte du lien, empreinte du code, expiration (15 min), utilisé | lié à un membre ; usage unique |
 | Session | appareil, expiration (30 jours) | liée à un membre |
@@ -284,6 +284,7 @@ La webapp repose sur Next.js en PWA, Supabase, un modèle d'IA de vision, Brevo 
 - Aucune contrainte de région d'hébergement : l'hébergement européen n'est pas obligatoire.
 - Une tâche planifiée quotidienne interroge la base pour éviter la mise en pause du projet Supabase après 7 jours d'inactivité.
 - Les scans et photos sont compressés automatiquement à l'envoi (environ 300 Ko par image) pour tenir dans 1 Go de stockage.
+- Sécurité (audit du 23/11/2026, `docs/audit-securite.md`) : aucun compte n'est accepté sans invitation, même si l'inscription publique se rouvrait dans Supabase ; un lecteur ne voit que les images que l'appli lui montre ; une photo proposée est toujours rangée sous `photos/<id de la recette>/` ; en-têtes CSP, HSTS et Permissions-Policy sur toutes les pages.
 
 ## Priorisation en versions
 
@@ -531,3 +532,4 @@ Propositions faites pour le sprint 10 de la V4 (US-51 et US-52) :
 | 11/11/2026 | V3 | V2 validée (US-26 à US-47 terminées) ; backlog V3 écrit (US-48 à US-50, sprint 9) : test A/B des grandes cartes À cuisiner, variante au hasard par membre, mesures anonymes, résultats et choix de la variante dans Profil |
 | 19/11/2026 | V4 | « Version 2.0 » demandée par Mattis : backlog V4 (US-51 à US-58, sprints 10 à 12) ; sprint 10 : renommer un cahier, ajouter une recette à la main |
 | 23/11/2026 | V4 | Sprint 10 validé par Mattis (US-51 et US-52 terminées) |
+| 23/11/2026 | Sécurité | Audit de sécurité (`docs/audit-securite.md`) : 5 failles corrigées (inscription sans invitation, fiches des membres, images lisibles, photo piégée, envoi hors recette) et 2 durcissements (origine des routes API, en-têtes de sécurité) |

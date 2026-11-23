@@ -18,3 +18,10 @@ export async function supprimerImage(chemin: string | null | undefined) {
   if (!chemin) return;
   await creerClientNavigateur().storage.from("images").remove([chemin]);
 }
+
+// Audit sécurité (F4) : la suppression d'une photo de plat ne touche jamais une autre
+// image (scan, couverture), même si une ancienne proposition pointait ailleurs.
+export async function supprimerPhotoDePlat(chemin: string | null | undefined) {
+  if (!chemin || !/^photos\/\d+\/[^/]+$/.test(chemin)) return;
+  await supprimerImage(chemin);
+}

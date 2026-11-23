@@ -3,12 +3,15 @@
 \set ON_ERROR_STOP on
 set client_min_messages = warning;
 
+-- Le premier compte (l'admin) passe sans invitation ; les suivants sont invités.
 insert into auth.users (id, email, raw_user_meta_data) values
-  ('00000000-0000-0000-0000-00000000000a', 'admin@ex.fr', '{"prenom":"Ada"}'),
+  ('00000000-0000-0000-0000-00000000000a', 'admin@ex.fr', '{"prenom":"Ada"}');
+update public.membre set role = 'admin' where email = 'admin@ex.fr';
+insert into public.invitation (email, role) values ('contrib@ex.fr', 'contributeur'), ('lecteur@ex.fr', 'lecteur');
+insert into auth.users (id, email, raw_user_meta_data) values
   ('00000000-0000-0000-0000-00000000000c', 'contrib@ex.fr', '{}'),
   ('00000000-0000-0000-0000-00000000000b', 'lecteur@ex.fr', '{}');
-update public.membre set role = 'admin' where email = 'admin@ex.fr';
-update public.membre set role = 'contributeur' where email = 'contrib@ex.fr';
+update public.invitation set acceptee_le = now();
 
 do $$ begin
   assert (select prenom from public.membre where email = 'admin@ex.fr') = 'Ada', 'membre créé par le trigger';

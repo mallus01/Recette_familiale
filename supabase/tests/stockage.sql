@@ -10,6 +10,7 @@ end $$;
 set role authenticated;
 set request.jwt.claim.sub = '00000000-0000-0000-0000-00000000000c';
 insert into storage.objects (bucket_id, name) values ('images', 'cahiers/1/couverture.jpg');
+update public.cahier set couverture_chemin = 'cahiers/1/couverture.jpg' where id = 1;
 reset role;
 
 -- Lecteur : la voit, ne peut rien ajouter ni supprimer

@@ -2,6 +2,7 @@ import { after } from "next/server";
 import { lirePage, type Fournisseur } from "@/lib/lecture/fournisseurs";
 import { coutEstime } from "@/lib/lecture/prix";
 import { membreConnecte } from "@/lib/membre";
+import { requeteDeLAppli } from "@/lib/meme-origine";
 import { creerClientServeur } from "@/lib/supabase/serveur";
 
 // US-11 : lit une page avec chacun des modèles comparés, en arrière-plan, et garde
@@ -13,6 +14,7 @@ function fournisseursCompares(): Fournisseur[] {
 }
 
 export async function POST(requete: Request) {
+  if (!requeteDeLAppli(requete)) return Response.json({ erreur: "requête refusée" }, { status: 403 });
   const { pageId } = (await requete.json().catch(() => ({}))) as { pageId?: unknown };
   if (typeof pageId !== "number") return Response.json({ erreur: "pageId manquant" }, { status: 400 });
 

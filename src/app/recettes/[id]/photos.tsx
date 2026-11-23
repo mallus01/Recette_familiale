@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
-import { envoyerImage, supprimerImage } from "@/lib/photos";
+import { envoyerImage, supprimerImage, supprimerPhotoDePlat } from "@/lib/photos";
 import { creerClientNavigateur } from "@/lib/supabase/client";
 
 export type PhotoFiche = { id: number; chemin: string; url?: string };
@@ -59,7 +59,7 @@ export function Photos({
       .delete()
       .eq("id", p.id);
     if (error) return setEtat("erreur");
-    await supprimerImage(p.chemin);
+    await supprimerPhotoDePlat(p.chemin);
     setASupprimer(null);
     setCourante(0);
     defilement.current?.scrollTo({ left: 0 });

@@ -1,5 +1,6 @@
 import { after } from "next/server";
 import { lirePage } from "@/lib/lecture/fournisseurs";
+import { requeteDeLAppli } from "@/lib/meme-origine";
 import { creerClientServeur } from "@/lib/supabase/serveur";
 
 // Lecture d'une page par l'IA, en arrière-plan : la requête répond tout de suite,
@@ -10,6 +11,7 @@ export const maxDuration = 300;
 const BLOCAGE_MINUTES = 10; // une lecture en cours depuis plus longtemps peut être relancée
 
 export async function POST(requete: Request) {
+  if (!requeteDeLAppli(requete)) return Response.json({ erreur: "requête refusée" }, { status: 403 });
   const { pageId } = (await requete.json().catch(() => ({}))) as { pageId?: unknown };
   if (typeof pageId !== "number") return Response.json({ erreur: "pageId manquant" }, { status: 400 });
 

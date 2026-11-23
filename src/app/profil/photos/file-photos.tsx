@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { supprimerImage } from "@/lib/photos";
+import { supprimerPhotoDePlat } from "@/lib/photos";
 import { creerClientNavigateur } from "@/lib/supabase/client";
 
 type Photo = {
@@ -36,7 +36,7 @@ export function FilePhotos({ photos }: { photos: Photo[] }) {
           .update({ statut: "validee", validee_le: new Date().toISOString() })
           .eq("id", p.id)
       : await supabase.from("photo").delete().eq("id", p.id);
-    if (!error && !valider) await supprimerImage(p.chemin);
+    if (!error && !valider) await supprimerPhotoDePlat(p.chemin);
     setEnCours(null);
     setMessage(
       error
