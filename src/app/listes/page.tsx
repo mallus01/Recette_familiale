@@ -7,6 +7,7 @@ import { Page } from "@/components/mise-en-page";
 import { membreConnecte } from "@/lib/membre";
 import { COLONNES_RESUME, enCartes, type RecetteResume } from "@/lib/recettes";
 import { urlsSignees } from "@/lib/supabase/images";
+import { GererListe, NouvelleListe } from "./gestion-listes";
 import { creerClientServeur } from "@/lib/supabase/serveur";
 
 export const metadata: Metadata = { title: "Mes listes · Recettes familiales" };
@@ -26,7 +27,8 @@ const LISTES = [
   },
 ] as const;
 
-// US-28 : les deux listes privées, séparées.
+// US-28 : les deux listes privées, séparées. US-53 à US-55 : suivies des listes créées
+// par le membre, avec « Nouvelle liste ».
 export default function MesListes({ searchParams }: PageProps<"/listes">) {
   return (
     <Page large>
@@ -44,17 +46,33 @@ async function Contenu({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { liste: cle } = await searchParams;
-  const liste = LISTES.find((l) => l.cle === cle) ?? LISTES[0];
   const membre = await membreConnecte();
   if (!membre) redirect("/connexion");
 
   const supabase = await creerClientServeur();
-  const { data: lignes } = await supabase
-    .from("liste_perso")
-    .select("recette_id")
+  const { data: creees } = await supabase
+    .from("liste_membre")
+    .select("id, nom")
     .eq("membre_id", membre.id)
-    .eq("type", liste.type)
-    .order("ajoute_le", { ascending: false });
+    .order("cree_le");
+  const mesListes = (creees ?? []) as { id: number; nom: string }[];
+  const creee = mesListes.find((l) => String(l.id) === cle);
+  const liste = creee
+    ? null
+    : (LISTES.find((l) => l.cle === cle) ?? LISTES[0]);
+
+  const { data: lignes } = creee
+    ? await supabase
+        .from("liste_membre_recette")
+        .select("recette_id")
+        .eq("liste_id", creee.id)
+        .order("ajoute_le", { ascending: false })
+    : await supabase
+        .from("liste_perso")
+        .select("recette_id")
+        .eq("membre_id", membre.id)
+        .eq("type", liste!.type)
+        .order("ajoute_le", { ascending: false });
   const ids = (lignes ?? []).map((l) => l.recette_id as number);
   const { data: brut } = ids.length
     ? await supabase
@@ -72,23 +90,51 @@ async function Contenu({
   return (
     <>
       <nav
-        className="-mt-2 flex rounded-full bg-ardoise/10 p-1 text-sm font-medium"
+        className="-mx-6 -mt-2 flex gap-2 overflow-x-auto px-6 pb-1 text-sm font-medium md:mx-0 md:flex-wrap md:px-0"
         aria-label="Listes"
       >
-        {LISTES.map((l) => (
+        {[
+          ...LISTES.map((l) => ({
+            cle: l.cle as string,
+            libelle: l.libelle as string,
+            actif: l === liste,
+          })),
+          ...mesListes.map((l) => ({
+            cle: String(l.id),
+            libelle: l.nom,
+            actif: l === creee,
+          })),
+        ].map((l) => (
           <Link
             key={l.cle}
             href={`/listes?liste=${l.cle}`}
             replace
-            aria-current={l === liste ? "page" : undefined}
-            className={`flex-1 rounded-full py-2 text-center ${l === liste ? "bg-white shadow-sm" : "text-ardoise/70"}`}
+            aria-current={l.actif ? "page" : undefined}
+            className={`flex min-h-12 shrink-0 items-center rounded-full border px-4 whitespace-nowrap ${
+              l.actif
+                ? "border-ardoise bg-ardoise text-white"
+                : "border-ardoise/25"
+            }`}
           >
             {l.libelle}
           </Link>
         ))}
+        <NouvelleListe />
       </nav>
+      {creee ? (
+        <GererListe
+          key={`${creee.id}-${creee.nom}`}
+          id={creee.id}
+          nom={creee.nom}
+          nombre={recettes.length}
+        />
+      ) : null}
       {recettes.length === 0 ? (
-        <p className="leading-relaxed text-taupe">{liste.vide}</p>
+        <p className="leading-relaxed text-taupe">
+          {creee
+            ? "Cette liste est vide. Sur la fiche d’une recette, touche « Ajouter à une liste » pour la ranger ici."
+            : liste!.vide}
+        </p>
       ) : (
         <ul className="flex flex-col divide-y divide-ardoise/10 md:grid md:grid-cols-2 md:gap-x-10 md:divide-y-0">
           {enCartes(recettes, urls).map((r) => (

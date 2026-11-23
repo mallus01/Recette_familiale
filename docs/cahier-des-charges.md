@@ -53,6 +53,7 @@ Deux listes indépendantes et privées permettent à chacun de mettre des recett
 - **Favoris** : les recettes qu'on aime et qu'on veut retrouver vite.
 - **À cuisiner** : les recettes qu'on prévoit de faire.
 - Les listes sont privées : chaque membre ne voit que les siennes.
+- En plus de ces deux listes, chaque membre peut créer, renommer et supprimer ses propres listes (V4, US-53 à US-55), privées elles aussi.
 - Une recette peut figurer dans l'une, l'autre, les deux ou aucune.
 - Une recette est retirée automatiquement de À cuisiner après un passage complet en mode cuisine, c'est-à-dire quand on passe la dernière étape.
 
@@ -240,7 +241,7 @@ Le modèle compte trois blocs : le cœur des recettes, les membres et l'accès, 
 
 | Entité | Attributs principaux | Relations |
 | --- | --- | --- |
-| Membre | prénom, nom (stocké en entier, initiale affichée), e-mail unique, rôle ; chaque membre ne lit que sa fiche, l'admin lit toutes les fiches | envoie des invitations, ouvre des sessions |
+| Membre | prénom, nom (stocké en entier, initiale affichée), e-mail unique, rôle, taille du texte (normale, grande, très grande), contraste renforcé (booléen) ; chaque membre ne lit que sa fiche, l'admin lit toutes les fiches | envoie des invitations, ouvre des sessions |
 | Invitation | e-mail, rôle, expiration (15 min), statut ; gérée par le mécanisme d'invitation de Supabase | envoyée par l'admin |
 | Jeton de connexion | empreinte du lien, empreinte du code, expiration (15 min), utilisé | lié à un membre ; usage unique |
 | Session | appareil, expiration (30 jours) | liée à un membre |
@@ -252,6 +253,7 @@ Le modèle compte trois blocs : le cœur des recettes, les membres et l'accès, 
 | Type de repas | nom unique, image | une valeur par recette |
 | Occasion | nom unique, image | plusieurs par recette (table de liaison) |
 | Liste perso | type (favori, à cuisiner), date d'ajout | un membre, une recette ; privée |
+| Liste créée | nom (unique pour le membre, sans tenir compte des majuscules), date de création | un membre ; contient des recettes (avec leur date d'ajout) ; privée |
 | Photo | image, statut (en attente, validée), ordre | une recette ; proposée par un membre, validée par l'admin |
 | Test A/B | code, variantes, statut (en cours, terminé), variante retenue | attribue une variante à chaque membre |
 | Mesure A/B | type (affichage, ouverture, cuisinée), variante, jour | un test, un membre ; lue seulement en totaux par l'admin |
@@ -476,6 +478,20 @@ Propositions faites pour le sprint 10 de la V4 (US-51 et US-52) :
 - Une recette ajoutée à la main n'appartient à aucun cahier : elle n'apparaît pas dans la rangée Les cahiers, mais dans la recherche, les filtres, les suggestions et les listes comme les autres.
 - Sa saisie réutilise l'écran de relecture, sans scan et sans le champ « tel qu'écrit » ; ses notes sont des notes de membre. En brouillon, elle reste dans la file à relire, section « Recettes saisies à la main ».
 
+Propositions faites pour le sprint 11 de la V4 (US-53 à US-55) :
+
+- Tables `liste_membre` et `liste_membre_recette`, à côté de `liste_perso` (Favoris et À cuisiner gardent leur fonctionnement, dont le retrait automatique). Nom de 60 caractères au plus.
+- Mes listes : rangée de pastilles qui défile, Favoris, À cuisiner, puis les listes créées dans l'ordre de création, et « + Nouvelle liste » au bout. Sur une liste créée : « Renommer la liste » et « Supprimer la liste », avec confirmation qui rappelle que les recettes restent dans l'appli.
+- Fiche recette : sous Favori et À cuisiner, « + Ajouter à une liste » (ou « Dans 2 de mes listes ») ouvre un panneau en bas de l'écran avec une case par liste et un champ pour créer une liste qui reçoit directement la recette.
+- Un lecteur ne peut ranger que des recettes publiées, comme pour Favoris et À cuisiner. Quand un membre est retiré, ses listes créées sont supprimées avec lui.
+
+Propositions faites pour le sprint 12 de la V4 (US-56 à US-58) :
+
+- Profil → Affichage : trois tailles de texte (normale, grande à 115 %, très grande à 130 %) présentées en grandes cases avec un « Aa » d'exemple, et un interrupteur « Contraste renforcé ». Le choix s'applique tout de suite, est gardé avec le membre (fonction `regler_affichage`) et copié sur l'appareil pour s'afficher sans délai, y compris sur l'écran de connexion.
+- Toute l'interface est en rem : textes, boutons et marges grandissent ensemble.
+- Contraste renforcé : gris ardoise #2B3A44 et brun taupe #4D4632 (contraste supérieur à 9:1 sur blanc) ; bordures et textes atténués foncent avec eux ; liens soulignés plus épais. Les couleurs claires restent des fonds.
+- Pour tous, quel que soit le réglage : boutons, champs et liens isolés d'au moins 48 px de haut ; boutons ronds (personnes, zoom du scan, retrait en relecture, options des membres) agrandis à 48 px ; contour de focus de 3 px ; la croix du mode cuisine devient « × Quitter ». Les suppressions demandaient déjà une confirmation.
+
 ## Journal des décisions
 
 | Date | Sujet | Décision |
@@ -532,4 +548,6 @@ Propositions faites pour le sprint 10 de la V4 (US-51 et US-52) :
 | 11/11/2026 | V3 | V2 validée (US-26 à US-47 terminées) ; backlog V3 écrit (US-48 à US-50, sprint 9) : test A/B des grandes cartes À cuisiner, variante au hasard par membre, mesures anonymes, résultats et choix de la variante dans Profil |
 | 19/11/2026 | V4 | « Version 2.0 » demandée par Mattis : backlog V4 (US-51 à US-58, sprints 10 à 12) ; sprint 10 : renommer un cahier, ajouter une recette à la main |
 | 23/11/2026 | V4 | Sprint 10 validé par Mattis (US-51 et US-52 terminées) |
+| 23/11/2026 | V4 | Sprint 11 : listes créées par chaque membre (créer, renommer, supprimer, ranger une recette depuis sa fiche), privées |
 | 23/11/2026 | Sécurité | Audit de sécurité (`docs/audit-securite.md`) : 5 failles corrigées (inscription sans invitation, fiches des membres, images lisibles, photo piégée, envoi hors recette) et 2 durcissements (origine des routes API, en-têtes de sécurité) |
+| 24/11/2026 | V4 | Sprint 12 : taille du texte et contraste renforcé réglables dans Profil (gardés avec le membre), zones à toucher de 48 px et focus visible pour tous |

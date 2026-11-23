@@ -19,9 +19,9 @@ Objectif : ranger ses recettes comme on l'entend, en plus de Favoris et À cuisi
 
 | ID    | User story | Critères d'acceptation | Statut |
 | ----- | ---------- | ---------------------- | ------ |
-| US-53 | En tant que membre, je veux créer, renommer et supprimer mes propres listes, afin de regrouper des recettes à ma façon. | Depuis Mes listes ; nom obligatoire, deux listes d'un même membre ne portent pas le même nom (sans tenir compte des majuscules) ; supprimer une liste demande une confirmation et ne supprime pas les recettes. Les listes sont privées, comme Favoris et À cuisiner. | À faire |
-| US-54 | En tant que membre, je veux ajouter une recette à une de mes listes depuis sa fiche, afin de la retrouver plus tard. | Sur la fiche, « Ajouter à une liste » ouvre la liste de mes listes avec une case par liste, et « Nouvelle liste » ; une recette peut être dans plusieurs listes. | À faire |
-| US-55 | En tant que membre, je veux voir toutes mes listes dans Mes listes, afin de passer de l'une à l'autre. | Le sélecteur de Mes listes montre Favoris, À cuisiner puis mes listes ; chaque liste affiche ses recettes, les derniers ajouts en premier. | À faire |
+| US-53 | En tant que membre, je veux créer, renommer et supprimer mes propres listes, afin de regrouper des recettes à ma façon. | Depuis Mes listes ; nom obligatoire, deux listes d'un même membre ne portent pas le même nom (sans tenir compte des majuscules) ; supprimer une liste demande une confirmation et ne supprime pas les recettes. Les listes sont privées, comme Favoris et À cuisiner. | En cours |
+| US-54 | En tant que membre, je veux ajouter une recette à une de mes listes depuis sa fiche, afin de la retrouver plus tard. | Sur la fiche, « Ajouter à une liste » ouvre la liste de mes listes avec une case par liste, et « Nouvelle liste » ; une recette peut être dans plusieurs listes. | En cours |
+| US-55 | En tant que membre, je veux voir toutes mes listes dans Mes listes, afin de passer de l'une à l'autre. | Le sélecteur de Mes listes montre Favoris, À cuisiner puis mes listes ; chaque liste affiche ses recettes, les derniers ajouts en premier. | En cours |
 
 ## Sprint 12 · Accessibilité pour les personnes âgées
 
@@ -29,6 +29,6 @@ Objectif : une appli lisible et facile à toucher, même avec une vue ou des ges
 
 | ID    | User story | Critères d'acceptation | Statut |
 | ----- | ---------- | ---------------------- | ------ |
-| US-56 | En tant que membre, je veux agrandir le texte de l'appli, afin de lire sans lunettes. | Profil → Taille du texte : normale, grande, très grande ; tout l'écran s'agrandit (textes, boutons, espacements) ; le choix est gardé pour le membre, sur tous ses appareils. | À faire |
-| US-57 | En tant que membre, je veux un contraste renforcé, afin de mieux distinguer les textes et les boutons. | Profil → Contraste renforcé : textes secondaires plus foncés, bordures plus marquées, liens soulignés plus épais ; même mémorisation que la taille du texte. | À faire |
-| US-58 | En tant que membre âgé, je veux des boutons faciles à toucher et des textes simples, afin de ne pas me tromper. | Toutes les zones à toucher font au moins 48 px ; les icônes seules ont un libellé écrit ; le focus clavier est visible ; les messages d'erreur disent quoi faire ; les actions qui suppriment demandent une confirmation. | À faire |
+| US-56 | En tant que membre, je veux agrandir le texte de l'appli, afin de lire sans lunettes. | Profil → Taille du texte : normale, grande, très grande ; tout l'écran s'agrandit (textes, boutons, espacements) ; le choix est gardé pour le membre, sur tous ses appareils. | En cours |
+| US-57 | En tant que membre, je veux un contraste renforcé, afin de mieux distinguer les textes et les boutons. | Profil → Contraste renforcé : textes secondaires plus foncés, bordures plus marquées, liens soulignés plus épais ; même mémorisation que la taille du texte. | En cours |
+| US-58 | En tant que membre âgé, je veux des boutons faciles à toucher et des textes simples, afin de ne pas me tromper. | Toutes les zones à toucher font au moins 48 px ; les icônes seules ont un libellé écrit ; le focus clavier est visible ; les messages d'erreur disent quoi faire ; les actions qui suppriment demandent une confirmation. | En cours |

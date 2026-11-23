@@ -82,7 +82,7 @@ export function Ingredients({
             aria-label="Une personne de moins"
             disabled={nb <= 1}
             onClick={() => setNb(nb - 1)}
-            className="h-11 w-11 rounded-full border border-ardoise/25 text-xl disabled:opacity-40"
+            className="h-12 w-12 rounded-full border border-ardoise/25 text-xl disabled:opacity-40"
           >
             −
           </button>
@@ -94,7 +94,7 @@ export function Ingredients({
             aria-label="Une personne de plus"
             disabled={nb >= 50}
             onClick={() => setNb(nb + 1)}
-            className="h-11 w-11 rounded-full border border-ardoise/25 text-xl disabled:opacity-40"
+            className="h-12 w-12 rounded-full border border-ardoise/25 text-xl disabled:opacity-40"
           >
             +
           </button>
