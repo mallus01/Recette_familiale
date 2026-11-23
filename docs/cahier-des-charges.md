@@ -530,3 +530,4 @@ Propositions faites pour le sprint 10 de la V4 (US-51 et US-52) :
 | 11/11/2026 | V2 | Sprint 8 : barre latérale, mode cuisine en deux colonnes, relecture face au scan, membres en tableau, pages élargies (à partir de 768 px) |
 | 11/11/2026 | V3 | V2 validée (US-26 à US-47 terminées) ; backlog V3 écrit (US-48 à US-50, sprint 9) : test A/B des grandes cartes À cuisiner, variante au hasard par membre, mesures anonymes, résultats et choix de la variante dans Profil |
 | 19/11/2026 | V4 | « Version 2.0 » demandée par Mattis : backlog V4 (US-51 à US-58, sprints 10 à 12) ; sprint 10 : renommer un cahier, ajouter une recette à la main |
+| 23/11/2026 | V4 | Sprint 10 validé par Mattis (US-51 et US-52 terminées) |
