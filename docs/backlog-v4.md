@@ -19,9 +19,9 @@ Objectif : ranger ses recettes comme on l'entend, en plus de Favoris et À cuisi
 
 | ID    | User story | Critères d'acceptation | Statut |
 | ----- | ---------- | ---------------------- | ------ |
-| US-53 | En tant que membre, je veux créer, renommer et supprimer mes propres listes, afin de regrouper des recettes à ma façon. | Depuis Mes listes ; nom obligatoire, deux listes d'un même membre ne portent pas le même nom (sans tenir compte des majuscules) ; supprimer une liste demande une confirmation et ne supprime pas les recettes. Les listes sont privées, comme Favoris et À cuisiner. | À faire |
-| US-54 | En tant que membre, je veux ajouter une recette à une de mes listes depuis sa fiche, afin de la retrouver plus tard. | Sur la fiche, « Ajouter à une liste » ouvre la liste de mes listes avec une case par liste, et « Nouvelle liste » ; une recette peut être dans plusieurs listes. | À faire |
-| US-55 | En tant que membre, je veux voir toutes mes listes dans Mes listes, afin de passer de l'une à l'autre. | Le sélecteur de Mes listes montre Favoris, À cuisiner puis mes listes ; chaque liste affiche ses recettes, les derniers ajouts en premier. | À faire |
+| US-53 | En tant que membre, je veux créer, renommer et supprimer mes propres listes, afin de regrouper des recettes à ma façon. | Depuis Mes listes ; nom obligatoire, deux listes d'un même membre ne portent pas le même nom (sans tenir compte des majuscules) ; supprimer une liste demande une confirmation et ne supprime pas les recettes. Les listes sont privées, comme Favoris et À cuisiner. | En cours |
+| US-54 | En tant que membre, je veux ajouter une recette à une de mes listes depuis sa fiche, afin de la retrouver plus tard. | Sur la fiche, « Ajouter à une liste » ouvre la liste de mes listes avec une case par liste, et « Nouvelle liste » ; une recette peut être dans plusieurs listes. | En cours |
+| US-55 | En tant que membre, je veux voir toutes mes listes dans Mes listes, afin de passer de l'une à l'autre. | Le sélecteur de Mes listes montre Favoris, À cuisiner puis mes listes ; chaque liste affiche ses recettes, les derniers ajouts en premier. | En cours |
 
 ## Sprint 12 · Accessibilité pour les personnes âgées
 
