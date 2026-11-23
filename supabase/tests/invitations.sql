@@ -28,10 +28,15 @@ reset role;
 
 -- Supabase crée le compte à l'envoi de l'invitation : le rôle prévu est appliqué
 insert into auth.users (id, email) values ('00000000-0000-0000-0000-0000000000d1', 'invite@ex.fr');
-insert into auth.users (id, email) values ('00000000-0000-0000-0000-0000000000d2', 'direct@ex.fr');
 do $$ begin
   assert (select role from public.membre where email = 'invite@ex.fr') = 'contributeur', 'rôle de l''invitation';
-  assert (select role from public.membre where email = 'direct@ex.fr') = 'lecteur', 'sans invitation : lecteur';
+  -- Audit sécurité (F1) : un compte sans invitation est refusé.
+  begin
+    insert into auth.users (id, email) values ('00000000-0000-0000-0000-0000000000d2', 'direct@ex.fr');
+    raise exception 'un compte sans invitation doit être refusé';
+  exception when insufficient_privilege then null;
+  end;
+  assert not exists (select 1 from public.membre where email = 'direct@ex.fr'), 'sans invitation : pas de membre';
 end $$;
 
 -- L'invité ouvre le lien, voit qui l'invite, complète son profil
