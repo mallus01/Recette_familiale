@@ -16,7 +16,14 @@ export type PageARelire = {
 };
 export type CahierARelire = { id: number; nom: string; pages: PageARelire[] };
 
-export function FileARelire({ cahiers }: { cahiers: CahierARelire[] }) {
+export function FileARelire({
+  cahiers,
+  aLaMain,
+}: {
+  cahiers: CahierARelire[];
+  // US-52 : brouillons saisis à la main, sans page scannée.
+  aLaMain: { id: number; titre: string }[];
+}) {
   const router = useRouter();
   const [relancees, setRelancees] = useState<Set<number>>(new Set());
   const toutes = cahiers.flatMap((c) => c.pages);
@@ -36,6 +43,27 @@ export function FileARelire({ cahiers }: { cahiers: CahierARelire[] }) {
     router.refresh();
   }
 
+  const saisies =
+    aLaMain.length > 0 ? (
+      <section className="flex flex-col gap-3">
+        <h2 className="font-semibold">Recettes saisies à la main</h2>
+        <ul className="flex flex-col divide-y divide-ardoise/10 rounded-2xl border border-ardoise/15">
+          {aLaMain.map((r) => (
+            <li key={r.id} className="p-3">
+              <Link
+                href={`/numeriser/relire/${r.id}`}
+                className="font-medium underline decoration-ciel decoration-2 underline-offset-4"
+              >
+                {r.titre}
+              </Link>
+              <span className="block text-sm text-taupe">Brouillon à terminer</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ) : null;
+
+  if (toutes.length === 0 && saisies) return <div className="flex flex-col gap-6">{saisies}</div>;
   if (toutes.length === 0) {
     return (
       <p className="rounded-2xl bg-ciel/15 p-5 leading-relaxed">
@@ -92,6 +120,7 @@ export function FileARelire({ cahiers }: { cahiers: CahierARelire[] }) {
           </ul>
         </section>
       ))}
+      {saisies}
     </div>
   );
 }

@@ -4,7 +4,8 @@ import { Suspense } from "react";
 import { Ligne } from "@/components/cartes";
 import { Couverture } from "@/components/couverture";
 import { EnTete, Page } from "@/components/mise-en-page";
-import { membreConnecte } from "@/lib/membre";
+import Link from "next/link";
+import { membreConnecte, peutNumeriser } from "@/lib/membre";
 import { COLONNES_RESUME, enCartes, type RecetteResume } from "@/lib/recettes";
 import { urlsSignees } from "@/lib/supabase/images";
 import { creerClientServeur } from "@/lib/supabase/serveur";
@@ -73,6 +74,14 @@ async function Contenu({ params }: { params: Promise<{ id: string }> }) {
             {recettes.length}{" "}
             {recettes.length > 1 ? "recettes publiées" : "recette publiée"}
           </p>
+          {peutNumeriser(membre.role) ? (
+            <Link
+              href={`/numeriser/cahiers/${cahier.id}`}
+              className="self-start text-sm underline decoration-ciel decoration-2 underline-offset-4"
+            >
+              Modifier le cahier
+            </Link>
+          ) : null}
         </div>
       </div>
       {recettes.length === 0 ? (

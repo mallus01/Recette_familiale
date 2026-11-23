@@ -294,6 +294,7 @@ La V1 doit permettre à un utilisateur seul de numériser ses cahiers et de cuis
 | V1 | Le cahier numérique, utilisable seul | Connexion lien et code (compte admin unique créé dans Supabase) ; capture en série, file à relire, relecture ; fiche recette avec scan et notes ; tags et gestion des listes fermées ; mode cuisine (écran allumé, étapes, panneau d'ingrédients, progression, swipe, boutons) ; adaptation des quantités et copie ; accueil (recherche, filtres, cahiers, suggestions) ; Favoris et À cuisiner ; tâche anti-pause et compression des images |
 | V2 | La famille | Retrait d'un membre ; photos proposées et validation ; images des valeurs de filtres ; ingrédients surlignés et barrés en mode cuisine ; séparation et fusion de pages ; mises en page dédiées aux grands écrans |
 | V3 | Les bonus | Test A/B des grandes cartes À cuisiner |
+| V4 (« version 2.0 ») | Plus simple pour tous | Renommer un cahier ; ajouter une recette à la main ; listes personnelles créées par chaque membre ; accessibilité pour les personnes âgées (taille du texte, contraste renforcé, grandes zones à toucher) |
 
 Aménagements de la V1 :
 
@@ -325,7 +326,7 @@ La V1 est développée selon Scrum, adapté à un projet solo, en sprints de 2 s
 | Sprint 3 | Mode cuisine et quantités | Écran allumé, étapes, panneau d'ingrédients, progression, boutons et swipe, nombre de personnes, bouton Copier |
 | Sprint 4 | Accueil et listes | Recherche, filtres à panneau dépliant, rangées Cahiers et Suggestions, Favoris et À cuisiner avec retrait automatique |
 
-Le détail des user stories et leur suivi : `docs/backlog-v1.md`. La V2 (sprints 5 à 8) : `docs/backlog-v2.md`. La V3 (sprint 9, test A/B des grandes cartes À cuisiner) : `docs/backlog-v3.md`.
+Le détail des user stories et leur suivi : `docs/backlog-v1.md`. La V2 (sprints 5 à 8) : `docs/backlog-v2.md`. La V3 (sprint 9, test A/B des grandes cartes À cuisiner) : `docs/backlog-v3.md`. La V4, appelée « version 2.0 » (sprints 10 à 12) : `docs/backlog-v4.md`.
 
 ## Points ouverts à valider
 
@@ -468,6 +469,12 @@ Propositions faites pour le sprint 9 de la V3 (US-48 à US-50) :
 - Terminer le test applique la variante retenue à tous et arrête les mesures ; le test peut être repris, chacun retrouvant sa variante.
 - Avec un seul membre actif, le test ne départage rien : il prend son sens quand plusieurs membres utilisent l'accueil.
 
+Propositions faites pour le sprint 10 de la V4 (US-51 et US-52) :
+
+- Le nom et la description d'un cahier se modifient depuis sa fiche dans Numériser ; la page Cahier de l'accueil y mène par « Modifier le cahier » (contributeurs et admin). La couverture ne se change pas.
+- Une recette ajoutée à la main n'appartient à aucun cahier : elle n'apparaît pas dans la rangée Les cahiers, mais dans la recherche, les filtres, les suggestions et les listes comme les autres.
+- Sa saisie réutilise l'écran de relecture, sans scan et sans le champ « tel qu'écrit » ; ses notes sont des notes de membre. En brouillon, elle reste dans la file à relire, section « Recettes saisies à la main ».
+
 ## Journal des décisions
 
 | Date | Sujet | Décision |
@@ -522,3 +529,5 @@ Propositions faites pour le sprint 9 de la V3 (US-48 à US-50) :
 | 11/11/2026 | V2 | Sprint 7 : recettes d'une même page signalées en relecture, fusion avec la page suivante (proposée par l'IA ou à la main), séparation d'une recette en deux |
 | 11/11/2026 | V2 | Sprint 8 : barre latérale, mode cuisine en deux colonnes, relecture face au scan, membres en tableau, pages élargies (à partir de 768 px) |
 | 11/11/2026 | V3 | V2 validée (US-26 à US-47 terminées) ; backlog V3 écrit (US-48 à US-50, sprint 9) : test A/B des grandes cartes À cuisiner, variante au hasard par membre, mesures anonymes, résultats et choix de la variante dans Profil |
+| 19/11/2026 | V4 | « Version 2.0 » demandée par Mattis : backlog V4 (US-51 à US-58, sprints 10 à 12) ; sprint 10 : renommer un cahier, ajouter une recette à la main |
+| 23/11/2026 | V4 | Sprint 10 validé par Mattis (US-51 et US-52 terminées) |

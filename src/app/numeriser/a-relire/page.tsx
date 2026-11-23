@@ -53,6 +53,17 @@ async function Contenu() {
   );
   const urls = await urlsSignees(pages.map((p) => p.image_chemin));
 
+  // US-52 : brouillons sans page, saisis à la main.
+  const { data: brouillons } = await supabase
+    .from("recette")
+    .select("id, titre, recette_page(page_id)")
+    .eq("statut", "brouillon")
+    .order("cree_le")
+    .returns<{ id: number; titre: string; recette_page: { page_id: number }[] }[]>();
+  const aLaMain = (brouillons ?? [])
+    .filter((r) => r.recette_page.length === 0)
+    .map((r) => ({ id: r.id, titre: r.titre }));
+
   // Tri par cahier (ordre alphabétique), puis par numéro de page.
   const parCahier = new Map<number, CahierARelire>();
   for (const p of pages) {
@@ -72,5 +83,5 @@ async function Contenu() {
   }
   const cahiers = [...parCahier.values()].sort((a, b) => a.nom.localeCompare(b.nom, "fr"));
 
-  return <FileARelire cahiers={cahiers} />;
+  return <FileARelire cahiers={cahiers} aLaMain={aLaMain} />;
 }
